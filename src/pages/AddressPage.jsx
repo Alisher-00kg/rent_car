@@ -1,11 +1,5 @@
-import React from 'react'
-
 const AddressPage = () => {
-  return (
-    <div>
-      AddressPage
-    </div>
-  )
-}
+  return <div>AddressPage</div>;
+};
 
-export default AddressPage
+export default AddressPage;

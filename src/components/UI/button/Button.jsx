@@ -1,7 +1,13 @@
 import { Button as MuiButton, styled } from "@mui/material";
-import React from "react";
 
-const Button = ({ children, variant, onClick, type, disabled, ...props }) => {
+const Button = ({
+  children,
+  variant = "contained",
+  onClick,
+  type,
+  disabled,
+  ...props
+}) => {
   return (
     <StyledButton
       variant={variant}
@@ -16,15 +22,8 @@ const Button = ({ children, variant, onClick, type, disabled, ...props }) => {
 };
 
 export default Button;
-const StyledButton = styled(MuiButton)(({ variant = "contained" }) => ({
+const StyledButton = styled(MuiButton)(() => ({
   fontSize: "17px",
-  fontWeight: "600",
-  background: "#fff",
-  color: "gray",
+  fontWeight: "500",
   borderRadius: "9.9px",
-  "&:active": {
-    background: "#3a3af8",
-    color: "white",
-    transition: "0.2s",
-  },
 }));

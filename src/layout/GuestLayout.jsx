@@ -1,20 +1,19 @@
 import { Outlet } from "react-router-dom";
 import { Footer } from "../components/footer/Footer";
 import GuestHeader from "../components/header/guest/GuestHeader";
+import { styled } from "@mui/material";
 
 export const GuestLayout = () => {
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100vh",
-        background: "yellow",
-      }}
-    >
-      GuestLayout
+    <StyledMain>
       <GuestHeader />
       <Outlet />
       <Footer />
-    </div>
+    </StyledMain>
   );
 };
+const StyledMain = styled("div")({
+  marginTop: "100px",
+  display: "flex",
+  flexDirection: "column",
+});

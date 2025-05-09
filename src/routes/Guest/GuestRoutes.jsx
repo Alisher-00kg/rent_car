@@ -1,5 +1,5 @@
 import { PrivateRoute } from "../PrivateRoute";
-import { MainPage } from "../../pages/main/MainPage";
+import MainPage from "../../pages/main/MainPage";
 import { PATHS } from "../../utils/constants/constants";
 import TariffsPage from "../../pages/user/TariffsPage";
 import SalesPage from "../../pages/user/SalesPage";
@@ -7,6 +7,7 @@ import ContactsPage from "../../pages/user/ContactsPage";
 import AddressPage from "../../pages/user/AddressPage";
 import ProfilePage from "../../pages/user/ProfilePage";
 import { Navigate } from "react-router-dom";
+// import MainPage from "../../pages/MainPage";
 
 export const GuestRoutes = () => {
   return [

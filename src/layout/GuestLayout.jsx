@@ -4,7 +4,13 @@ import GuestHeader from "../components/header/guest/GuestHeader";
 
 export const GuestLayout = () => {
   return (
-    <div>
+    <div
+      style={{
+        width: "100%",
+        height: "100vh",
+        background: "yellow",
+      }}
+    >
       GuestLayout
       <GuestHeader />
       <Outlet />

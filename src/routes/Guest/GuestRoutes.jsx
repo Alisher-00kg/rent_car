@@ -25,16 +25,6 @@ export const GuestRoutes = () => {
       ),
     },
     {
-      path: "/guest/car/:id",
-      element: (
-        <PrivateRoute
-          component={<MainPage />}
-          fallBackPath={PATHS.SIGN_IN}
-          isAllowed={false}
-        />
-      ),
-    },
-    {
       path: PATHS.GUEST.TARIFFS,
       element: (
         <PrivateRoute
@@ -81,6 +71,16 @@ export const GuestRoutes = () => {
           component={<ProfilePage />}
           fallBackPath={PATHS.GUEST.ROOT}
           isAllowed={true}
+        />
+      ),
+    },
+    {
+      path: "/guest/main-page/:id",
+      element: (
+        <PrivateRoute
+          component={<MainPage />}
+          fallBackPath={PATHS.SIGN_IN}
+          isAllowed={false}
         />
       ),
     },

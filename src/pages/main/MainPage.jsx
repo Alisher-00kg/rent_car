@@ -1,3 +1,13 @@
 export const MainPage = () => {
-  return <div>MainPage</div>;
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100vh",
+        background: "red",
+      }}
+    >
+      MainPage
+    </div>
+  );
 };

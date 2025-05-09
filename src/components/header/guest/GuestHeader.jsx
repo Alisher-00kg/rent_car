@@ -1,34 +1,27 @@
 import { styled } from "@mui/material";
-import { useSelector } from "react-redux";
+import { PATHS } from "../../../utils/constants/constants";
 import { NavLink } from "react-router-dom";
-import { PATHS } from "../../utils/constants/constants";
 
-const Header = () => {
-  const { role } = useSelector((state) => state.auth);
+const GuestHeader = () => {
   return (
     <StyledHeader>
-      <NavLink
-        to={role === "USER" ? PATHS.USER.ROOT : PATHS.ADMIN.ROOT}
-        className={"link"}
-      >
+      <NavLink to={PATHS.GUEST.ROOT} className={"link"}>
         <h2>
           Rent<span>Car</span>
         </h2>
       </NavLink>
-      {role === "USER" && (
-        <nav className="nav">
-          <StyledNavLink to={PATHS.USER.TARIFFS}>Тарифы</StyledNavLink>
-          <StyledNavLink to={PATHS.USER.SALES}>Акции</StyledNavLink>
-          <StyledNavLink to={PATHS.USER.CONTACTS}>Контакты</StyledNavLink>
-          <StyledNavLink to={PATHS.USER.ADDRESS}>Адрес</StyledNavLink>
-          <StyledNavLink to={PATHS.USER.PROFILE}>Профиль</StyledNavLink>
-        </nav>
-      )}
+      <nav className="nav">
+        <StyledNavLink to={PATHS.GUEST.TARIFFS}>Тарифы</StyledNavLink>
+        <StyledNavLink to={PATHS.GUEST.SALES}>Акции</StyledNavLink>
+        <StyledNavLink to={PATHS.GUEST.CONTACTS}>Контакты</StyledNavLink>
+        <StyledNavLink to={PATHS.GUEST.ADDRESS}>Адрес</StyledNavLink>
+        <StyledNavLink to={PATHS.GUEST.PROFILE}>Профиль</StyledNavLink>
+      </nav>
     </StyledHeader>
   );
 };
 
-export default Header;
+export default GuestHeader;
 
 const StyledHeader = styled("header")({
   display: "flex",

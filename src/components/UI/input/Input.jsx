@@ -2,7 +2,7 @@ import { styled, TextField } from "@mui/material";
 import { forwardRef } from "react";
 
 const Input = forwardRef(
-  ({ placeholder, InputProps, label, ...props }, ref) => {
+  ({ placeholder, InputProps, borderRadius = null, label, ...props }, ref) => {
     return (
       <StyledInput
         type="text"
@@ -10,6 +10,7 @@ const Input = forwardRef(
         label={label}
         inputRef={ref}
         InputProps={InputProps}
+        borderRadius={borderRadius}
         {...props}
       />
     );
@@ -17,9 +18,9 @@ const Input = forwardRef(
 );
 
 export default Input;
-const StyledInput = styled(TextField)(() => ({
-  "& .css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root": {
-    borderRadius: "6px",
+const StyledInput = styled(TextField)(({ borderRadius }) => ({
+  "& .MuiInputBase-root": {
+    borderRadius: borderRadius || "6px",
     height: "fit-content",
     "& ::placeholder": {
       color: "#535353",

@@ -158,12 +158,8 @@ const StyledButton = styled(Button)`
   margin-top: 25px !important;
   width: 100%;
 `;
-const StyledTextField = styled(TextField)({
+const StyledTextField = styled(Input)({
   "& .MuiInputBase-root": {
     backgroundColor: "#e7f0ff",
-    borderRadius: "6px",
-    "& input::placeholder": {
-      color: "#535353",
-    },
   },
 });

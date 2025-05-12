@@ -3,6 +3,7 @@ import { PATHS } from "../../utils/constants/constants";
 import { useSelector } from "react-redux";
 import { PrivateRoute } from "../PrivateRoute";
 import { AdminPage } from "../../pages/admin/AdminPage";
+import { AdminOrders } from "../../pages/admin/AdminOrders";
 
 export const AdminRoutes = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -16,6 +17,16 @@ export const AdminRoutes = () => {
       element: (
         <PrivateRoute
           component={<AdminPage />}
+          isAllowed={isAuthenticated}
+          fallBackPath={PATHS.ADMIN.ROOT}
+        />
+      ),
+    },
+    {
+      path: PATHS.ADMIN.ORDERS,
+      element: (
+        <PrivateRoute
+          component={<AdminOrders />}
           isAllowed={isAuthenticated}
           fallBackPath={PATHS.ADMIN.ROOT}
         />

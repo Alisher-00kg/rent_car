@@ -1,14 +1,19 @@
 import { Outlet } from "react-router-dom";
-import Header from "../components/header/Header";
-import { Footer } from "../components/footer/Footer";
+import { AdminHeader } from "../components/header/admin/AdminHeader";
+import styled from "styled-components";
 
 export const AdminLayout = () => {
   return (
     <div>
       AdminLayout
-      <Header />
-      <Outlet />
-      <Footer />
+      <AdminHeader />
+      <StyledOutletWrapper>
+        <Outlet />
+      </StyledOutletWrapper>
     </div>
   );
 };
+const StyledOutletWrapper = styled.div`
+  padding: 0px 40px;
+  margin-top: 120px;
+`;

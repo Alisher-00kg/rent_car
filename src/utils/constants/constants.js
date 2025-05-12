@@ -79,6 +79,7 @@ export const PATHS = {
   ADMIN: {
     ROOT: "/admin",
     PAGE: "/admin/admin-page",
+    ORDERS: "/admin/admin-orders",
   },
   NOT_FOUND: "*",
   SIGN_IN: "/sign-in",

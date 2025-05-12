@@ -1,9 +1,11 @@
-import { Box, Modal, styled } from "@mui/material";
+import { Box, Fade, Modal, styled } from "@mui/material";
 
 export const BaseModal = ({ children, open, onClose, ...props }) => {
   return (
     <Modal open={open} onClose={onClose} {...props}>
-      <Content>{children}</Content>
+      <Fade in={open}>
+        <Content>{children}</Content>
+      </Fade>
     </Modal>
   );
 };

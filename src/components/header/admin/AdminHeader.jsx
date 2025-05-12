@@ -1,10 +1,27 @@
-import { IconButton, styled } from "@mui/material";
+import { IconButton, Menu, MenuItem, styled } from "@mui/material";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { PATHS } from "../../../utils/constants/constants";
 import { Icons } from "../../../assets";
 import { MdAdminPanelSettings } from "react-icons/md";
+import { useState } from "react";
+import { BaseModal } from "../../UI/modal/BaseModal";
 export const AdminHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
   const { role } = useSelector((state) => state.auth);
   return (
     <StyledHeader>
@@ -21,11 +38,23 @@ export const AdminHeader = () => {
         <MdAdminPanelSettings
           style={{ color: "white", width: "25", height: "25" }}
         />
-        <StyledIconButton>
+        <StyledMenu
+          anchorEl={anchorEl}
+          id="fade-menu"
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Fade}
+        >
+          <StyledMenuItem onClick={handleClose}>
+            <StyledLink onClick={handleOpenModal}>Log out</StyledLink>
+          </StyledMenuItem>
+        </StyledMenu>
+        <StyledIconButton onClick={handleClick}>
           <span>Администратор</span>
           <Icons.ArrowDown />
         </StyledIconButton>
       </StyledRightBox>
+      <BaseModal op></BaseModal>
     </StyledHeader>
   );
 };
@@ -83,4 +112,23 @@ const StyledIconButton = styled(IconButton)`
 const StyledRightBox = styled("div")({
   display: "flex",
   alignItems: "center",
+});
+const StyledMenu = styled(Menu)(() => ({
+  "& .css-1tktgsa-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
+    width: "158px",
+    height: "84px",
+    borderRadius: "10px",
+  },
+}));
+const StyledMenuItem = styled(MenuItem)({
+  "&:hover": {
+    color: "#0073DE",
+  },
+});
+const StyledLink = styled(Link)({
+  textDecoration: "none",
+  color: "#292929",
+  "&:hover": {
+    color: "#0073DE",
+  },
 });

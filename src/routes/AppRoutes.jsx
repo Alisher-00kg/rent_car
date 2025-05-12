@@ -15,7 +15,6 @@ import { GuestLayout } from "../layout/GuestLayout";
 import { GuestRoutes } from "./Guest/GuestRoutes";
 import { SignIn } from "../auth/SignIn";
 import { SignUp } from "../auth/SignUp";
-import { MainPage } from "../pages/main/MainPage";
 
 export const AppRoutes = () => {
   const { isAuthenticated, role } = useSelector((state) => state.auth);
@@ -31,7 +30,7 @@ export const AppRoutes = () => {
       element: isAuthenticated ? (
         <Navigate to={routeByRole[role]} replace />
       ) : (
-        <Navigate to={PATHS.GUEST.PAGE}/>
+        <Navigate to={PATHS.GUEST.PAGE} />
       ),
     },
     {

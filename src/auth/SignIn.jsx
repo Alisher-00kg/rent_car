@@ -1,4 +1,10 @@
-import { Paper, Typography } from "@mui/material";
+import {
+  IconButton,
+  InputAdornment,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Input from "../components/UI/input/Input";
 import styled from "styled-components";
 import Button from "../components/UI/button/Button";
@@ -6,8 +12,11 @@ import { ErrorMessage } from "../components/UI/error/ErrorMessage";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { PATHS } from "../utils/constants/constants";
-
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
+import { useState } from "react";
 export const SignIn = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -15,6 +24,8 @@ export const SignIn = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
+    console.log(data);
+
     reset();
   };
   return (
@@ -33,6 +44,7 @@ export const SignIn = () => {
             <Input
               placeholder="Введите почту ..."
               label="Почта"
+              type="email"
               fullWidth
               {...register("email", {
                 required: {
@@ -48,10 +60,27 @@ export const SignIn = () => {
             <ErrorMessage>{errors?.email?.message}</ErrorMessage>
           </InputWrapper>
           <InputWrapper>
-            <Input
+            <StyledTextField
               placeholder="Введите пароль ..."
               label="Пароль"
+              type={showPassword ? "text" : "password"}
               fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                    >
+                      {showPassword ? (
+                        <FaRegEye style={{ backgroundColor: "transparent" }} />
+                      ) : (
+                        <FaRegEyeSlash />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               {...register("password", {
                 required: {
                   value: true,
@@ -68,7 +97,10 @@ export const SignIn = () => {
             <ErrorMessage>{errors?.password?.message}</ErrorMessage>
           </InputWrapper>
           <StyledButton type="submit">Вход</StyledButton>
-          <Link to={PATHS.SIGN_UP}>Зарегистрироваться</Link>
+          <StyledInfoText>
+            <p>Создать аккаунт?</p>
+            <StyledLink to={PATHS.SIGN_UP}>Зарегистрироваться</StyledLink>
+          </StyledInfoText>
         </StyledForm>
       </StyledInnerWrapper>
     </StyledWrapper>
@@ -104,7 +136,20 @@ const StyledForm = styled.form`
   align-items: center;
   gap: 28px;
 `;
-
+const StyledInfoText = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  p {
+    color: #1976d2;
+  }
+`;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  font-weight: 600;
+`;
 const InputWrapper = styled.div`
   width: 100%;
   position: relative;
@@ -113,3 +158,12 @@ const StyledButton = styled(Button)`
   margin-top: 25px !important;
   width: 100%;
 `;
+const StyledTextField = styled(TextField)({
+  "& .MuiInputBase-root": {
+    backgroundColor: "#e7f0ff",
+    borderRadius: "6px",
+    "& input::placeholder": {
+      color: "#535353",
+    },
+  },
+});

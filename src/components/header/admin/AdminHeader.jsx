@@ -1,4 +1,4 @@
-import { IconButton, Menu, MenuItem, styled } from "@mui/material";
+import { Fade, IconButton, Menu, MenuItem, styled } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import { PATHS } from "../../../utils/constants/constants";
@@ -6,9 +6,10 @@ import { Icons } from "../../../assets";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { useState } from "react";
 import { BaseModal } from "../../UI/modal/BaseModal";
+import { LogoutModal } from "../../UI/modal/LogoutModal";
 export const AdminHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -54,7 +55,11 @@ export const AdminHeader = () => {
           <Icons.ArrowDown />
         </StyledIconButton>
       </StyledRightBox>
-      <BaseModal op></BaseModal>
+      {isOpen && (
+        <BaseModal open={handleOpenModal} onClose={handleCloseModal}>
+          <LogoutModal onClose={handleCloseModal} />
+        </BaseModal>
+      )}
     </StyledHeader>
   );
 };
@@ -115,8 +120,8 @@ const StyledRightBox = styled("div")({
 });
 const StyledMenu = styled(Menu)(() => ({
   "& .css-1tktgsa-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
-    width: "158px",
-    height: "84px",
+    width: "120px",
+    height: "54px",
     borderRadius: "10px",
   },
 }));
@@ -126,8 +131,11 @@ const StyledMenuItem = styled(MenuItem)({
   },
 });
 const StyledLink = styled(Link)({
+  width: "100%",
   textDecoration: "none",
   color: "#292929",
+  textAlign: "center",
+
   "&:hover": {
     color: "#0073DE",
   },

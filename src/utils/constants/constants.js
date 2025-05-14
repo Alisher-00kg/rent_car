@@ -80,6 +80,7 @@ export const PATHS = {
     ROOT: "/admin",
     PAGE: "/admin/admin-page",
     ORDERS: "/admin/admin-orders",
+    CREATE: "/admin/admin-page/create-card",
   },
   NOT_FOUND: "*",
   SIGN_IN: "/sign-in",

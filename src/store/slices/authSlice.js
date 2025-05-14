@@ -4,8 +4,8 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     userData: {},
-    role: "ADMIN",
-    isAuthenticated: true,
+    role: "GUEST",
+    isAuthenticated: false,
     isLoading: false,
     errorMessage: null,
     token: null,

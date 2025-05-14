@@ -55,11 +55,9 @@ export const AdminHeader = () => {
           <Icons.ArrowDown />
         </StyledIconButton>
       </StyledRightBox>
-      {isOpen && (
-        <BaseModal open={handleOpenModal} onClose={handleCloseModal}>
-          <LogoutModal onClose={handleCloseModal} />
-        </BaseModal>
-      )}
+      <BaseModal open={isOpen} onClose={handleCloseModal}>
+        <LogoutModal onClose={handleCloseModal} />
+      </BaseModal>
     </StyledHeader>
   );
 };

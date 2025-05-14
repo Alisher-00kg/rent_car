@@ -7,7 +7,6 @@ import SalesPage from "../../pages/user/SalesPage";
 import ContactsPage from "../../pages/user/ContactsPage";
 import AddressPage from "../../pages/user/AddressPage";
 import ProfilePage from "../../pages/user/ProfilePage";
-// import MainPage from "../../pages/MainPage";
 import MainPage from "../../pages/main/MainPage";
 
 export const UserRoutes = () => {

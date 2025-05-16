@@ -5,6 +5,7 @@ import ArrowDown from "./icons/arrow-down.svg?react";
 import Left from "./icons/icon-left.svg?react";
 import Right from "./icons/icon-right.svg?react";
 import DefaultDropeZone from "./icons/default-zone.svg?react";
+import WhatsApp from "./icons/wts.svg?react";
 export const Icons = {
   Progress,
   Location,
@@ -13,4 +14,5 @@ export const Icons = {
   Left,
   Right,
   DefaultDropeZone,
+  WhatsApp,
 };

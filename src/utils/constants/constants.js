@@ -5,6 +5,7 @@ import Bently from "../../assets/images/biznez16.png";
 import WhiteCar from "../../assets/images/mersedes4.png";
 export const CARS = [
   {
+    id: 1,
     category: "Стандарт класс",
     image: [Audi, WhiteCar],
     model: "Audi B-klasse",
@@ -15,6 +16,7 @@ export const CARS = [
     pricePerDay: 6500,
   },
   {
+    id: 2,
     category: "Винивены",
     image: [WhiteCar, Bently],
     model: "Audi B-klasse",
@@ -25,6 +27,7 @@ export const CARS = [
     pricePerDay: 6500,
   },
   {
+    id: 3,
     category: "Комфорт класс",
     image: [Bizness, WhiteCar],
     model: "Mercedes-Benz Citan",
@@ -35,6 +38,7 @@ export const CARS = [
     pricePerDay: 7500,
   },
   {
+    id: 4,
     category: "Бизнес класс",
     image: [Mers, WhiteCar],
     model: "Mercedes-Benz Vito",
@@ -45,6 +49,7 @@ export const CARS = [
     pricePerDay: 5500,
   },
   {
+    id: 5,
     category: "Внедорожники",
     image: [Bently, WhiteCar],
     model: "Mercedes-Benz V-klasse",

@@ -8,6 +8,7 @@ import ContactsPage from "../../pages/user/ContactsPage";
 import AddressPage from "../../pages/user/AddressPage";
 import ProfilePage from "../../pages/user/ProfilePage";
 import MainPage from "../../pages/main/MainPage";
+import { InnerCardPage } from "../../pages/user/InnerCardPage";
 
 export const UserRoutes = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -18,62 +19,59 @@ export const UserRoutes = () => {
     },
     {
       path: PATHS.USER.PAGE,
+      // index: true,
       element: (
-        <PrivateRoute
-          component={<MainPage />}
-          isAllowed={isAuthenticated}
-          fallBackPath={PATHS.USER.ROOT}
-        />
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+          <MainPage />
+        </PrivateRoute>
       ),
     },
     {
       path: PATHS.USER.TARIFFS,
       element: (
-        <PrivateRoute
-          component={<TariffsPage />}
-          isAllowed={isAuthenticated}
-          fallBackPath={PATHS.USER.ROOT}
-        />
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+          <TariffsPage />
+        </PrivateRoute>
       ),
     },
     {
       path: PATHS.USER.SALES,
       element: (
-        <PrivateRoute
-          component={<SalesPage />}
-          isAllowed={isAuthenticated}
-          fallBackPath={PATHS.USER.ROOT}
-        />
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+          <SalesPage />
+        </PrivateRoute>
       ),
     },
     {
       path: PATHS.USER.CONTACTS,
       element: (
-        <PrivateRoute
-          component={<ContactsPage />}
-          isAllowed={isAuthenticated}
-          fallBackPath={PATHS.USER.ROOT}
-        />
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_INT}>
+          <ContactsPage />
+        </PrivateRoute>
       ),
     },
     {
       path: PATHS.USER.ADDRESS,
       element: (
-        <PrivateRoute
-          component={<AddressPage />}
-          isAllowed={isAuthenticated}
-          fallBackPath={PATHS.USER.ROOT}
-        />
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+          <AddressPage />
+        </PrivateRoute>
       ),
     },
     {
       path: PATHS.USER.PROFILE,
       element: (
-        <PrivateRoute
-          component={<ProfilePage />}
-          isAllowed={isAuthenticated}
-          fallBackPath={PATHS.USER.ROOT}
-        />
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+          <ProfilePage />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: PATHS.USER.PAGE + "/:cardID",
+      element: (
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+          <InnerCardPage />
+        </PrivateRoute>
       ),
     },
   ];

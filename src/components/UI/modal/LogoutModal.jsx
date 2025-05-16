@@ -1,7 +1,19 @@
 import { styled } from "@mui/material";
 import Button from "../button/Button";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../../store/slices/authSlice";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "../../../utils/constants/constants";
 
 export const LogoutModal = ({ onClose }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    dispatch(logOut());
+    navigate(PATHS.SIGN_IN, { replace: true });
+    onClose();
+  };
+
   return (
     <StyledModalka>
       <p>Вы уверены, что хотите выйти?</p>
@@ -9,7 +21,9 @@ export const LogoutModal = ({ onClose }) => {
         <StyledCanel variant="" onClick={onClose}>
           Отменить
         </StyledCanel>
-        <StyledGetOut variant="text"> Выйти</StyledGetOut>
+        <StyledGetOut variant="text" onClick={handleLogOut}>
+          Выйти
+        </StyledGetOut>
       </StyledContainerModal>
     </StyledModalka>
   );

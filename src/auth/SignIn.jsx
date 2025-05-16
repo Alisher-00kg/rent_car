@@ -10,24 +10,29 @@ import styled from "styled-components";
 import Button from "../components/UI/button/Button";
 import { ErrorMessage } from "../components/UI/error/ErrorMessage";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PATHS } from "../utils/constants/constants";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { signInThunk } from "../store/thunks/authThunk";
 export const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
 
+  const onSubmit = (data) => {
+    dispatch(signInThunk({ userData: data, navigate }));
     reset();
   };
+
   return (
     <StyledWrapper>
       <StyledInnerWrapper elevation={5}>

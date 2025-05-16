@@ -15,32 +15,27 @@ export const AdminRoutes = () => {
     },
     {
       path: PATHS.ADMIN.PAGE,
+      // index: true,
       element: (
-        <PrivateRoute
-          component={<AdminPage />}
-          isAllowed={isAuthenticated}
-          fallBackPath={PATHS.ADMIN.ROOT}
-        />
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+          <AdminPage />
+        </PrivateRoute>
       ),
     },
     {
       path: PATHS.ADMIN.ORDERS,
       element: (
-        <PrivateRoute
-          component={<AdminOrders />}
-          isAllowed={isAuthenticated}
-          fallBackPath={PATHS.ADMIN.ROOT}
-        />
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+          <AdminOrders />
+        </PrivateRoute>
       ),
     },
     {
       path: PATHS.ADMIN.CREATE,
       element: (
-        <PrivateRoute
-          component={<CreateCard />}
-          isAllowed={isAuthenticated}
-          fallBackPath={PATHS.ADMIN.ROOT}
-        />
+        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+          <CreateCard />
+        </PrivateRoute>
       ),
     },
   ];

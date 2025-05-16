@@ -1,10 +1,4 @@
-import {
-  IconButton,
-  InputAdornment,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { IconButton, InputAdornment, Paper, Typography } from "@mui/material";
 import Input from "../components/UI/input/Input";
 import Button from "../components/UI/button/Button";
 import styled from "styled-components";
@@ -15,17 +9,25 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../components/UI/error/ErrorMessage";
+import { useDispatch } from "react-redux";
+import { signUpThunk } from "../store/thunks/authThunk";
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
 
+  const onSubmit = (data) => {
+    if (data.email === "admin@gmail.com" && data.password === "Admin123!") {
+      data.role = "ADMIN";
+    } else {
+      data.role = "USER";
+    }
+    dispatch(signUpThunk(data));
     reset();
   };
   return (

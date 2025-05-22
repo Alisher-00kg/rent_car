@@ -6,6 +6,9 @@ import Left from "./icons/icon-left.svg?react";
 import Right from "./icons/icon-right.svg?react";
 import DefaultDropeZone from "./icons/default-zone.svg?react";
 import WhatsApp from "./icons/wts.svg?react";
+import DeleteIcon from "./icons/delete-icon.svg?react";
+import EditIcon from "./icons/edit-icon.svg?react";
+
 export const Icons = {
   Progress,
   Location,
@@ -15,4 +18,6 @@ export const Icons = {
   Right,
   DefaultDropeZone,
   WhatsApp,
+  DeleteIcon,
+  EditIcon,
 };

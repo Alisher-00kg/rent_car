@@ -30,11 +30,10 @@ export const LogoutModal = ({ onClose }) => {
 };
 
 const StyledModalka = styled("div")(() => ({
-  width: "458px",
-  height: "100px",
   display: "flex",
   flexDirection: "column",
   gap: "30px",
+  padding: "20px 50px",
 
   "& p": {
     textAlign: "center",
@@ -50,20 +49,18 @@ const StyledContainerModal = styled("div")(() => ({
 const StyledCanel = styled(Button)(() => ({
   width: "116px",
   height: "42px",
-  borderRadius: "10px",
-  border: "1px solid #959595",
-  color: "#959595",
-  "&:hover": {
-    color: "#959595",
-  },
+  borderRadius: "6px",
+  border: "1px solid #03045e",
+  color: "#03045e",
+  fontSize: "14px",
 }));
 const StyledGetOut = styled(Button)(() => ({
-  width: "88px",
-  height: "42px",
-  backgroundColor: "#0079BF",
+  width: "120px",
+  height: "43px",
+  backgroundColor: "#03045e",
   color: "#FFFFFF",
   fontSize: "14px",
-  borderRadius: "10px",
+  borderRadius: "6px",
   "&:hover": {
     color: "#FFFFFF",
   },

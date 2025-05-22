@@ -3,6 +3,9 @@ import Bizness from "../../assets/images/biznez4.png";
 import Mers from "../../assets/images/biznez5.png";
 import Bently from "../../assets/images/biznez16.png";
 import WhiteCar from "../../assets/images/mersedes4.png";
+import React from "react";
+import { Icons } from "../../assets";
+import { ActionCell } from "../helpers/action-cell";
 export const CARS = [
   {
     id: 1,
@@ -17,7 +20,7 @@ export const CARS = [
   },
   {
     id: 2,
-    category: "Винивены",
+    category: "Минивены",
     image: [WhiteCar, Bently],
     model: "Audi B-klasse",
     year: 2022,
@@ -61,6 +64,61 @@ export const CARS = [
   },
 ];
 
+export const COLUMNS = [
+  {
+    Header: "ID",
+    accessor: "id",
+  },
+  {
+    Header: "Категория",
+    accessor: "category",
+  },
+  {
+    Header: "Картинка",
+    accessor: "image",
+    Cell: ({ row }) => {
+      return React.createElement("img", {
+        src: row.image[0],
+        style: {
+          width: "120px",
+          height: "30px",
+          objectFit: "scale-down",
+          borderRadius: "4px",
+        },
+      });
+    },
+  },
+  {
+    Header: "Модель",
+    accessor: "model",
+  },
+  {
+    Header: "Год",
+    accessor: "year",
+  },
+  {
+    Header: "Коробка передач",
+    accessor: "transmission",
+  },
+  {
+    Header: "Топливо",
+    accessor: "fuel",
+  },
+  {
+    Header: "Двигатель",
+    accessor: "engine",
+  },
+  {
+    Header: "Цена за день",
+    accessor: "pricePerDay",
+  },
+  {
+    Header: "Действие",
+    accessor: "action",
+    Cell: ActionCell,
+  },
+];
+
 export const PATHS = {
   GUEST: {
     ROOT: "/guest",
@@ -84,6 +142,7 @@ export const PATHS = {
   ADMIN: {
     ROOT: "/admin",
     PAGE: "/admin/admin-page",
+    PAGE_DETAILS: "/admin/admin-page/:carId",
     ORDERS: "/admin/admin-orders",
     CREATE: "/admin/admin-page/create-card",
   },

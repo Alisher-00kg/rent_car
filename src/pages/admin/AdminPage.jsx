@@ -2,96 +2,165 @@ import styled from "styled-components";
 import Input from "../../components/UI/input/Input";
 import Button from "../../components/UI/button/Button";
 import { CiSearch } from "react-icons/ci";
-import { IconButton, InputAdornment } from "@mui/material";
-import { useState } from "react";
+import { IconButton, InputAdornment, Typography } from "@mui/material";
+import { useState, useMemo } from "react";
 import { CreateDiscount } from "../../components/UI/modal/CreateDiscount";
-import { PATHS } from "../../utils/constants/constants";
+import { COLUMNS, PATHS } from "../../utils/constants/constants";
 import { useNavigate } from "react-router-dom";
 
 import { styled as muistyled } from "@mui/material";
 import { CARS } from "../../utils/constants/constants";
-import Card from "../../components/UI/card/Card";
-import ChoseUs from "../../components/chose-us/ChoseUs";
-import Slider from "../../components/swiper/Slider";
-import { imageArray } from "../../utils/constants/carsSlider";
+import { Table } from "../../components/UI/table";
+
 export const AdminPage = () => {
   const [cars, setCars] = useState(CARS);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
+  // Фильтрация машин по поисковому запросу
+  const filteredCars = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return cars;
+    }
+
+    const query = searchQuery.toLowerCase().trim();
+
+    return cars.filter((car) => {
+      // Поиск по модели
+      if (car.model?.toLowerCase().includes(query)) return true;
+
+      // Поиск по категории
+      if (car.category?.toLowerCase().includes(query)) return true;
+
+      // Поиск по году (конвертируем в строку)
+      if (car.year?.toString().includes(query)) return true;
+
+      // Поиск по коробке передач
+      if (car.transmission?.toLowerCase().includes(query)) return true;
+
+      // Поиск по типу топлива
+      if (car.fuel?.toLowerCase().includes(query)) return true;
+
+      // Поиск по двигателю
+      if (car.engine?.toLowerCase().includes(query)) return true;
+
+      // Поиск по цене
+      if (car.pricePerDay?.toString().includes(query)) return true;
+
+      return false;
+    });
+  }, [cars, searchQuery]);
+
   const handleOpenModal = () => {
     setIsOpen(true);
   };
+
   const handleCloseModal = () => {
     setIsOpen(false);
   };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    // Поиск уже работает через useMemo, но можно добавить дополнительную логику
+  };
+
   return (
     <StyledWrapper>
       <StyledInnerPanel>
-        <StyledInput
-          placeholder="Поис по названию или ..."
-          borderradius="11px"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton edge="end">
-                  <CiSearch />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+        <form onSubmit={handleSearchSubmit} style={{ display: "contents" }}>
+          <StyledInput
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Поиск по модели, категории, году..."
+            borderradius="11px"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" type="submit">
+                    <CiSearch />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </form>
         <StyledWrapperButtons>
+          <CreateSale variant="outlined" onClick={handleOpenModal}>
+            Создать скидку
+          </CreateSale>
           <StyledButton
             variant="outlined"
             onClick={() => navigate(PATHS.ADMIN.CREATE)}
           >
             Добавить карточку
           </StyledButton>
-          <StyledButton variant="outlined" onClick={handleOpenModal}>
-            Создать скидку
-          </StyledButton>
         </StyledWrapperButtons>
       </StyledInnerPanel>
       <CreateDiscount isOpen={isOpen} onClose={handleCloseModal} />
-      <div style={{ display: "flex", flexDirection: "column", gap: "100px" }}>
-        <StyledUl>
-          {cars.map((item) => (
-            <Card key={item.fuel} {...item} />
-          ))}
-        </StyledUl>
-      </div>
+
+      {/* Показываем результаты поиска */}
+      {searchQuery && (
+        <SearchResults>
+          Найдено результатов: {filteredCars.length} из {cars.length}
+        </SearchResults>
+      )}
+
+      <Table columns={COLUMNS} data={filteredCars} />
     </StyledWrapper>
   );
 };
+
 const StyledWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 200px;
+  gap: 30px;
 `;
+
 const StyledInnerPanel = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
-const StyledInput = styled(Input)`
-  width: 550px;
-`;
+
+const StyledInput = styled(Input)({
+  width: "550px",
+});
+
 const StyledButton = styled(Button)({
   width: "fit-content",
   fontSize: "16px",
   textTransform: "capitalize !important",
+  "&.MuiButtonBase-root": {
+    color: "#03045e",
+    border: "1px solid #03045e",
+  },
 });
+
 const StyledWrapperButtons = styled.div`
   width: fit-content;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
 `;
-const StyledUl = muistyled("ul")({
-  width: "100%",
-  display: "flex",
-  gap: "50px",  
+
+const CreateSale = muistyled(Typography)({
+  color: "#03045e",
+  fontWeight: "500",
+  cursor: "pointer",
+  textDecoration: "underline dotted #03045e",
 });
+
+const SearchResults = styled.div`
+  color: #666;
+  font-size: 14px;
+  align-self: flex-start;
+  margin-left: 20px;
+`;

@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const Footer = () => {
   return (
     <StyledFooter>
-      <nav></nav>
       <StyledNav>
         <h2>
           Rent<span>Car</span>

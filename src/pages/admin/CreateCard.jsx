@@ -203,6 +203,7 @@ export const CreateCard = () => {
           options={driveTypeOptions}
           name="driveType"
         />
+        <div></div>
         <StyledDropZoneInfo {...getRootProps()}>
           <input {...getInputProps()} />
           <Icons.DefaultDropeZone />
@@ -244,7 +245,6 @@ const StyledWrapper = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 50px;
   & .top-info {
     width: 100%;
@@ -254,9 +254,11 @@ const StyledWrapper = styled.div`
 `;
 const StyledForm = styled.form`
   width: 340px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 50px;
+  grid-row-gap: 30px;
   gap: 25px;
 `;
 const StyledDropZoneInfo = styled.div`

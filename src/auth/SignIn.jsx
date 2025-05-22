@@ -1,10 +1,4 @@
-import {
-  IconButton,
-  InputAdornment,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { IconButton, InputAdornment, Paper, Typography } from "@mui/material";
 import Input from "../components/UI/input/Input";
 import styled from "styled-components";
 import Button from "../components/UI/button/Button";
@@ -17,6 +11,7 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { signInThunk } from "../store/thunks/authThunk";
+
 export const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();

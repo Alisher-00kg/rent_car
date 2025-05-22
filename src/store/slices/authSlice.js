@@ -6,12 +6,12 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     userData: {},
-    role: roleFromStorage,
-    isAuthenticated: !!roleFromStorage,
-    isAuthInitialized: false,
+    role: "ADMIN",
+    isAuthenticated: !!true,
+    isAuthInitialized: true,
     isLoading: false,
     errorMessage: null,
-    token: null,
+    token: "asdfasdf",
   },
   reducers: {
     isAuth: (state, action) => {

@@ -5,7 +5,6 @@ import styled from "styled-components";
 export const AdminLayout = () => {
   return (
     <div>
-      AdminLayout
       <AdminHeader />
       <StyledOutletWrapper>
         <Outlet />
@@ -15,5 +14,5 @@ export const AdminLayout = () => {
 };
 const StyledOutletWrapper = styled.div`
   padding: 0px 40px;
-  margin-top: 120px;
+  margin-top: 130px;
 `;

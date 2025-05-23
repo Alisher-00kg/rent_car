@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { styled } from "@mui/material";
+import { styled, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../utils/constants/constants";
 import { useSelector } from "react-redux";
-
+import { MdOutlineFavorite } from "react-icons/md";
+import Button from "../button/Button";
+import { Icons } from "../../../assets";
 const Card = ({
   id,
   category,
@@ -46,6 +48,7 @@ const Card = ({
     <StyledDiv>
       <li onClick={() => handleNavigate(id)}>
         <div id="box_cars">
+          <StyledHeart />
           <div className="slider">
             <button
               className="slider-btn left"
@@ -54,7 +57,7 @@ const Card = ({
                 prevSlide();
               }}
             >
-              <span className="arrow">&#8592;</span>
+              <span className="arrow">&#8249;</span>
             </button>
             {images && images.length > 0 ? (
               <img src={images[currentIndex]} alt={model} />
@@ -68,33 +71,18 @@ const Card = ({
                 nextSlide();
               }}
             >
-              <span className="arrow">&#8594;</span>
+              <span className="arrow">&#8250;</span>
             </button>
           </div>
-          <h3>{model}</h3>
-          <div className="info">
-            <p>
-              <strong>Бренд: ............. </strong> {brand}
-            </p>
-            <p>
-              <strong>Год выпуска: ............. </strong> {yearOfRelease}
-            </p>
-            <p>
-              <strong>КПП: ............. </strong> {transmission}
-            </p>
-            <p>
-              <strong>Топливо: ............. </strong> {flueType}
-            </p>
-            <p>
-              <strong>Двигатель: ............. </strong> {driveType}
-            </p>
-            <p>
-              <strong>Мест: ............. </strong> {numberOfSeats}
-            </p>
-            <p>
-              <strong>Цена аренды: ............. </strong> {rentPrice} ₽
-            </p>
-          </div>
+          <StyledDescription>
+            <div className="inner_box">
+              <p className="title">{brand}</p>
+              <p>
+                {model},{transmission}. {flueType}, {driveType}, {numberOfSeats}
+              </p>
+            </div>
+            <Button variant="base">Посмотреть</Button>
+          </StyledDescription>
         </div>
       </li>
     </StyledDiv>
@@ -110,13 +98,14 @@ const StyledDiv = styled("div")({
   padding: "15px",
   margin: "10px",
   "& #box_cars": {
+    position: "relative",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     width: "350px",
     height: "auto",
     borderRadius: "14px",
-    gap: "20px",
+    gap: "45px",
     boxShadow:
       "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
     cursor: "pointer",
@@ -134,24 +123,6 @@ const StyledDiv = styled("div")({
       fontWeight: "bold",
       margin: "10px 0",
       color: "#333",
-    },
-
-    "& .info": {
-      display: "flex",
-      flexDirection: "column",
-      gap: "5px",
-      color: "#666",
-      fontSize: "18px",
-      padding: "0 10px",
-      textAlign: "left",
-
-      "& p": {
-        margin: 0,
-      },
-
-      "& strong": {
-        color: "#000",
-      },
     },
 
     "& .slider": {
@@ -174,7 +145,7 @@ const StyledDiv = styled("div")({
         position: "absolute",
         top: "50%",
         transform: "translateY(-50%)",
-        background: "rgba(255, 255, 255, 0.6)",
+        background: "none",
         border: "none",
         fontSize: "18px",
         cursor: "pointer",
@@ -193,14 +164,58 @@ const StyledDiv = styled("div")({
       },
 
       "&:hover .slider-btn": {
-        background: "rgba(255, 255, 255, 1)",
-        transform: "scale(1.1)",
+        transform: "scale(1.2)",
       },
 
       "& .arrow": {
-        fontSize: "20px",
-        color: "#333",
+        fontSize: "80px",
+        color: "#fff",
       },
     },
+  },
+});
+
+const StyledDescription = styled("div")({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  color: "#282828",
+  gap: "15px",
+  fontSize: "18px",
+  padding: "0 15px",
+  textAlign: "left",
+  "& .title": {
+    fontSize: "20px",
+  },
+  "& p": {
+    margin: 0,
+  },
+
+  "& strong": {
+    color: "#000",
+  },
+  "& .inner_box": {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    "& :nth-child(2)": {
+      fontSize: "15px",
+      display: "-webkit-box",
+      WebkitLineClamp: 2,
+      WebkitBoxOrient: "vertical",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    },
+  },
+});
+const StyledHeart = styled(Icons.WhiteHeart)({
+  position: "absolute",
+  zIndex: "10",
+  top: "15px",
+  right: "15px",
+  stroke: "white",
+  transition: "transform 0.4s easy-out",
+  "&:hover": {
+    transform: "scale(1.2)",
   },
 });

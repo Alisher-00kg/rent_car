@@ -10,13 +10,28 @@ import DeleteIcon from "./icons/delete-icon.svg?react";
 import EditIcon from "./icons/edit-icon.svg?react";
 import WhiteHeart from "./icons/white-heart.svg?react";
 import styled from "styled-components";
+import ChevronLeft from "./icons/chevron-left.svg?react";
+import WhatsAppNav from "./icons/whats-app.svg?react";
+import Telegram from "./icons/telegram.svg?react";
+import Instagram from "./icons/instagram.svg?react";
+import TikTok from "./icons/tik-tok.svg?react";
+import FaceBook from "./icons/facebook.svg?react";
 
 const Styled24 = (Component) => styled(Component)`
   width: 24px;
   height: 24px;
   cursor: pointer;
 `;
-
+const Styled18 = (Component) => styled(Component)`
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+`;
+const Styled60 = (Component) => styled(Component)`
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+`;
 export const Icons = {
   Progress,
   Location,
@@ -29,4 +44,10 @@ export const Icons = {
   DeleteIcon,
   EditIcon,
   WhiteHeart: Styled24(WhiteHeart),
+  ChevronLeft: Styled18(ChevronLeft),
+  WhatsAppNav: Styled60(WhatsAppNav),
+  Telegram: Styled60(Telegram),
+  Instagram: Styled60(Instagram),
+  TikTok: Styled60(TikTok),
+  FaceBook: Styled60(FaceBook),
 };

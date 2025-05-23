@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   createBrowserRouter,
   Navigate,
@@ -15,23 +15,10 @@ import { GuestLayout } from "../layout/GuestLayout";
 import { GuestRoutes } from "./Guest/GuestRoutes";
 import { SignIn } from "../auth/SignIn";
 import { SignUp } from "../auth/SignUp";
-import { useEffect } from "react";
-import { isAuth } from "../store/slices/authSlice";
 
 export const AppRoutes = () => {
-  const { isAuthenticated, role, isAuthInitialized } = useSelector(
-    (state) => state.auth
-  );
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const authData = JSON.parse(localStorage.getItem("auth")) || {};
-    if (!role) {
-      dispatch(isAuth(authData.data?.role));
-    }
-  }, [dispatch, role]);
-  // if (!isAuthInitialized) {
-  //   return <div>Загрузка...</div>;
-  // }
+  const { isAuthorized, role } = useSelector((state) => state.auth);
+
   const routeByRole = {
     ADMIN: PATHS.ADMIN.ROOT,
     USER: PATHS.USER.ROOT,
@@ -40,7 +27,7 @@ export const AppRoutes = () => {
   const routes = createBrowserRouter([
     {
       path: "/",
-      element: isAuthenticated ? (
+      element: isAuthorized ? (
         <Navigate to={routeByRole[role]} replace />
       ) : (
         <Navigate to={PATHS.GUEST.PAGE} />
@@ -109,8 +96,6 @@ export const AppRoutes = () => {
       element: <NotFoundPage />,
     },
   ]);
-  // if (isLoading) {
-  //   return <div>Загрузка...</div>;
-  // }
+
   return <RouterProvider router={routes} />;
 };

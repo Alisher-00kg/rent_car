@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import { authSlice } from "./slices/authSlice";
 import { allCarsSlice } from "./slices/allCarsSlice";
 
@@ -7,4 +8,9 @@ export const store = configureStore({
     [authSlice.name]: authSlice.reducer,
     [allCarsSlice.name]: allCarsSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat
+      // usersApi.middleware,
+      (),
 });

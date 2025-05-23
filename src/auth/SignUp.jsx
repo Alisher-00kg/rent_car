@@ -9,28 +9,37 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../components/UI/error/ErrorMessage";
-import { useDispatch } from "react-redux";
-import { signUpThunk } from "../store/thunks/authThunk";
+import { useSignUpMutation } from "../store/api/auth.service";
 
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useDispatch();
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [signUp] = useSignUpMutation();
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
 
+  const password = watch("password");
+
   const onSubmit = (data) => {
-    if (data.email === "admin@gmail.com" && data.password === "Admin123!") {
-      data.role = "ADMIN";
-    } else {
-      data.role = "USER";
-    }
-    dispatch(signUpThunk(data));
+    const signUpData = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+      role: "USER",
+      localDate: new Date().toISOString().split("T")[0],
+    };
+
+    console.log(signUpData);
+    signUp(signUpData);
     reset();
   };
+
   return (
     <StyledWrapper>
       <StyledInnerWrapper elevation={3}>
@@ -49,44 +58,14 @@ export const SignUp = () => {
               fullWidth
               placeholder="Имя"
               type="text"
-              {...register("firstName", {
+              {...register("name", {
                 required: {
                   value: true,
                   message: "Обязательное поле",
                 },
               })}
             />
-            <ErrorMessage>{errors?.firstName?.message}</ErrorMessage>
-          </InputWrapper>
-          <InputWrapper>
-            <Input
-              label="Фамилия"
-              fullWidth
-              type="text"
-              placeholder="Фамилия"
-              {...register("lastName", {
-                required: {
-                  value: true,
-                  message: "Обязательное поле",
-                },
-              })}
-            />
-            <ErrorMessage>{errors?.lastName?.message}</ErrorMessage>
-          </InputWrapper>
-          <InputWrapper>
-            <Input
-              label="Номер телефона"
-              fullWidth
-              type="tel"
-              placeholder="Номер телефона"
-              {...register("phoneNumber", {
-                required: {
-                  value: true,
-                  message: "Обязательное поле",
-                },
-              })}
-            />
-            <ErrorMessage>{errors?.phoneNumber?.message}</ErrorMessage>
+            <ErrorMessage>{errors?.name?.message}</ErrorMessage>
           </InputWrapper>
           <InputWrapper>
             <Input
@@ -134,15 +113,43 @@ export const SignUp = () => {
                   value: true,
                   message: "Обязательное поле",
                 },
-                pattern: {
-                  value:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/,
-                  message:
-                    "Должен содержать 6 символов: одну заглавную букву, одну строчную букву, одну цифру и один символ специального регистра.",
-                },
+                minLength: 6,
               })}
             />
             <ErrorMessage>{errors?.password?.message}</ErrorMessage>
+          </InputWrapper>
+          <InputWrapper>
+            <StyledTextField
+              label="Подтвердите пароль"
+              fullWidth
+              placeholder="Подтвердите пароль"
+              type={showConfirmPassword ? "text" : "password"}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    >
+                      {showConfirmPassword ? (
+                        <FaRegEye style={{ backgroundColor: "transparent" }} />
+                      ) : (
+                        <FaRegEyeSlash />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              {...register("confirmPassword", {
+                required: {
+                  value: true,
+                  message: "Обязательное поле",
+                },
+                validate: (value) =>
+                  value === password || "Пароли не совпадают",
+              })}
+            />
+            <ErrorMessage>{errors?.confirmPassword?.message}</ErrorMessage>
           </InputWrapper>
           <StyledButton type="submit">Зарегистрироваться</StyledButton>
           <StyledInfoText>
@@ -154,6 +161,7 @@ export const SignUp = () => {
     </StyledWrapper>
   );
 };
+
 const StyledWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
@@ -161,6 +169,7 @@ const StyledWrapper = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
 const StyledInnerWrapper = styled(Paper)(() => ({
   "&.MuiPaper-root ": {
     width: "400px",
@@ -182,6 +191,7 @@ const StyledForm = styled.form`
   align-items: center;
   gap: 28px;
 `;
+
 const StyledInfoText = styled.div`
   width: 100%;
   display: flex;
@@ -192,18 +202,22 @@ const StyledInfoText = styled.div`
     color: #1976d2;
   }
 `;
+
 const StyledLink = styled(Link)`
   text-decoration: none;
   font-weight: 600;
 `;
+
 const InputWrapper = styled.div`
   width: 100%;
   position: relative;
 `;
+
 const StyledButton = styled(Button)`
   margin-top: 25px !important;
   width: 100%;
 `;
+
 const StyledTextField = styled(Input)({
   "& .MuiInputBase-root": {
     backgroundColor: "#e7f0ff",

@@ -19,8 +19,10 @@ export const authApi = createApi({
         body: userData,
       }),
     }),
+    getAll: builder.query({
+      query: () => "/car/getAllCars",
+    }),
   }),
 });
 
-export const { useSignInMutation, useSignUpMutation, useSendEmailMutation } =
-  authApi;
+export const { useSignInMutation, useSignUpMutation, useGetAllQuery } = authApi;

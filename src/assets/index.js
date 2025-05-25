@@ -8,6 +8,14 @@ import DefaultDropeZone from "./icons/default-zone.svg?react";
 import WhatsApp from "./icons/wts.svg?react";
 import DeleteIcon from "./icons/delete-icon.svg?react";
 import EditIcon from "./icons/edit-icon.svg?react";
+import WhiteHeart from "./icons/white-heart.svg?react";
+import styled from "styled-components";
+
+const Styled24 = (Component) => styled(Component)`
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+`;
 
 export const Icons = {
   Progress,
@@ -20,4 +28,5 @@ export const Icons = {
   WhatsApp,
   DeleteIcon,
   EditIcon,
+  WhiteHeart: Styled24(WhiteHeart),
 };

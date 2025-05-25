@@ -9,12 +9,15 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../components/UI/error/ErrorMessage";
-import { useSignUpMutation } from "../store/api/auth.service";
+import { useGetAllQuery, useSignUpMutation } from "../store/api/auth.service";
 
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [signUp] = useSignUpMutation();
+  const { data } = useGetAllQuery();
+  console.log(data);
+
   const {
     register,
     handleSubmit,
@@ -31,13 +34,12 @@ export const SignUp = () => {
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
-      role: "USER",
-      localDate: new Date().toISOString().split("T")[0],
+      role: "USER", // или можете сделать это динамическим
+      localDate: new Date().toISOString().split("T")[0], // текущая дата в формате YYYY-MM-DD
     };
 
-    console.log(signUpData);
     signUp(signUpData);
-    reset();
+    // reset();
   };
 
   return (
@@ -113,7 +115,10 @@ export const SignUp = () => {
                   value: true,
                   message: "Обязательное поле",
                 },
-                minLength: 6,
+                minLength: {
+                  value: 6,
+                  message: "Пароль должен содержать минимум 6 символов",
+                },
               })}
             />
             <ErrorMessage>{errors?.password?.message}</ErrorMessage>

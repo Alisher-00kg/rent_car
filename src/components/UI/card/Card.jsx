@@ -1,21 +1,14 @@
 import { useState } from "react";
-import { styled, Typography } from "@mui/material";
+import { styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../utils/constants/constants";
 import { useSelector } from "react-redux";
-import { MdOutlineFavorite } from "react-icons/md";
 import Button from "../button/Button";
 import { Icons } from "../../../assets";
 const Card = ({
   id,
-  category,
   brand,
   model,
-  color,
-  yearOfRelease,
-  madeInCountry,
-  rentPrice,
-  hasCarInStock,
   flueType,
   numberOfSeats,
   transmission,
@@ -198,7 +191,7 @@ const StyledDescription = styled("div")({
     display: "flex",
     flexDirection: "column",
     gap: "10px",
-    "& :nth-child(2)": {
+    "& :nth-of-type(2)": {
       fontSize: "15px",
       display: "-webkit-box",
       WebkitLineClamp: 2,

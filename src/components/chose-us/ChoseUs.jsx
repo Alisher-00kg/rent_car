@@ -1,5 +1,4 @@
-import { colors, styled } from "@mui/material";
-import React from "react";
+import { styled } from "@mui/material";
 import { Icons } from "../../assets";
 
 const ChoseUs = () => {

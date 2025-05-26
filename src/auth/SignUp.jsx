@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../components/UI/error/ErrorMessage";
 import { useDispatch } from "react-redux";
 import { signUpThunk } from "../store/thunks/authThunk";
+
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();

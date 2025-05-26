@@ -75,7 +75,7 @@ const StyledHeader = styled("header")({
   zIndex: 2,
   "& .nav": {
     display: "flex",
-    gap: "50px",
+    gap: "30px",
   },
   "& h2": {
     color: "white",
@@ -118,8 +118,7 @@ const StyledRightBox = styled("div")({
 });
 const StyledMenu = styled(Menu)(() => ({
   "& .css-1tktgsa-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
-    width: "120px",
-    height: "54px",
+    width: "150px",
     borderRadius: "10px",
   },
 }));

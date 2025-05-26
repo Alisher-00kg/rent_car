@@ -8,15 +8,18 @@ const Input = forwardRef(
       InputProps,
       borderradius = null,
       label,
+      inputLabel,
       value,
       onChange,
+      id = null,
       ...props
     },
     ref
   ) => {
-    return (
+    const inputField = (
       <StyledInput
         type="text"
+        id={id ?? inputLabel}
         placeholder={placeholder}
         label={label}
         inputRef={ref}
@@ -27,6 +30,17 @@ const Input = forwardRef(
         {...props}
       />
     );
+
+    if (inputLabel) {
+      return (
+        <StyledInputWrapper>
+          <label htmlFor={inputLabel}>{inputLabel}</label>
+          {inputField}
+        </StyledInputWrapper>
+      );
+    }
+
+    return inputField;
   }
 );
 
@@ -40,3 +54,13 @@ const StyledInput = styled(TextField)(({ borderradius }) => ({
     },
   },
 }));
+const StyledInputWrapper = styled("div")({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "start",
+  gap: "12px",
+  "& label": {
+    color: "#00000099",
+  },
+});

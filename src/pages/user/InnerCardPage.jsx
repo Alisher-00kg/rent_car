@@ -3,10 +3,6 @@ import { Navigation, Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import Audi from "../../assets/images/Audi2.png";
-import Bizness from "../../assets/images/biznez4.png";
-import Mers from "../../assets/images/biznez5.png";
-import Bently from "../../assets/images/biznez16.png";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -15,23 +11,28 @@ import { PATHS } from "../../utils/constants/constants";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/UI/input/Input";
 import { BaseModal } from "../../components/UI/modal/BaseModal";
-import { Typography } from "@mui/material";
-import { getSingleCar } from "../../store/thunks/allCars";
+import { IconButton, Typography } from "@mui/material";
+import { getAllCars, getSingleCar } from "../../store/thunks/allCars";
+import { Icons } from "../../assets";
+import Card from "../../components/UI/card/Card";
 
 export const InnerCardPage = () => {
   const navigate = useNavigate();
   const { cardID } = useParams();
   const { role } = useSelector((state) => state.auth);
-  const { singleCar } = useSelector((state) => state.allCars);
+  const { singleCar, cars } = useSelector((state) => state.allCars);
   console.log(singleCar);
   const [isOpen, setIsOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(4);
   const dispatch = useDispatch();
   useEffect(() => {
     if (cardID) {
       dispatch(getSingleCar(cardID));
     }
   }, [cardID, dispatch]);
-
+  useEffect(() => {
+    dispatch(getAllCars());
+  }, [dispatch]);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const handleReservation = () => {};
   const handleOpenModal = () => {
@@ -40,136 +41,220 @@ export const InnerCardPage = () => {
   const handleCloseModal = () => {
     setIsOpen(false);
   };
+  const handleNavigateToBack = () => {
+    switch (role) {
+      case "USER":
+        return navigate(PATHS.USER.PAGE);
+      default:
+        return navigate(PATHS.GUEST.PAGE);
+    }
+  };
+  const aboutCar = [
+    {
+      text: "Категория:",
+      value: singleCar?.category,
+    },
+    {
+      text: "Цвет:",
+      value: singleCar?.color,
+    },
+    {
+      text: "Год выпуска:",
+      value: singleCar?.yearOfRelease,
+    },
+    {
+      text: "Производство:",
+      value: singleCar?.madeInCountry,
+    },
+    {
+      text: "Тип топлива:",
+      value: singleCar?.flueType,
+    },
+    {
+      text: "Трансмиссия:",
+      value: singleCar?.transmission,
+    },
+    {
+      text: "Привод:",
+      value: singleCar?.driveType,
+    },
+    {
+      text: "Мест:",
+      value: singleCar?.numberOfSeats,
+    },
+    {
+      text: "В наличии:",
+      value: singleCar?.hasCarInStock ? "Да" : "Нет",
+    },
+    {
+      text: "Цена за сутки:",
+      value: `${singleCar?.rentPrice}руб`,
+    },
+  ];
   return (
-    <GalleryWrapper>
-      <div>
-        <div
-          style={{
-            maxWidth: "700px",
-          }}
-        >
-          <MainSlider>
-            <Swiper
-              modules={[Navigation, Thumbs]}
-              navigation
-              thumbs={{ swiper: thumbsSwiper }}
-              className="main-slider"
-              spaceBetween={10}
-            >
-              {singleCar?.images?.map((img, index) => (
-                <SwiperSlide key={index}>
-                  <img src={img} alt={`Slide ${index}`} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </MainSlider>
-        </div>
+    <StyledMainWrapper>
+      <StyledInnerWrapper>
+        <StyledCap>
+          <p>Главная / Mercedes-Benz Citan</p>
+          <StyledIconButton onClick={handleNavigateToBack}>
+            <Icons.ChevronLeft /> Назад
+          </StyledIconButton>
+        </StyledCap>
+        <GalleryWrapper>
+          <div>
+            <WrapperSlider>
+              <p className="title">
+                {singleCar?.brand} {singleCar?.model}
+              </p>
+              <MainSlider>
+                <Swiper
+                  modules={[Navigation, Thumbs]}
+                  navigation
+                  thumbs={{ swiper: thumbsSwiper }}
+                  className="main-slider"
+                  spaceBetween={10}
+                >
+                  {singleCar?.images?.map((img, index) => (
+                    <SwiperSlide key={index}>
+                      <img src={img} alt={`Slide ${index}`} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </MainSlider>
+            </WrapperSlider>
 
-        <ThumbsSlider>
-          <Swiper
-            modules={[Thumbs]}
-            onSwiper={setThumbsSwiper}
-            spaceBetween={10}
-            slidesPerView={4}
-            watchSlidesProgress
-            className="thumbs-slider"
-          >
-            {singleCar?.images?.map((img, index) => (
-              <SwiperSlide key={index}>
-                <img src={img} alt={`Thumb ${index}`} />
-              </SwiperSlide>
+            <ThumbsSlider>
+              <Swiper
+                modules={[Thumbs]}
+                onSwiper={setThumbsSwiper}
+                spaceBetween={10}
+                slidesPerView={4}
+                watchSlidesProgress
+                className="thumbs-slider"
+              >
+                {singleCar?.images?.map((img, index) => (
+                  <SwiperSlide key={index}>
+                    <img src={img} alt={`Thumb ${index}`} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </ThumbsSlider>
+          </div>
+
+          <StyledRightBar>
+            <section>
+              <CarInfoList>
+                {aboutCar?.map(({ text, value }, index) => (
+                  <li key={index}>
+                    <span className="label">{text}</span>
+                    <span className="dots" />
+                    <span className="value">{value}</span>
+                  </li>
+                ))}
+              </CarInfoList>
+            </section>
+            <LowerLayout>
+              <StyledButton onClick={handleOpenModal} variant={"base"}>
+                Забронировать
+              </StyledButton>
+              <IconButton>
+                <StyledHeart />
+              </IconButton>
+            </LowerLayout>
+          </StyledRightBar>
+          <BaseModal open={isOpen} onClose={handleCloseModal}>
+            {role === "GUEST" ? (
+              <StyledBackInfo>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  Чтобы забронировать вам сначала надо войти в аккаунт или
+                  зарегистрироваться!
+                </Typography>
+                <StyledBtnsWrapper>
+                  <StyledButton onClick={() => navigate(PATHS.SIGN_IN)}>
+                    Войти
+                  </StyledButton>
+                  <StyledButton onClick={() => navigate(PATHS.SIGN_UP)}>
+                    Зарегистрироваться
+                  </StyledButton>
+                </StyledBtnsWrapper>
+              </StyledBackInfo>
+            ) : (
+              <form>
+                <Input label="Имя" />
+                <Input label="Фамилия" />
+                <Input label="Номер телефон" />
+              </form>
+            )}
+          </BaseModal>
+        </GalleryWrapper>
+      </StyledInnerWrapper>
+      <StyledAnotherInfo>
+        <StyledSection>
+          <p className="friends_title">Поделиться с друзьями</p>
+          <nav className="friends_navigation">
+            <IconButton>
+              <Icons.WhatsAppNav />
+            </IconButton>
+            <IconButton>
+              <Icons.Telegram />
+            </IconButton>
+            <IconButton>
+              <Icons.Instagram />
+            </IconButton>
+            <IconButton>
+              <Icons.TikTok />
+            </IconButton>
+            <IconButton>
+              <Icons.FaceBook />
+            </IconButton>
+          </nav>
+        </StyledSection>
+        <StyledArticle>
+          <p className="similar_title">Похожие объявления</p>
+          <StyledUl>
+            {cars?.slice(0, visibleCount).map((item, index) => (
+              <Card key={item.id || index} {...item} />
             ))}
-          </Swiper>
-        </ThumbsSlider>
-      </div>
-
-      <StyledRightBar>
-        <section>
-          <h2>
-            {singleCar?.brand} {singleCar?.model}
-          </h2>
-          <CarInfoList>
-            <li>
-              <strong>Категория:</strong> {singleCar?.category}
-            </li>
-            <li>
-              <strong>Цвет:</strong> {singleCar?.color}
-            </li>
-            <li>
-              <strong>Год выпуска:</strong> {singleCar?.yearOfRelease}
-            </li>
-            <li>
-              <strong>Производство:</strong> {singleCar?.madeInCountry}
-            </li>
-            <li>
-              <strong>Тип топлива:</strong> {singleCar?.flueType}
-            </li>
-            <li>
-              <strong>Трансмиссия:</strong> {singleCar?.transmission}
-            </li>
-            <li>
-              <strong>Привод:</strong> {singleCar?.driveType}
-            </li>
-            <li>
-              <strong>Мест:</strong> {singleCar?.numberOfSeats}
-            </li>
-            <li>
-              <strong>В наличии:</strong>{" "}
-              {singleCar?.hasCarInStock ? "Да" : "Нет"}
-            </li>
-            <li>
-              <strong>Цена за сутки: </strong> {singleCar?.rentPrice} руб
-            </li>
-          </CarInfoList>
-        </section>
-
-        <StyledBtnsWrapper>
-          <StyledButton onClick={handleOpenModal}>Забронировать</StyledButton>
-          <StyledButton onClick={() => navigate(PATHS.USER.PAGE)}>
-            Назад
-          </StyledButton>
-        </StyledBtnsWrapper>
-      </StyledRightBar>
-      <BaseModal open={isOpen} onClose={handleCloseModal}>
-        {role === "GUEST" ? (
-          <StyledBackInfo>
-            <Typography
-              variant="h6"
-              sx={{
-                textAlign: "center",
-              }}
+          </StyledUl>
+          {visibleCount < cars.length && (
+            <Button
+              variant="showmore"
+              onClick={() => setVisibleCount((prev) => prev + 4)}
             >
-              Чтобы забронировать вам сначала надо войти в аккаунт или
-              зарегистрироваться!
-            </Typography>
-            <StyledBtnsWrapper>
-              <StyledButton onClick={() => navigate(PATHS.SIGN_IN)}>
-                Войти
-              </StyledButton>
-              <StyledButton onClick={() => navigate(PATHS.SIGN_UP)}>
-                Зарегистрироваться
-              </StyledButton>
-            </StyledBtnsWrapper>
-          </StyledBackInfo>
-        ) : (
-          <form>
-            <Input label="Имя" />
-            <Input label="Фамилия" />
-            <Input label="Номер телефон" />
-          </form>
-        )}
-      </BaseModal>
-    </GalleryWrapper>
+              Посмотреть еще
+            </Button>
+          )}
+        </StyledArticle>
+      </StyledAnotherInfo>
+    </StyledMainWrapper>
   );
 };
-
-const GalleryWrapper = styled("div")({
+const StyledMainWrapper = styled("div")({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "109px",
   padding: "80px",
+});
+const StyledInnerWrapper = styled("div")({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "63px",
+});
+const GalleryWrapper = styled("div")({
   width: "100%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  gap: "200px",
+  gap: "108px",
 });
 
 const MainSlider = styled("div")({
@@ -222,16 +307,28 @@ const StyledBtnsWrapper = styled.div`
   gap: 50px;
 `;
 const StyledButton = styled(Button)({
-  width: "220px",
+  "&.MuiButtonBase-root": {
+    height: "40px !important",
+  },
 });
 
 const StyledRightBar = styled.div`
-  width: 100%;
+  position: relative;
+  width: 30%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 100px;
+  gap: 50px;
+  padding: 20px;
+  border-radius: 8px;
 `;
+const LowerLayout = styled("div")({
+  width: "75%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "40px",
+});
 const StyledBackInfo = styled.div`
   width: 100%;
   display: flex;
@@ -240,22 +337,110 @@ const StyledBackInfo = styled.div`
   gap: 40px;
 `;
 const CarInfoList = styled.ul`
-  margin-top: 20px;
-  padding: 0;
-  list-style: none;
-  font-size: 16px;
-  line-height: 1.8;
-  width: 100%;
-  max-width: 400px;
-
+  font-size: 18px;
+  width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  color: #282828;
   & li {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
+    align-items: center;
+    width: 100%;
+  }
+  .label {
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  & strong {
-    font-weight: 600;
-    color: #333;
+  .dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted #ccc;
+    height: 1px;
+    margin: 0 8px;
+    overflow: hidden;
+  }
+
+  .value {
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 `;
+
+const StyledIconButton = styled(IconButton)({
+  "&.MuiButtonBase-root": {
+    fontSize: "17px",
+    color: "#7E52FF",
+  },
+});
+
+const StyledCap = styled("nav")({
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+});
+const StyledHeart = styled(Icons.WhiteHeart)({
+  width: "34px",
+  height: "34px",
+  stroke: "#000",
+  transition: "transform 0.4s easy-out",
+  "&:hover": {
+    transform: "scale(1.2)",
+  },
+});
+const WrapperSlider = styled("div")({
+  width: "760px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "start",
+  gap: "24px",
+  "& .title": {
+    fontSize: "34px",
+  },
+});
+const StyledAnotherInfo = styled("div")({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "start",
+  gap: "80px",
+});
+const StyledSection = styled("section")({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "start",
+  gap: "26px",
+  "& .friends_title": {
+    fontSize: "30px",
+    color: "#282828",
+    fontWeight: "700",
+  },
+  "& .friends_navigation": {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  },
+});
+const StyledArticle = styled("article")({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "start",
+  gap: "65px",
+  "& .similar_title": {
+    fontSize: "34px",
+    color: "#282828",
+    fontWeight: "700",
+  },
+});
+const StyledUl = styled("ul")({
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "30px",
+  flexWrap: "wrap",
+});

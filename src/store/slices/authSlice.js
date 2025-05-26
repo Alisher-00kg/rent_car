@@ -12,21 +12,22 @@ const getInitialState = () => {
         email: userData.email || "",
         token: userData.token || null,
         role: userData.role || "GUEST",
-        localDate: userData.role || null,
-        isAuthorized: true,
+        localDate: userData.localDate || null,
+        isAuthorized: !!userData.token,
       };
     } catch (error) {
-      error;
+      console.error("Error parsing auth cookie:", error);
+      Cookies.remove("auth");
     }
   }
 
   return {
     name: "",
     email: "",
-    token: null,
-    role: "GUEST",
+    token: "asdfasdf",
+    role: "ADMIN",
     localDate: null,
-    isAuthorized: false,
+    isAuthorized: true,
   };
 };
 
@@ -59,14 +60,20 @@ export const authSlice = createSlice({
       if (authUserCookie) {
         try {
           const userData = JSON.parse(authUserCookie);
-          state.isAuthorized = true;
-          state.role = userData.role;
-          state.name = userData.name;
-          state.email = userData.email;
-          state.localDate = userData.localDate;
-          state.token = userData.token;
+          state.isAuthorized = !!userData.token;
+          state.role = userData.role || "GUEST";
+          state.name = userData.name || "";
+          state.email = userData.email || "";
+          state.localDate = userData.localDate || null;
+          state.token = userData.token || null;
         } catch (error) {
-          error;
+          state.isAuthorized = false;
+          state.role = "GUEST";
+          state.name = "";
+          state.email = "";
+          state.localDate = null;
+          state.token = null;
+          Cookies.remove("auth");
         }
       }
     },

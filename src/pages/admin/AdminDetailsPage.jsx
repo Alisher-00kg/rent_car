@@ -1,3 +1,9 @@
+import { InnerCardPage } from "../user/InnerCardPage";
+
 export const AdminDetailsPage = () => {
-  return <div>AdminDetailsPage</div>;
+  return (
+    <div>
+      <InnerCardPage />
+    </div>
+  );
 };

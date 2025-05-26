@@ -6,7 +6,6 @@ export const getAllCars = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axiosInstance.get("/cars");
-      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(error?.message);

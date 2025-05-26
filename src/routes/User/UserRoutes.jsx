@@ -11,7 +11,7 @@ import MainPage from "../../pages/main/MainPage";
 import { InnerCardPage } from "../../pages/user/InnerCardPage";
 
 export const UserRoutes = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthorized } = useSelector((state) => state.auth);
   return [
     {
       index: true,
@@ -19,9 +19,8 @@ export const UserRoutes = () => {
     },
     {
       path: PATHS.USER.PAGE,
-      // index: true,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <MainPage />
         </PrivateRoute>
       ),
@@ -29,7 +28,7 @@ export const UserRoutes = () => {
     {
       path: PATHS.USER.TARIFFS,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <TariffsPage />
         </PrivateRoute>
       ),
@@ -37,7 +36,7 @@ export const UserRoutes = () => {
     {
       path: PATHS.USER.SALES,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <SalesPage />
         </PrivateRoute>
       ),
@@ -45,7 +44,7 @@ export const UserRoutes = () => {
     {
       path: PATHS.USER.CONTACTS,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_INT}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_INT}>
           <ContactsPage />
         </PrivateRoute>
       ),
@@ -53,7 +52,7 @@ export const UserRoutes = () => {
     {
       path: PATHS.USER.ADDRESS,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <AddressPage />
         </PrivateRoute>
       ),
@@ -61,7 +60,7 @@ export const UserRoutes = () => {
     {
       path: PATHS.USER.PROFILE,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <ProfilePage />
         </PrivateRoute>
       ),
@@ -69,7 +68,7 @@ export const UserRoutes = () => {
     {
       path: PATHS.USER.PAGE + "/:cardID",
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <InnerCardPage />
         </PrivateRoute>
       ),

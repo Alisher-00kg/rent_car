@@ -18,18 +18,20 @@ import Card from "../../components/UI/card/Card";
 
 export const InnerCardPage = () => {
   const navigate = useNavigate();
-  const { cardID } = useParams();
+  const { carId } = useParams();
   const { role } = useSelector((state) => state.auth);
   const { singleCar, cars } = useSelector((state) => state.allCars);
-  console.log(singleCar);
   const [isOpen, setIsOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(4);
   const dispatch = useDispatch();
+  console.log(singleCar);
+
   useEffect(() => {
-    if (cardID) {
-      dispatch(getSingleCar(cardID));
+    if (carId) {
+      dispatch(getSingleCar(carId));
     }
-  }, [cardID, dispatch]);
+  }, [carId, dispatch]);
+
   useEffect(() => {
     dispatch(getAllCars());
   }, [dispatch]);
@@ -95,7 +97,24 @@ export const InnerCardPage = () => {
     <StyledMainWrapper>
       <StyledInnerWrapper>
         <StyledCap>
-          <p>Главная / Mercedes-Benz Citan</p>
+          <p>
+            <span
+              onClick={() => navigate(-1)}
+              style={{
+                cursor: "pointer",
+              }}
+            >
+              Главная
+            </span>{" "}
+            /{" "}
+            <span
+              style={{
+                color: "#03045e",
+              }}
+            >
+              {singleCar?.brand} {singleCar.model}
+            </span>
+          </p>
           <StyledIconButton onClick={handleNavigateToBack}>
             <Icons.ChevronLeft /> Назад
           </StyledIconButton>
@@ -164,9 +183,11 @@ export const InnerCardPage = () => {
                 <StyledButton onClick={handleOpenModal} variant={"contained"}>
                   Забронировать
                 </StyledButton>
-                <IconButton>
-                  <StyledHeart />
-                </IconButton>
+                {role === "USER" ? null : (
+                  <IconButton>
+                    <StyledHeart />
+                  </IconButton>
+                )}
               </LowerLayout>
             </StyledRightBar>
           </article>
@@ -193,11 +214,12 @@ export const InnerCardPage = () => {
                 </StyledBtnsWrapper>
               </StyledBackInfo>
             ) : (
-              <form>
+              <FormBook>
                 <Input label="Имя" />
                 <Input label="Фамилия" />
                 <Input label="Номер телефон" />
-              </form>
+                <Button variant="contained">Забронировать</Button>
+              </FormBook>
             )}
           </BaseModal>
         </GalleryWrapper>
@@ -349,7 +371,6 @@ const StyledRightBar = styled.div`
   border-radius: 8px;
 `;
 const LowerLayout = styled("div")({
-  width: "75%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -394,10 +415,13 @@ const CarInfoList = styled.ul`
   }
 `;
 
-const StyledIconButton = styled(IconButton)({
-  "&.MuiButtonBase-root": {
-    fontSize: "17px",
-    color: "#7E52FF",
+const StyledIconButton = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  color: "#03045e",
+  cursor: "pointer",
+  "& svg path": {
+    color: "#03045e",
   },
 });
 
@@ -466,4 +490,12 @@ const StyledUl = styled("ul")({
   justifyContent: "center",
   gap: "30px",
   flexWrap: "wrap",
+});
+
+const FormBook = styled("form")({
+  width: "285px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+  margin: "20px 10px",
 });

@@ -8,7 +8,7 @@ import { AdminDetailsPage } from "../../pages/admin/AdminDetailsPage";
 import { AdminCreateCard } from "../../pages/admin/AdminCreateCard";
 
 export const AdminRoutes = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthorized } = useSelector((state) => state.auth);
   return [
     {
       index: true,
@@ -17,7 +17,7 @@ export const AdminRoutes = () => {
     {
       path: PATHS.ADMIN.PAGE,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <AdminPage />
         </PrivateRoute>
       ),
@@ -25,7 +25,7 @@ export const AdminRoutes = () => {
     {
       path: PATHS.ADMIN.PAGE_DETAILS,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <AdminDetailsPage />
         </PrivateRoute>
       ),
@@ -33,7 +33,7 @@ export const AdminRoutes = () => {
     {
       path: PATHS.ADMIN.ORDERS,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <AdminOrders />
         </PrivateRoute>
       ),
@@ -41,7 +41,7 @@ export const AdminRoutes = () => {
     {
       path: PATHS.ADMIN.CREATE,
       element: (
-        <PrivateRoute isAllowed={isAuthenticated} fallBackPath={PATHS.SIGN_IN}>
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <AdminCreateCard />
         </PrivateRoute>
       ),

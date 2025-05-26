@@ -21,7 +21,7 @@ export const LogoutModal = ({ onClose }) => {
         <StyledCanel variant="" onClick={onClose}>
           Отменить
         </StyledCanel>
-        <StyledGetOut variant="text" onClick={handleLogOut}>
+        <StyledGetOut variant="base" onClick={handleLogOut}>
           Выйти
         </StyledGetOut>
       </StyledContainerModal>
@@ -55,8 +55,10 @@ const StyledCanel = styled(Button)(() => ({
   fontSize: "14px",
 }));
 const StyledGetOut = styled(Button)(() => ({
+  "&.MuiButtonBase-root": {
+    height: "43px",
+  },
   width: "120px",
-  height: "43px",
   backgroundColor: "#03045e",
   color: "#FFFFFF",
   fontSize: "14px",

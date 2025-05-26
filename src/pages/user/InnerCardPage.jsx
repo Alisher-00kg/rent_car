@@ -101,67 +101,76 @@ export const InnerCardPage = () => {
           </StyledIconButton>
         </StyledCap>
         <GalleryWrapper>
-          <div>
-            <WrapperSlider>
-              <p className="title">
-                {singleCar?.brand} {singleCar?.model}
-              </p>
-              <MainSlider>
+          <div className="title_wrapper">
+            <p className="title">
+              {singleCar?.brand} {singleCar?.model}
+            </p>
+          </div>
+          <article className="main_container">
+            <div>
+              <WrapperSlider>
+                <MainSlider>
+                  <Swiper
+                    modules={[Navigation, Thumbs]}
+                    navigation
+                    thumbs={{ swiper: thumbsSwiper }}
+                    className="main-slider"
+                    spaceBetween={10}
+                  >
+                    {singleCar?.images?.map((img, index) => (
+                      <SwiperSlide key={index}>
+                        <img
+                          src={img}
+                          alt={`Slide ${index}`}
+                          className="main_slide_img"
+                        />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </MainSlider>
+              </WrapperSlider>
+
+              <ThumbsSlider>
                 <Swiper
-                  modules={[Navigation, Thumbs]}
-                  navigation
-                  thumbs={{ swiper: thumbsSwiper }}
-                  className="main-slider"
+                  modules={[Thumbs]}
+                  onSwiper={setThumbsSwiper}
                   spaceBetween={10}
+                  slidesPerView={4}
+                  watchSlidesProgress
+                  className="thumbs-slider"
                 >
                   {singleCar?.images?.map((img, index) => (
                     <SwiperSlide key={index}>
-                      <img src={img} alt={`Slide ${index}`} />
+                      <img src={img} alt={`Thumb ${index}`} />
                     </SwiperSlide>
                   ))}
                 </Swiper>
-              </MainSlider>
-            </WrapperSlider>
+              </ThumbsSlider>
+            </div>
 
-            <ThumbsSlider>
-              <Swiper
-                modules={[Thumbs]}
-                onSwiper={setThumbsSwiper}
-                spaceBetween={10}
-                slidesPerView={4}
-                watchSlidesProgress
-                className="thumbs-slider"
-              >
-                {singleCar?.images?.map((img, index) => (
-                  <SwiperSlide key={index}>
-                    <img src={img} alt={`Thumb ${index}`} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </ThumbsSlider>
-          </div>
+            <StyledRightBar>
+              <section>
+                <CarInfoList>
+                  {aboutCar?.map(({ text, value }, index) => (
+                    <li key={index}>
+                      <span className="label">{text}</span>
+                      <span className="dots" />
+                      <span className="value">{value}</span>
+                    </li>
+                  ))}
+                </CarInfoList>
+              </section>
+              <LowerLayout>
+                <StyledButton onClick={handleOpenModal} variant={"contained"}>
+                  Забронировать
+                </StyledButton>
+                <IconButton>
+                  <StyledHeart />
+                </IconButton>
+              </LowerLayout>
+            </StyledRightBar>
+          </article>
 
-          <StyledRightBar>
-            <section>
-              <CarInfoList>
-                {aboutCar?.map(({ text, value }, index) => (
-                  <li key={index}>
-                    <span className="label">{text}</span>
-                    <span className="dots" />
-                    <span className="value">{value}</span>
-                  </li>
-                ))}
-              </CarInfoList>
-            </section>
-            <LowerLayout>
-              <StyledButton onClick={handleOpenModal} variant={"base"}>
-                Забронировать
-              </StyledButton>
-              <IconButton>
-                <StyledHeart />
-              </IconButton>
-            </LowerLayout>
-          </StyledRightBar>
           <BaseModal open={isOpen} onClose={handleCloseModal}>
             {role === "GUEST" ? (
               <StyledBackInfo>
@@ -252,9 +261,26 @@ const StyledInnerWrapper = styled("div")({
 const GalleryWrapper = styled("div")({
   width: "100%",
   display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "108px",
+  flexDirection: "column",
+  alignItems: "start",
+  justifyContent: "start",
+  gap: "20px",
+  "& .title_wrapper": {
+    width: "100%",
+    textAlign: "start",
+    paddingLeft: "15px",
+    "& .title": {
+      fontSize: "34px",
+    },
+  },
+  "& .main_container": {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "108px",
+  },
 });
 
 const MainSlider = styled("div")({
@@ -264,9 +290,9 @@ const MainSlider = styled("div")({
   borderRadius: "12px",
   overflow: "hidden",
 
-  "& img": {
-    width: "100%",
-    height: "100%",
+  "& .main_slide_img": {
+    maxWidth: "760px",
+    minHeight: "450px",
     objectFit: "cover",
     borderRadius: "12px",
   },
@@ -385,7 +411,7 @@ const StyledHeart = styled(Icons.WhiteHeart)({
   width: "34px",
   height: "34px",
   stroke: "#000",
-  transition: "transform 0.4s easy-out",
+  transition: "transform 0.4s ease-out",
   "&:hover": {
     transform: "scale(1.2)",
   },
@@ -396,9 +422,6 @@ const WrapperSlider = styled("div")({
   flexDirection: "column",
   alignItems: "start",
   gap: "24px",
-  "& .title": {
-    fontSize: "34px",
-  },
 });
 const StyledAnotherInfo = styled("div")({
   width: "100%",

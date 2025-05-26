@@ -31,7 +31,7 @@ export const Select = ({
         label={label}
         {...rest}
         sx={{
-          marginTop: "5px",
+          marginTop: "12px",
         }}
       >
         {options.map((option) => (

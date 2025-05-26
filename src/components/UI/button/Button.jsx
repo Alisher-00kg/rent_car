@@ -52,4 +52,7 @@ const StyledButton = styled(MuiButton)(({ variant }) => ({
       gap: "6px",
     },
   },
+  "&.MuiButtonBase-root:hover": {
+    background: variant === "contained" ? "#1522ad" : "",
+  },
 }));

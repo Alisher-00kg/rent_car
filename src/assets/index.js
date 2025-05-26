@@ -18,6 +18,8 @@ import TikTok from "./icons/tik-tok.svg?react";
 import FaceBook from "./icons/facebook.svg?react";
 import DropClick from "./icons/drop-click.svg?react";
 import DeleteDropZoneImage from "./icons/delete.svg?react";
+import EmptyFavorite from "./icons/undraw_delivery-truck_mjui.svg?react";
+import XSymbol from "./icons/x-symbol.svg?react";
 
 const Styled24 = (Component) => styled(Component)`
   width: 24px;
@@ -51,6 +53,7 @@ export const Icons = {
   DeleteIcon,
   EditIcon,
   DropClick,
+  EmptyFavorite,
   WhiteHeart: Styled24(WhiteHeart),
   ChevronLeft: Styled18(ChevronLeft),
   WhatsAppNav: Styled60(WhatsAppNav),
@@ -59,4 +62,5 @@ export const Icons = {
   TikTok: Styled60(TikTok),
   FaceBook: Styled60(FaceBook),
   DeleteDropZoneImage: Styled32(DeleteDropZoneImage),
+  XSymbol: Styled18(XSymbol),
 };

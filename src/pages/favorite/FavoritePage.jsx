@@ -1,8 +1,31 @@
-import { Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import Button from "../../components/UI/button/Button";
 import styled from "styled-components";
+import { styled as muiStyled } from "@mui/material/styles";
+import { Icons } from "../../assets";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { PATHS } from "../../utils/constants/constants";
+import Card from "../../components/UI/card/Card";
+import { getAllCars } from "../../store/thunks/allCars";
 
 export const FavoritePage = () => {
+  const { cars } = useSelector((state) => state.allCars);
+  const { role } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllCars());
+  }, [dispatch]);
+  const handleNavigateToBack = () => {
+    switch (role) {
+      case "USER":
+        return navigate(PATHS.USER.PAGE);
+      default:
+        return navigate(PATHS.GUEST.PAGE);
+    }
+  };
   return (
     <StyledWrapper>
       <StyledHeader>
@@ -10,14 +33,37 @@ export const FavoritePage = () => {
         <Typography variant="h4">Избранное</Typography>
       </StyledHeader>
       <StyledMainContent>
-        <StyledInnerBox>
-          <p className="title">В ИЗБРАННОМ ПОКА ПУСТО</p>
-          <p className="description">
-            Воспользуйтесь поиском, выберите нужные товары и добавьте их в
-            избранное!
-          </p>
-          <Button>К аренде</Button>
-        </StyledInnerBox>
+        {cars?.length === 0 ? (
+          <StyledEmptyBlock>
+            <StyledEmptyIcon />
+            <StyledInnerBox>
+              <p className="title">В ИЗБРАННОМ ПОКА ПУСТО</p>
+              <p className="description">
+                Воспользуйтесь поиском, выберите нужные товары и добавьте их в
+                избранное!
+              </p>
+              <StyledButton variant="contained" onClick={handleNavigateToBack}>
+                К аренде
+              </StyledButton>
+            </StyledInnerBox>
+          </StyledEmptyBlock>
+        ) : (
+          <StyledMainCardsBlock>
+            <StyledIconButton>
+              <Icons.XSymbol /> Очистить список машин
+            </StyledIconButton>
+            <StyledUl>
+              {cars?.slice(0).map((item) => (
+                <Card key={item.id} {...item} />
+              ))}
+            </StyledUl>
+            <nav className="navigation_btn">
+              <StyledButton variant="outlined" onClick={handleNavigateToBack}>
+                К главной
+              </StyledButton>
+            </nav>
+          </StyledMainCardsBlock>
+        )}
       </StyledMainContent>
     </StyledWrapper>
   );
@@ -25,24 +71,23 @@ export const FavoritePage = () => {
 const StyledWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  padding: 50px 120px;
+  padding: 15px 120px;
 `;
 const StyledHeader = styled.header`
   width: 100%;
-  height: 120px;
+  height: 100px;
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: 40px;
+  gap: 25px;
   border-bottom: 2px solid #cdcdcd;
 `;
 const StyledMainContent = styled.main`
   width: 100%;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
 `;
 const StyledInnerBox = styled.div`
   width: fit-content;
@@ -53,6 +98,53 @@ const StyledInnerBox = styled.div`
   justify-content: center;
   gap: 20px;
   &.title {
-    /* font-weight: ; */
+    font-weight: 600;
+    font-size: 24px;
+  }
+`;
+const StyledButton = muiStyled(Button)({
+  width: "240px !important",
+});
+
+const StyledEmptyIcon = styled(Icons.EmptyFavorite)`
+  width: 800px;
+  height: 320px;
+`;
+const StyledEmptyBlock = styled("div")`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  margin-top: 80px;
+`;
+const StyledUl = styled("ul")({
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "30px",
+  flexWrap: "wrap",
+});
+const StyledIconButton = muiStyled(IconButton)({
+  "&.MuiButtonBase-root:hover": {
+    background: "none",
+  },
+  "&.MuiButtonBase-root": {
+    fontSize: "16px",
+  },
+});
+
+const StyledMainCardsBlock = styled("div")`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  gap: 15px;
+  margin-top: 40px;
+  & .navigation_btn {
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
   }
 `;

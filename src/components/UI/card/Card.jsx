@@ -39,7 +39,7 @@ const Card = ({
 
   return (
     <StyledDiv>
-      <li onClick={() => handleNavigate(id)}>
+      <li>
         <div id="box_cars">
           <StyledHeart />
           <div className="slider">
@@ -74,7 +74,9 @@ const Card = ({
                 {model},{transmission}. {flueType}, {driveType}, {numberOfSeats}
               </p>
             </div>
-            <Button variant="base">Посмотреть</Button>
+            <Button variant="contained" onClick={() => handleNavigate(id)}>
+              Посмотреть
+            </Button>
           </StyledDescription>
         </div>
       </li>
@@ -89,7 +91,6 @@ const StyledDiv = styled("div")({
   display: "flex",
   justifyContent: "center",
   padding: "15px",
-  margin: "10px",
   "& #box_cars": {
     position: "relative",
     display: "flex",
@@ -106,9 +107,9 @@ const StyledDiv = styled("div")({
     overflow: "hidden",
     backgroundColor: "#fff",
     paddingBottom: "25px",
+    transition: "transform 0.3s ease-out",
     "&:hover": {
-      transform: "scale(1.03)",
-      transition: "0.3s",
+      transform: "scale(1.04)",
     },
 
     "& h3": {
@@ -145,7 +146,7 @@ const StyledDiv = styled("div")({
         padding: "12px",
         borderRadius: "50%",
         zIndex: 1,
-        transition: "background 0.3s, transform 0.3s",
+        transition: "background 0.3s, transform 0.3s ease-out",
       },
 
       "& .left": {
@@ -207,8 +208,8 @@ const StyledHeart = styled(Icons.WhiteHeart)({
   top: "15px",
   right: "15px",
   stroke: "white",
-  transition: "transform 0.4s easy-out",
+  transition: "transform 0.3s ease-out",
   "&:hover": {
-    transform: "scale(1.2)",
+    transform: "scale(1.3)",
   },
 });

@@ -16,6 +16,8 @@ import Telegram from "./icons/telegram.svg?react";
 import Instagram from "./icons/instagram.svg?react";
 import TikTok from "./icons/tik-tok.svg?react";
 import FaceBook from "./icons/facebook.svg?react";
+import DropClick from "./icons/drop-click.svg?react";
+import DeleteDropZoneImage from "./icons/delete.svg?react";
 
 const Styled24 = (Component) => styled(Component)`
   width: 24px;
@@ -32,6 +34,11 @@ const Styled60 = (Component) => styled(Component)`
   height: 60px;
   cursor: pointer;
 `;
+const Styled32 = (Component) => styled(Component)`
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+`;
 export const Icons = {
   Progress,
   Location,
@@ -43,6 +50,7 @@ export const Icons = {
   WhatsApp,
   DeleteIcon,
   EditIcon,
+  DropClick,
   WhiteHeart: Styled24(WhiteHeart),
   ChevronLeft: Styled18(ChevronLeft),
   WhatsAppNav: Styled60(WhatsAppNav),
@@ -50,4 +58,5 @@ export const Icons = {
   Instagram: Styled60(Instagram),
   TikTok: Styled60(TikTok),
   FaceBook: Styled60(FaceBook),
+  DeleteDropZoneImage: Styled32(DeleteDropZoneImage),
 };

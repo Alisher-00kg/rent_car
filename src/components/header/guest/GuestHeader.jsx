@@ -1,8 +1,30 @@
-import { styled } from "@mui/material";
+import { Fade, IconButton, Menu, MenuItem, styled } from "@mui/material";
 import { PATHS } from "../../../utils/constants/constants";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Icons } from "../../../assets";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { MdOutlineFavorite } from "react-icons/md";
 
 const GuestHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
   return (
     <StyledHeader>
       <NavLink to={PATHS.GUEST.ROOT} className={"link"}>
@@ -14,9 +36,52 @@ const GuestHeader = () => {
         <StyledNavLink to={PATHS.GUEST.TARIFFS}>Тарифы</StyledNavLink>
         <StyledNavLink to={PATHS.GUEST.SALES}>Акции</StyledNavLink>
         <StyledNavLink to={PATHS.GUEST.CONTACTS}>Контакты</StyledNavLink>
-        <StyledNavLink to={PATHS.GUEST.ADDRESS}>Адрес</StyledNavLink>
+        <StyledNavLink to={PATHS.GUEST.ABOUTUS}>О нас</StyledNavLink>
         <StyledNavLink to={PATHS.GUEST.PROFILE}>Профиль</StyledNavLink>
       </nav>
+      <StyledRightBox>
+        <StyledMenu
+          anchorEl={anchorEl}
+          id="fade-menu"
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Fade}
+        >
+          <StyledMenuItem onClick={handleClose}>
+            <StyledLink onClick={handleOpenModal}>Войти</StyledLink>
+          </StyledMenuItem>
+        </StyledMenu>
+        <StyledIconButton onClick={handleClick}>
+          <FaRegCircleUser
+            style={{ color: "white", width: "25", height: "25" }}
+          />
+          <span>Гость</span>
+          <Icons.ArrowDown />
+        </StyledIconButton>
+        <div>
+          <IconButton>
+            <IoIosNotificationsOutline
+              style={{
+                color: "white",
+                width: "25",
+                height: "25",
+                cursor: "pointer",
+              }}
+            />
+          </IconButton>
+          <IconButton onClick={() => navigate(PATHS.GUEST.FAVORITE)}>
+            <MdOutlineFavorite
+              style={{
+                color: "white",
+                width: "25",
+                height: "25",
+                fill: "white",
+                cursor: "pointer",
+              }}
+            />
+          </IconButton>
+        </div>
+      </StyledRightBox>
     </StyledHeader>
   );
 };
@@ -60,5 +125,41 @@ const StyledNavLink = styled(NavLink)`
   }
   &:hover {
     color: #fff902;
+  }
+`;
+const StyledRightBox = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  gap: "30px",
+});
+const StyledMenu = styled(Menu)(() => ({
+  "& .css-1tktgsa-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
+    width: "120px",
+    height: "54px",
+    borderRadius: "10px",
+  },
+}));
+const StyledMenuItem = styled(MenuItem)({
+  "&:hover": {
+    color: "#0073DE",
+  },
+});
+const StyledLink = styled(Link)({
+  width: "100%",
+  textDecoration: "none",
+  color: "#292929",
+  textAlign: "center",
+
+  "&:hover": {
+    color: "#0073DE",
+  },
+});
+const StyledIconButton = styled(IconButton)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  span {
+    color: #fff;
+    font-size: 16px;
   }
 `;

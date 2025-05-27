@@ -126,8 +126,9 @@ export const PATHS = {
     TARIFFS: "/guest/tariffs",
     SALES: "/guest/sales",
     CONTACTS: "/guest/contacts",
-    ADDRESS: "/guest/address",
+    ABOUTUS: "/guest/aboutus",
     PROFILE: "/guest/profile",
+    FAVORITE: "/guest/favorite",
   },
   USER: {
     ROOT: "/user",
@@ -135,8 +136,9 @@ export const PATHS = {
     TARIFFS: "/user/tariffs",
     SALES: "/user/sales",
     CONTACTS: "/user/contacts",
-    ADDRESS: "/user/address",
+    ABOUTUS: "/user/aboutus",
     PROFILE: "/user/profile",
+    FAVORITE: "/user/favorite",
   },
 
   ADMIN: {

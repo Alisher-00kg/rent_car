@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { PATHS } from "../../utils/constants/constants";
 import Card from "../../components/UI/card/Card";
 import { getAllCars } from "../../store/thunks/allCars";
+import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
 
 export const FavoritePage = () => {
   const { cars } = useSelector((state) => state.allCars);
@@ -26,10 +27,36 @@ export const FavoritePage = () => {
         return navigate(PATHS.GUEST.PAGE);
     }
   };
+  function getRouteByRole() {
+    switch (role) {
+      case "USER":
+        return [
+          {
+            label: "Главная",
+            href: "/user/user-page",
+          },
+          {
+            label: "Избранное",
+            href: "/user/favorite",
+          },
+        ];
+      default:
+        return [
+          {
+            label: "Главная",
+            href: "/guest/main-page",
+          },
+          {
+            label: "Избранное",
+            href: "/guest/favorite",
+          },
+        ];
+    }
+  }
   return (
     <StyledWrapper>
       <StyledHeader>
-        <p>MainPage/Favorite</p>
+        <BreadCrumbs breadcrumbs={getRouteByRole()} />
         <Typography variant="h4">Избранное</Typography>
       </StyledHeader>
       <StyledMainContent>
@@ -71,16 +98,17 @@ export const FavoritePage = () => {
 const StyledWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  padding: 15px 120px;
+  padding: 0px 90px;
 `;
 const StyledHeader = styled.header`
   width: 100%;
-  height: 100px;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: 25px;
   border-bottom: 2px solid #cdcdcd;
+  padding-bottom: 15px;
 `;
 const StyledMainContent = styled.main`
   width: 100%;

@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-const AddressPage = () => {
-  return <StyledWrapper>AddressPage Soon</StyledWrapper>;
+const AboutUsPage = () => {
+  return <StyledWrapper>AboutUsPage Soon</StyledWrapper>;
 };
 
-export default AddressPage;
+export default AboutUsPage;
 const StyledWrapper = styled.div`
   width: 100%;
   min-height: 100vh;

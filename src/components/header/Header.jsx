@@ -1,6 +1,6 @@
 import { Fade, IconButton, Menu, MenuItem, styled } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { PATHS } from "../../utils/constants/constants";
 import { useEffect, useState } from "react";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -14,6 +14,7 @@ const Header = () => {
   const { role } = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -43,15 +44,12 @@ const Header = () => {
           <StyledNavLink to={PATHS.USER.TARIFFS}>Тарифы</StyledNavLink>
           <StyledNavLink to={PATHS.USER.SALES}>Акции</StyledNavLink>
           <StyledNavLink to={PATHS.USER.CONTACTS}>Контакты</StyledNavLink>
-          <StyledNavLink to={PATHS.USER.ADDRESS}>Адрес</StyledNavLink>
+          <StyledNavLink to={PATHS.USER.ABOUTUS}>О нас</StyledNavLink>
           <StyledNavLink to={PATHS.USER.PROFILE}>Профиль</StyledNavLink>
         </nav>
       )}
 
       <StyledRightBox>
-        <FaRegCircleUser
-          style={{ color: "white", width: "25", height: "25" }}
-        />
         <StyledMenu
           anchorEl={anchorEl}
           id="fade-menu"
@@ -64,27 +62,34 @@ const Header = () => {
           </StyledMenuItem>
         </StyledMenu>
         <StyledIconButton onClick={handleClick}>
+          <FaRegCircleUser
+            style={{ color: "white", width: "25", height: "25" }}
+          />
           <span>{localValue}</span>
           <Icons.ArrowDown />
         </StyledIconButton>
         <div>
-          <IoIosNotificationsOutline
-            style={{
-              color: "white",
-              width: "25",
-              height: "25",
-              cursor: "pointer",
-            }}
-          />
-          <MdOutlineFavorite
-            style={{
-              color: "white",
-              width: "25",
-              height: "25",
-              fill: "white",
-              cursor: "pointer",
-            }}
-          />
+          <IconButton>
+            <IoIosNotificationsOutline
+              style={{
+                color: "white",
+                width: "25",
+                height: "25",
+                cursor: "pointer",
+              }}
+            />
+          </IconButton>
+          <IconButton onClick={() => navigate(PATHS.USER.FAVORITE)}>
+            <MdOutlineFavorite
+              style={{
+                color: "white",
+                width: "25",
+                height: "25",
+                fill: "white",
+                cursor: "pointer",
+              }}
+            />
+          </IconButton>
         </div>
       </StyledRightBox>
       <BaseModal open={isOpen} onClose={handleCloseModal}>
@@ -148,6 +153,7 @@ const StyledIconButton = styled(IconButton)`
 const StyledRightBox = styled("div")({
   display: "flex",
   alignItems: "center",
+  gap: "30px",
 });
 const StyledMenu = styled(Menu)(() => ({
   "& .css-1tktgsa-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {

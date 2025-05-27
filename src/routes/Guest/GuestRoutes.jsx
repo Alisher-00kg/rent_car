@@ -3,11 +3,12 @@ import MainPage from "../../pages/main/MainPage";
 import { PATHS } from "../../utils/constants/constants";
 import TariffsPage from "../../pages/user/TariffsPage";
 import SalesPage from "../../pages/user/SalesPage";
-import ContactsPage from "../../pages/user/ContactsPage";
-import AddressPage from "../../pages/user/AddressPage";
+import { ContactsPage } from "../../pages/user/ContactsPage";
 import ProfilePage from "../../pages/user/ProfilePage";
 import { Navigate } from "react-router-dom";
 import { InnerCardPage } from "../../pages/user/InnerCardPage";
+import AboutUsPage from "../../pages/user/AddressPage";
+import { FavoritePage } from "../../pages/favorite/FavoritePage";
 
 export const GuestRoutes = () => {
   return [
@@ -48,10 +49,10 @@ export const GuestRoutes = () => {
       ),
     },
     {
-      path: PATHS.GUEST.ADDRESS,
+      path: PATHS.GUEST.ABOUTUS,
       element: (
         <PrivateRoute fallBackPath={PATHS.SIGN_IN} isAllowed={true}>
-          <AddressPage />
+          <AboutUsPage />
         </PrivateRoute>
       ),
     },
@@ -68,6 +69,14 @@ export const GuestRoutes = () => {
       element: (
         <PrivateRoute fallBackPath={PATHS.SIGN_IN} isAllowed={true}>
           <InnerCardPage />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: PATHS.GUEST.FAVORITE,
+      element: (
+        <PrivateRoute fallBackPath={PATHS.SIGN_IN} isAllowed={true}>
+          <FavoritePage />
         </PrivateRoute>
       ),
     },

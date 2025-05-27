@@ -4,11 +4,12 @@ import { useSelector } from "react-redux";
 import { PrivateRoute } from "../PrivateRoute";
 import TariffsPage from "../../pages/user/TariffsPage";
 import SalesPage from "../../pages/user/SalesPage";
-import ContactsPage from "../../pages/user/ContactsPage";
-import AddressPage from "../../pages/user/AddressPage";
+import { ContactsPage } from "../../pages/user/ContactsPage";
 import ProfilePage from "../../pages/user/ProfilePage";
 import MainPage from "../../pages/main/MainPage";
 import { InnerCardPage } from "../../pages/user/InnerCardPage";
+import AboutUsPage from "../../pages/user/AddressPage";
+import { FavoritePage } from "../../pages/favorite/FavoritePage";
 
 export const UserRoutes = () => {
   const { isAuthorized } = useSelector((state) => state.auth);
@@ -50,10 +51,10 @@ export const UserRoutes = () => {
       ),
     },
     {
-      path: PATHS.USER.ADDRESS,
+      path: PATHS.USER.ABOUTUS,
       element: (
         <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
-          <AddressPage />
+          <AboutUsPage />
         </PrivateRoute>
       ),
     },
@@ -70,6 +71,14 @@ export const UserRoutes = () => {
       element: (
         <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <InnerCardPage />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: PATHS.USER.FAVORITE,
+      element: (
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
+          <FavoritePage />
         </PrivateRoute>
       ),
     },

@@ -4,7 +4,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../components/UI/button/Button";
 import { PATHS } from "../../utils/constants/constants";
@@ -15,6 +15,7 @@ import { IconButton, Typography } from "@mui/material";
 import { getAllCars, getSingleCar } from "../../store/thunks/allCars";
 import { Icons } from "../../assets";
 import Card from "../../components/UI/card/Card";
+import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
 
 export const InnerCardPage = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export const InnerCardPage = () => {
   const [visibleCount, setVisibleCount] = useState(4);
   const dispatch = useDispatch();
   console.log(singleCar);
+  console.log(carId);
 
   useEffect(() => {
     if (carId) {
@@ -35,6 +37,7 @@ export const InnerCardPage = () => {
   useEffect(() => {
     dispatch(getAllCars());
   }, [dispatch]);
+
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const handleReservation = () => {};
   const handleOpenModal = () => {
@@ -93,28 +96,50 @@ export const InnerCardPage = () => {
       value: `${singleCar?.rentPrice}руб`,
     },
   ];
+
+  function getRouteByRole(car) {
+    switch (role) {
+      case "USER":
+        return [
+          {
+            label: "Главная",
+            href: "/user/user-page",
+          },
+          {
+            label: `${car.brand}  ${car.model}`,
+            href: `/user/user-page/${car.id}`,
+          },
+        ];
+        break;
+      case "ADMIN":
+        return [
+          {
+            label: "Главная",
+            href: "/admin/admin-page",
+          },
+          {
+            label: `${car.brand}  ${car.model}`,
+            href: `/admin/admin-page/${car.id}`,
+          },
+        ];
+      default:
+        return [
+          {
+            label: "Главная",
+            href: "/guest/main-page",
+          },
+          {
+            label: "Избранное",
+            href: "/guest/favorite",
+          },
+        ];
+    }
+  }
   return (
     <StyledMainWrapper>
       <StyledInnerWrapper>
         <StyledCap>
-          <p>
-            <span
-              onClick={() => navigate(-1)}
-              style={{
-                cursor: "pointer",
-              }}
-            >
-              Главная
-            </span>{" "}
-            /{" "}
-            <span
-              style={{
-                color: "#03045e",
-              }}
-            >
-              {singleCar?.brand} {singleCar.model}
-            </span>
-          </p>
+          <BreadCrumbs breadcrumbs={getRouteByRole(singleCar)} />
           <StyledIconButton onClick={handleNavigateToBack}>
             <Icons.ChevronLeft /> Назад
           </StyledIconButton>
@@ -183,11 +208,9 @@ export const InnerCardPage = () => {
                 <StyledButton onClick={handleOpenModal} variant={"contained"}>
                   Забронировать
                 </StyledButton>
-                {role === "USER" ? null : (
-                  <IconButton>
-                    <StyledHeart />
-                  </IconButton>
-                )}
+                <IconButton>
+                  <StyledHeart />
+                </IconButton>
               </LowerLayout>
             </StyledRightBar>
           </article>
@@ -271,7 +294,7 @@ const StyledMainWrapper = styled("div")({
   flexDirection: "column",
   alignItems: "center",
   gap: "109px",
-  padding: "80px",
+  padding: "0px 90px",
 });
 const StyledInnerWrapper = styled("div")({
   width: "100%",
@@ -420,6 +443,7 @@ const StyledIconButton = styled("div")({
   alignItems: "center",
   color: "#03045e",
   cursor: "pointer",
+  paddingTop: "72px",
   "& svg path": {
     color: "#03045e",
   },
@@ -427,6 +451,7 @@ const StyledIconButton = styled("div")({
 
 const StyledCap = styled("nav")({
   width: "100%",
+  height: "40px",
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",

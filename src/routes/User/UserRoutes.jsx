@@ -67,7 +67,7 @@ export const UserRoutes = () => {
       ),
     },
     {
-      path: PATHS.USER.PAGE + "/:cardID",
+      path: PATHS.USER.PAGE_DETAILS,
       element: (
         <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <InnerCardPage />

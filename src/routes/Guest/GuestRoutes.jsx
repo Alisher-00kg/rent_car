@@ -65,7 +65,7 @@ export const GuestRoutes = () => {
       ),
     },
     {
-      path: PATHS.GUEST.PAGE + "/:cardID",
+      path: PATHS.GUEST.PAGE_DETAILS,
       element: (
         <PrivateRoute fallBackPath={PATHS.SIGN_IN} isAllowed={true}>
           <InnerCardPage />

@@ -9,14 +9,14 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../components/UI/error/ErrorMessage";
-import { useGetAllQuery, useSignUpMutation } from "../store/api/auth.service";
+// import { useGetAllQuery, useSignUpMutation } from "../store/api/auth.service";
 
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [signUp] = useSignUpMutation();
-  const { data } = useGetAllQuery();
-  console.log(data);
+  // const [signUp] = useSignUpMutation();
+  // const { data } = useGetAllQuery();
+  // console.log(data);
 
   const {
     register,
@@ -26,7 +26,7 @@ export const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  const password = watch("password");
+  // const password = watch("password");
 
   const onSubmit = (data) => {
     const signUpData = {
@@ -38,7 +38,7 @@ export const SignUp = () => {
       localDate: new Date().toISOString().split("T")[0], // текущая дата в формате YYYY-MM-DD
     };
 
-    signUp(signUpData);
+    // signUp(signUpData);
     // reset();
   };
 

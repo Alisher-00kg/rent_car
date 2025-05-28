@@ -123,6 +123,7 @@ export const PATHS = {
   GUEST: {
     ROOT: "/guest",
     PAGE: "/guest/main-page",
+    PAGE_DETAILS: "/guest/main-page/:carId",
     TARIFFS: "/guest/tariffs",
     SALES: "/guest/sales",
     CONTACTS: "/guest/contacts",
@@ -133,6 +134,7 @@ export const PATHS = {
   USER: {
     ROOT: "/user",
     PAGE: "/user/user-page",
+    PAGE_DETAILS: "/user/user-page/:carId",
     TARIFFS: "/user/tariffs",
     SALES: "/user/sales",
     CONTACTS: "/user/contacts",

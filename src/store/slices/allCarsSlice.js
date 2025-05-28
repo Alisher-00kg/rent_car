@@ -26,7 +26,7 @@ export const allCarsSlice = createSlice({
       })
       .addCase(getSingleCar.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.singleCar = action.payload;
+        state.singleCar = action?.payload;
       });
   },
 });

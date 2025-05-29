@@ -1,0 +1,13 @@
+export { default as SberBank } from "./sber-bank2.png";
+export { default as TBank } from "./t-bank.png";
+export { default as AlfaBank } from "./alfa-bank.png";
+export { default as Gazprom } from "./gazprom.png";
+export { default as Avito } from "./avito.png";
+export { default as LadaLogo } from "./lada.jpg";
+export { default as BMWLogo } from "./bmw.png";
+export { default as MercLogo } from "./merc-logo.png";
+export { default as AudiLogo } from "./audi-logo.jpg";
+export { default as UserProfile1 } from "./uiProfile1.png";
+export { default as UserProfile2 } from "./uiProfile2.png";
+export { default as UserProfile3 } from "./uiProfile3.png";
+export { default as UserProfile4 } from "./userProfile4.jpg";

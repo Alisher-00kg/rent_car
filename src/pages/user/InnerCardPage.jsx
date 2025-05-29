@@ -73,7 +73,7 @@ export const InnerCardPage = () => {
     },
     {
       text: "Тип топлива:",
-      value: singleCar?.flueType,
+      value: singleCar?.fuelType,
     },
     {
       text: "Трансмиссия:",

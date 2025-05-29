@@ -1,39 +1,55 @@
-import React, { useEffect, useState } from "react";
-
-import { keyframes, styled } from "@mui/material";
-import { CARS, PATHS } from "../../utils/constants/constants";
+import { useEffect } from "react";
+import { IconButton, keyframes, styled } from "@mui/material";
 import Card from "../../components/UI/card/Card";
 import ChoseUs from "../../components/chose-us/ChoseUs";
-import Slider from "../../components/swiper/Slider";
-import { imageArray } from "../../utils/constants/carsSlider";
 import { Icons } from "../../assets";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCars } from "../../store/thunks/allCars";
+import { InfinitySlider } from "../../components/partners/InfinitySlider";
+import { Feedback } from "../../components/feedback-card/Feedback";
+import { BannerSlider } from "../../components/swiper/BannerSlider";
+import { bannerImages } from "../../utils/constants/carsSlider.js";
+
 const MainPage = () => {
-  // const [cars, setCars] = useState(CARS);
   const dispatch = useDispatch();
   const { cars } = useSelector((state) => state.allCars);
-  console.log(cars, "sds");
 
   useEffect(() => {
     dispatch(getAllCars());
   }, [dispatch]);
 
+  const openLink = (url) => window.open(url, "_blank");
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "100px" }}>
-      <StyledWhatsApp />
-      <Slider images={imageArray} />
+    <Wrapper>
+      <BannerSlider images={bannerImages} />
+      <WhatsAppButton onClick={() => openLink("https://wa.me/+79992781923")}>
+        <Icons.WhatsAppNav />
+      </WhatsAppButton>
+      <TelegramButton onClick={() => openLink("https://t.me/+79992781923")}>
+        <Icons.Telegram />
+      </TelegramButton>
       <ChoseUs />
+
       <StyledUl>
         {cars?.map((item) => (
           <Card key={item.id} {...item} />
         ))}
       </StyledUl>
-    </div>
+      <Feedback />
+      <InfinitySlider />
+    </Wrapper>
   );
 };
 
 export default MainPage;
+
+const Wrapper = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  gap: "100px",
+});
+
 const StyledUl = styled("ul")({
   width: "100%",
   display: "flex",
@@ -43,24 +59,62 @@ const StyledUl = styled("ul")({
   flexWrap: "wrap",
 });
 
-const animatedWhatsApp = keyframes`
-  
-0%{
-    transform: scale(1);
-}
+const animatedPulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
 
-50%{
-    transform: scale(1.1);
-}
-100%{
+const rippleEffect = keyframes`
+  0% {
     transform: scale(1);
-}
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
 `;
-const StyledWhatsApp = styled(Icons.WhatsApp)`
-  position: fixed;
-  z-index: 99;
-  right: 20px;
-  bottom: 20px;
-  margin: 10px 90px;
-  animation: ${animatedWhatsApp} 1s infinite linear;
-`;
+
+const baseButtonStyles = {
+  position: "fixed",
+  right: "20px",
+  zIndex: 99,
+  width: "56px",
+  height: "56px",
+  padding: 0,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  animation: `${animatedPulse} 2s infinite ease-in-out`,
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    borderRadius: "50%",
+    backgroundColor: "rgba(0, 255, 0, 0.3)",
+    animation: `${rippleEffect} 2.4s infinite ease-out`,
+    zIndex: -1,
+  },
+};
+
+const WhatsAppButton = styled(IconButton)({
+  ...baseButtonStyles,
+  bottom: "120px",
+  "&::before": {
+    ...baseButtonStyles["&::before"],
+    backgroundColor: "rgba(0, 255, 0, 0.3)",
+  },
+});
+
+const TelegramButton = styled(IconButton)({
+  ...baseButtonStyles,
+  bottom: "20px",
+  "&::before": {
+    ...baseButtonStyles["&::before"],
+    backgroundColor: "rgba(0, 136, 204, 0.3)",
+  },
+});

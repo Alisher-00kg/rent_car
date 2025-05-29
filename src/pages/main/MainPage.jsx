@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-
+import { useEffect } from "react";
 import { keyframes, styled } from "@mui/material";
-import { CARS, PATHS } from "../../utils/constants/constants";
 import Card from "../../components/UI/card/Card";
 import ChoseUs from "../../components/chose-us/ChoseUs";
 import Slider from "../../components/swiper/Slider";
@@ -9,8 +7,9 @@ import { imageArray } from "../../utils/constants/carsSlider";
 import { Icons } from "../../assets";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCars } from "../../store/thunks/allCars";
+import { InfinitySlider } from "../../components/partners/InfinitySlider";
+import { Feedback } from "../../components/feedback-card/Feedback";
 const MainPage = () => {
-  // const [cars, setCars] = useState(CARS);
   const dispatch = useDispatch();
   const { cars } = useSelector((state) => state.allCars);
   console.log(cars, "sds");
@@ -29,6 +28,8 @@ const MainPage = () => {
           <Card key={item.id} {...item} />
         ))}
       </StyledUl>
+      <Feedback />
+      <InfinitySlider />
     </div>
   );
 };

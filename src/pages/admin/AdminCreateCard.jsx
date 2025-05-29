@@ -202,7 +202,7 @@ export const AdminCreateCard = () => {
           label={"Выберите тип топливо"}
           value={carValues.fuelType}
           onChange={handleChange}
-          options={flueTypeOptions}
+          options={fuelTypeOptions}
           name="fuelType"
         />
         <StyledInput

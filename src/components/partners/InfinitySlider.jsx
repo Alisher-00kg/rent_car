@@ -65,9 +65,9 @@ const StyledAllContainer = styled("div")`
   height: 55vh;
 `;
 
-const StyledContainerName = styled("h1")({
-  fontSize: "35px",
-  fontWeight: "700",
+const StyledContainerName = styled("h2")({
+  fontSize: "42px",
+  fontWeight: "600",
   color: "#281677f1",
 });
 

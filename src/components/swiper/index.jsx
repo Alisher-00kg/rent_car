@@ -37,7 +37,6 @@ export const FeedBackSlider = ({
         }}
         navigation={true}
         onSlideChange={(swiper) => setIndex(swiper.realIndex)}
-        x
         loop={true}
         modules={[Autoplay, Navigation]}
         {...props}

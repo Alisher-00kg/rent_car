@@ -13,7 +13,6 @@ const UserLayout = () => {
         <Outlet />
         <Footer />
       </StyledMain>
-      s
     </>
   );
 };

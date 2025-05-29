@@ -84,7 +84,9 @@ const StyledCardWrapper = styled("div")({
   },
 });
 
-const StyledCard = styled(Card)(({ isActive }) => ({
+const StyledCard = styled(Card, {
+  shouldForwardProp: (prop) => prop !== "isActive",
+})(({ isActive }) => ({
   display: "flex",
   flexDirection: "column",
   height: pxToRem(564),
@@ -110,13 +112,17 @@ const TextContainer = styled(Box)({
   marginTop: pxToRem(50),
 });
 
-const StyledTitleTypography = styled(Typography)(({ isActive }) => ({
+const StyledTitleTypography = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== "isActive",
+})(({ isActive }) => ({
   fontSize: pxToRem(17),
   fontWeight: "700",
   color: isActive ? "#fff" : "#3b10e5",
 }));
 
-const StyledBodyTypography = styled(Typography)(({ isActive }) => ({
+const StyledBodyTypography = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== "isActive",
+})(({ isActive }) => ({
   color: isActive ? "#fff" : "#000",
 }));
 
@@ -161,7 +167,9 @@ const StyledArrowButton = styled(IconButton)({
   },
 });
 
-const StyledPaginationDot = styled(Box)(({ isActive }) => ({
+const StyledPaginationDot = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "isActive",
+})(({ isActive }) => ({
   width: pxToRem(6),
   height: isActive ? pxToRem(30) : pxToRem(16),
   backgroundColor: isActive ? "#4B00A2" : "#E0D7FF",

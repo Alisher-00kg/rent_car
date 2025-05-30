@@ -15,9 +15,9 @@ const Button = ({ children, variant, onClick, type, disabled, ...props }) => {
 };
 
 export default Button;
-const StyledButton = styled(MuiButton)(({ variant }) => ({
+const StyledButton = styled(MuiButton)(({ variant,width }) => ({
   "&.MuiButtonBase-root": {
-    width: "100%",
+    width: width || "100%",
     height: variant === "base" ? "31px" : variant === "showmore" ? "46px" : "",
     fontSize: variant === "showmore" ? "18px" : "16px",
     fontWeight: "500",

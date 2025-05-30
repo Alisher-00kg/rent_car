@@ -6,7 +6,7 @@ export const signUpThunk = createAsyncThunk(
   "auth/signUpThunk",
   async (newUser, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.post("/register", newUser);
+      const { data } = await axiosInstance.post("/sign-up", newUser);
       console.log(data, "daaa");
       toast.success("Успешно зарегистрировались!");
     } catch (error) {

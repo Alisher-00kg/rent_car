@@ -43,7 +43,7 @@ const StyledBreadcrumbs = styled(MuiBreadcrumbs)(() => ({
   fontSize: "14px",
   display: "flex",
   alignItems: " center",
-  padding: "60px 0px 0px 0px",
+  padding: "30px 0px 0px 0px",
 }));
 
 const StyledLink = styled(RouterLink, {

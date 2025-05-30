@@ -9,11 +9,12 @@ const UserLayout = () => {
     <>
       <ScrollToTop />
       <StyledMain>
-        <Header />
-        <Outlet />
+        <div>
+          <Header />
+          <Outlet />
+        </div>
         <Footer />
       </StyledMain>
-      s
     </>
   );
 };
@@ -21,4 +22,9 @@ const UserLayout = () => {
 export default UserLayout;
 const StyledMain = styled("div")({
   marginTop: "100px",
+  minHeight: "100vh",
+  display: "flex",
+  flexDirection: "column",
+  gap: "250px",
+  background: "#f3f3f3",
 });

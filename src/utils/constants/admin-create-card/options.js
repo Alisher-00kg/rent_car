@@ -18,7 +18,7 @@ export const brandOptions = [
   { value: "skoda", label: "Skoda" },
   { value: "lada", label: "Lada" },
 ];
-export const flueTypeOptions = [
+export const fuelTypeOptions = [
   { value: "standart", label: "Стандартная выхлопная система" },
   { value: "sport", label: "Спортивная выхлопная система" },
   { value: "straight", label: "Прямоточная система (стрейтпайп)" },

@@ -6,18 +6,18 @@ const ChoseUs = () => {
     <StyledDiv>
       <h2>Почему нужно выбрать нас?</h2>
       <div className="container">
-        <div className="box">
+        <StyledItem>
           <Icons.Progress />
           <p>Новый и ухоженный автопарк</p>
-        </div>
-        <div className="box">
+        </StyledItem>
+        <StyledItem>
           <Icons.Location />
           <p>На месте когда и где нужно</p>
-        </div>
-        <div className="box">
+        </StyledItem>
+        <StyledItem>
           <Icons.Warning />
           <p>Саблюдаем дорожные правила и этикет</p>
-        </div>
+        </StyledItem>
       </div>
     </StyledDiv>
   );
@@ -30,29 +30,35 @@ const StyledDiv = styled("div")({
   alignItems: "center",
   gap: "70px",
   "& h2": {
-    textShadow: "2px 2px 2px rgba(0,0,0,0.94)",
-    color: "#0000a9",
-    fontSize: "40px",
+    color: "#281677f1",
+    fontSize: "42px",
   },
   "& .container": {
     width: "100%",
     height: "200px",
-    background: "linear-gradient(#00d4b8, #0077b6, #03045e)",
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-around",
-    "& .box": {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      width: "150px",
-      gap: "10px",
-      "& p": {
-        fontSize: "14px",
-        fontWeight: "750",
-        color: "white",
-        textAlign: "center",
-      },
-    },
+    justifyContent: "space-evenly",
+  },
+});
+
+const StyledItem = styled("div")({
+  padding: "0px 25px",
+  width: "322px",
+  height: "192px",
+  borderRadius: "12px",
+  background: "#1522ad",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "10px",
+  boxShadow: "0px 8px 25px 0px #0000001A",
+  "& p": {
+    width: "fit-content",
+    fontSize: "16px",
+    fontWeight: "500",
+    color: "#fff902",
+    textAlign: "center",
   },
 });

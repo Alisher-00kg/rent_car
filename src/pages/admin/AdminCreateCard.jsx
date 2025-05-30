@@ -5,7 +5,7 @@ import {
   brandOptions,
   categoryOptions,
   driveTypeOptions,
-  flueTypeOptions,
+  fuelTypeOptions,
   transmissionOptions,
 } from "../../utils/constants/admin-create-card/options";
 import { useDropzone } from "react-dropzone";
@@ -25,7 +25,7 @@ export const AdminCreateCard = () => {
     madeInCountry: "",
     rentPrice: "",
     hasCarInStock: true,
-    flueType: flueTypeOptions[0].value,
+    fuelType: fuelTypeOptions[0].value,
     numberOfSeats: "",
     transmission: transmissionOptions[0].value,
     driveType: driveTypeOptions[0].value,
@@ -199,11 +199,11 @@ export const AdminCreateCard = () => {
           name="rentPrice"
         />
         <Select
-          label={"Выберите выхлопную систему"}
-          value={carValues.flueType}
+          label={"Выберите тип топливо"}
+          value={carValues.fuelType}
           onChange={handleChange}
-          options={flueTypeOptions}
-          name="flueType"
+          options={fuelTypeOptions}
+          name="fuelType"
         />
         <StyledInput
           inputLabel="Количество сидений"

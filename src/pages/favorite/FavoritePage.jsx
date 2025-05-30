@@ -41,16 +41,7 @@ export const FavoritePage = () => {
           },
         ];
       default:
-        return [
-          {
-            label: "Главная",
-            href: "/guest/main-page",
-          },
-          {
-            label: "Избранное",
-            href: "/guest/favorite",
-          },
-        ];
+        return role;
     }
   }
   return (
@@ -106,7 +97,6 @@ const StyledHeader = styled.header`
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: 25px;
   border-bottom: 2px solid #cdcdcd;
   padding-bottom: 15px;
 `;

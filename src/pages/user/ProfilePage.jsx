@@ -1,18 +1,37 @@
-
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import Button from "../../components/UI/button/Button";
+import { styled as muiStyled } from "@mui/material/styles";
+import { useSelector } from "react-redux";
+import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
 
 const ProfilePage = () => {
   const [images, setImages] = useState([]);
+  const { role } = useSelector((state) => state.auth);
+  function getRouteByRole() {
+    switch (role) {
+      case "USER":
+        return [
+          {
+            label: "Главная",
+            href: "/user/user-page",
+          },
+          {
+            label: "Профиль",
+            href: "/user/profile",
+          },
+        ];
+      default:
+        return role;
+    }
+  }
 
   const onDrop = (acceptedFiles) => {
     if (images.length + acceptedFiles.length > 4) {
-      alert('Максимум 4 фото');
+      alert("Максимум 4 фото");
       return;
     }
-
 
     const newImages = acceptedFiles.map((file) =>
       Object.assign(file, {
@@ -26,7 +45,7 @@ const ProfilePage = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/*': [],
+      "image/*": [],
     },
     multiple: true,
     maxFiles: 4,
@@ -35,104 +54,129 @@ const ProfilePage = () => {
     setImages(images.filter((_, i) => i !== indexToRemove));
   };
 
+  return (
+    <StyledWrapper>
+      <StyledTitleAndBr>
+        <BreadCrumbs breadcrumbs={getRouteByRole()} />
+      </StyledTitleAndBr>
+      <ProfileWrapper>
+        <Section>
+          <ProfileHeader>
+            <Title>Персональные данные</Title>
+            <Button variant="contained" width="180px">
+              Редактировать
+            </Button>
+          </ProfileHeader>
 
+          <InfoGrid>
+            <InfoItem>
+              <Label>Имя</Label>
+              <Value>Айбек Омуров</Value>
+            </InfoItem>
+            <InfoItem>
+              <Label>Телефон</Label>
+              <Value>+7 903 263 18 65</Value>
+            </InfoItem>
+            <InfoItem>
+              <Label>Email</Label>
+              <Value>aibek@gmail.com</Value>
+            </InfoItem>
+          </InfoGrid>
+        </Section>
 
-  return <div>
-    <ProfileWrapper>
+        <div>
+          <Title>Водительские права и паспорт</Title>
+          <DropZoneWrapper>
+            <DropArea {...getRootProps()}>
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <p>Отпустите изображения...</p>
+              ) : (
+                <p>Перетащите или нажмите для загрузки (до 4 фото)</p>
+              )}
+            </DropArea>
 
-      <Section>
-        <ProfileHeader>
-          <Title>Профиль</Title>
-          <Button variant="contained" width="150px" >Редактировать</Button>
-        </ProfileHeader>
+            <PreviewList>
+              {images.map((file, index) => (
+                <ImageWrapper key={index}>
+                  <PreviewImage src={file.preview} alt={`preview-${index}`} />
+                  <RemoveIcon onClick={() => removeImage(index)}>
+                    &times;
+                  </RemoveIcon>
+                </ImageWrapper>
+              ))}
+            </PreviewList>
+            <UploadButton variant={"outlined"} disabled={images.length === 0}>
+              Загрузить
+            </UploadButton>
+          </DropZoneWrapper>
+        </div>
 
-        <InfoGrid>
-          <InfoItem>
-            <Label>Имя</Label>
-            <Value>Айбек Омуров</Value>
-          </InfoItem>
-          <InfoItem>
-            <Label>Телефон</Label>
-            <Value>+7 903 263 18 65</Value>
-          </InfoItem>
-          <InfoItem>
-            <Label>Email</Label>
-            <Value>aibek@gmail.com</Value>
-          </InfoItem>
-        </InfoGrid>
-      </Section>
+        <Section>
+          <Title>Аренды</Title>
+          <Card>Kia K5 — 01.06–05.06 — Активна</Card>
+          <Card>Toyota Camry — 10.05–12.05 — Завершена</Card>
+          <ActionLink>Посмотреть все</ActionLink>
+        </Section>
+        <ProfileConfig>
+          <HeaderRow>
+            <Title>Настройки</Title>
+          </HeaderRow>
 
-      <div>
-        <Title>Водительские права и паспорт</Title>
-        <DropZoneWrapper>
-          <DropArea {...getRootProps()}>
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Отпустите изображения...</p>
-            ) : (
-              <p>Перетащите или нажмите для загрузки (до 4 фото)</p>
-            )}
-          </DropArea>
+          <SettingsGrid>
+            <SettingItem>
+              <Label>Язык</Label>
+              <Value>Русский</Value>
+            </SettingItem>
 
-          <PreviewList>
-            {images.map((file, index) => (
-              <ImageWrapper key={index}>
-                <PreviewImage src={file.preview} alt={`preview-${index}`} />
-                <RemoveIcon onClick={() => removeImage(index)}>&times;</RemoveIcon>
-              </ImageWrapper>
-            ))}
-          </PreviewList>
-          <UploadButton disabled={images.length === 0}>
-            Загрузить
-          </UploadButton>
-        </DropZoneWrapper>
-      </div>
-
-      <Section>
-        <Title>Аренды</Title>
-        <Card>Kia K5 — 01.06–05.06 — Активна</Card>
-        <Card>Toyota Camry — 10.05–12.05 — Завершена</Card>
-        <ActionLink>Посмотреть все</ActionLink>
-      </Section>
-      <ProfileConfig>
-        <HeaderRow>
-          <Title>Настройки</Title>
-        </HeaderRow>
-
-        <SettingsGrid>
-          <SettingItem>
-            <Label>Язык</Label>
-            <Value>Русский</Value>
-          </SettingItem>
-
-          <SettingLink>Сменить пароль</SettingLink>
-          <SettingLink>Уведомления</SettingLink>
-          <SettingLink className="danger">Выйти из аккаунта</SettingLink>
-        </SettingsGrid>
-      </ProfileConfig>
-    </ProfileWrapper>
-
-  </div>;
+            <Button variant={"text"}>Сменить пароль</Button>
+            <Button variant={"text"}>Уведомления</Button>
+            <Button variant={"outlined"} width="220px">
+              Выйти из аккаунта
+            </Button>
+          </SettingsGrid>
+        </ProfileConfig>
+      </ProfileWrapper>
+    </StyledWrapper>
+  );
 };
 
 export default ProfilePage;
-
-
+const StyledWrapper = styled("div")(() => ({
+  width: "100%",
+  padding: "0px 90px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "60px",
+}));
 const ProfileWrapper = styled.section`
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
-  font-family: 'Inter', sans-serif;
+  width: 820px;
+  padding: 3rem 2.5rem;
+  font-family: "Inter", sans-serif;
   color: #111827;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 100px;
+  background-color: rgba(201, 204, 248, 0.702);
+  border-radius: 12px;
 `;
-
+const StyledTitleAndBr = styled("div")(() => ({
+  width: "100%",
+  display: "flex",
+  justifyContent: "start",
+  borderBottom: "2px solid #cdcdcd",
+}));
 const ProfileHeader = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 `;
 const InfoGrid = styled.div`
+  width: 100%;
   display: grid;
   gap: 16px;
 `;
@@ -143,7 +187,7 @@ const InfoItem = styled.div`
   background: #f8f9fa;
   padding: 12px 16px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 `;
 
 const Label = styled.span`
@@ -158,28 +202,20 @@ const Value = styled.span`
 
 const Section = styled.div`
   margin-bottom: 2.5rem;
+  width: 100%;
 `;
 
 const Title = styled.h2`
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 1.25rem;
   border-bottom: 1px solid #e5e7eb;
   padding-bottom: 0.5rem;
-`;
-
-const InfoRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
-  color: #374151;
 `;
 
 const ActionLink = styled.button`
   background: none;
   border: none;
-  color: #4f46e5;
+  color: #7e52ff;
   font-weight: 500;
   cursor: pointer;
   padding: 0;
@@ -206,7 +242,7 @@ const DropZoneWrapper = styled.div`
 `;
 
 const DropArea = styled.div`
-  border: 2px dashed #19b08f;
+  border: 2px dashed #4b00a2;
   border-radius: 10px;
   padding: 30px;
   text-align: center;
@@ -234,27 +270,20 @@ const PreviewImage = styled.img`
   border-radius: 8px;
   border: 1px solid #ccc;
 `;
-const UploadButton = styled.button`
-  margin-top: 20px;
-  width: 400px;
-  background-color: #19b08f;
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.3s;
+const UploadButton = muiStyled(Button)(({ disabled }) => ({
+  "&.MuiButtonBase-root": {
+    border: disabled && "1px solid gray",
+    background: disabled && "gray",
+    color: disabled && "#fff",
+    marginTop: "15px",
+  },
+  "&.Mui-disabled": {
+    pointerEvents: "unset",
+    cursor: "no-drop",
+    opacity: 0.5,
+  },
+}));
 
-  &:hover {
-    background-color: #15997a;
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-`
 const RemoveIcon = styled.span`
   position: absolute;
   top: -8px;
@@ -266,9 +295,7 @@ const RemoveIcon = styled.span`
   font-size: 14px;
   cursor: pointer;
   font-weight: bold;
-  box-shadow: 0 0 6px rgba(0,0,0,0.2);
-
-  
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
 `;
 const ImageWrapper = styled.div`
   position: relative;
@@ -276,6 +303,7 @@ const ImageWrapper = styled.div`
   height: 90px;
 `;
 const ProfileConfig = styled.div`
+  width: 100%;
   margin-top: 40px;
 `;
 
@@ -287,41 +315,18 @@ const HeaderRow = styled.div`
 `;
 
 const SettingsGrid = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 16px;
 `;
 
 const SettingItem = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   padding: 12px 16px;
   background-color: #f8f9fa;
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-`;
-
-
-
-const SettingLink = styled.a`
-  color: #19b08f;
-  cursor: pointer;
-  font-weight: 500;
-  padding: 10px 14px;
-  border-radius: 8px;
-  transition: 0.3s;
-  background: #f0fdf9;
-  width: fit-content;
-
-  &:hover {
-    background: #dffaf2;
-  }
-
-  &.danger {
-    color: #d9534f;
-    background: #fcecec;
-
-    &:hover {
-      background: #f9d9d9;
-    }
-  }
 `;

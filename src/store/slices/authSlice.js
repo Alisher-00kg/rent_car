@@ -25,7 +25,7 @@ const getInitialState = () => {
     name: "",
     email: "",
     token: "asdfasdf",
-    role: "ADMIN",
+    role: "USER",
     localDate: null,
     isAuthorized: true,
   };

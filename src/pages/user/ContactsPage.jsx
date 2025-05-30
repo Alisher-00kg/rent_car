@@ -51,7 +51,6 @@ export const ContactsPage = () => {
     <ContainerDiv>
       <StyledTitleAndBr>
         <BreadCrumbs breadcrumbs={getRouteByRole()} />
-        <p>Контакты</p>
       </StyledTitleAndBr>
       <Container>
         <StyledLeftContainer>
@@ -175,19 +174,15 @@ export const ContactsPage = () => {
 };
 
 const ContainerDiv = styled("div")(() => ({
+  width: "100%",
+  minHeight: "100vh",
   padding: "0px 90px",
 }));
 const StyledTitleAndBr = styled("div")(() => ({
+  width: "100%",
   display: "flex",
-  gap: "25px",
-  flexDirection: "column",
-  "& p": {
-    fontSize: "30px",
-    borderBottom: "2px solid #cdcdcd",
-    fontFamily: "Ubuntu",
-    fontWeight: "500 ",
-    paddingBottom: "15px",
-  },
+  justifyContent: "start",
+  borderBottom: "2px solid #cdcdcd",
 }));
 const StyledLeftContainer = styled("div")(() => ({
   display: "flex",

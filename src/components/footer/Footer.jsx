@@ -1,14 +1,16 @@
 import styled from "styled-components";
-import { FaFacebookF, FaInstagram, FaTwitter, FaPhone, FaEnvelope } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTwitter,
+  FaPhone,
+  FaEnvelope,
+} from "react-icons/fa";
 
 export const Footer = () => {
   return (
     <StyledFooter>
-      <StyledNav>
-        {/* <h2>
-          Rent<span>Car</span>
-        </h2> */}
-      </StyledNav>
+      <StyledNav></StyledNav>
       <FooterContainer>
         <Section>
           <Title>О компании</Title>
@@ -24,15 +26,25 @@ export const Footer = () => {
         </Section>
         <Section>
           <Title>Контакты</Title>
-          <Link href="+7903-263-18-65"><FaPhone /> +7903-263-18-65</Link>
-          <Link href="mailto:rentcar@example.com"><FaEnvelope /> rentcar@example.com</Link>
+          <Link href="+79992781923">
+            <FaPhone /> +79992781923
+          </Link>
+          <Link href="mailto:rentcar@example.com">
+            <FaEnvelope /> rentcar@bayel.com
+          </Link>
         </Section>
         <Section>
           <Title>Мы в соцсетях</Title>
           <SocialIcons>
-            <IconLink href="#"><FaFacebookF /></IconLink>
-            <IconLink href="#"><FaInstagram /></IconLink>
-            <IconLink href="#"><FaTwitter /></IconLink>
+            <IconLink href="#">
+              <FaFacebookF />
+            </IconLink>
+            <IconLink href="#">
+              <FaInstagram />
+            </IconLink>
+            <IconLink href="#">
+              <FaTwitter />
+            </IconLink>
           </SocialIcons>
         </Section>
         <FooterBottom>
@@ -44,36 +56,16 @@ export const Footer = () => {
 };
 const StyledFooter = styled.footer`
   width: 100%;
-  /* background: linear-gradient(#03045e, #03045e, #0077b6, #00d4b8);
-  padding: 30px; */
   min-height: 300px;
-  margin-top: 20%;
- nav > h2 {
-    color: white;
-    span {
-      color: yellow;
-    }
-  }
 `;
 
 const StyledNav = styled.nav`
-
-
   display: flex;
   flex-direction: column;
- 
   gap: 100px;
-  h1 {
-    color: rgba(255, 255, 255, 0.7);
-    span {
-      color: #fff902;
-    }
-  }
 `;
 const FooterContainer = styled.footer`
   background-color: #1f1f1f;
-   /* background: linear-gradient(#03045e, #03045e, #0077b6, #00d4b8);
-  padding: 30px; */
   color: #fff;
   padding: 40px 20px;
   display: flex;
@@ -90,7 +82,7 @@ const Section = styled.div`
 const Title = styled.h3`
   font-size: 18px;
   margin-bottom: 15px;
-  color: #f78b31;
+  color: #fff902;
 `;
 
 const Link = styled.a`
@@ -128,4 +120,3 @@ const FooterBottom = styled.div`
   margin-top: 30px;
   width: 100%;
 `;
-

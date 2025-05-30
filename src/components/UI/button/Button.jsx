@@ -58,6 +58,8 @@ const StyledButton = styled(MuiButton)(({ variant, width }) => ({
         ? "#1522ad"
         : variant === "outlined"
         ? "#c8c8f5"
+        : variant === "showmore"
+        ? "#e6e600"
         : "",
   },
 }));

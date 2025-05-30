@@ -141,93 +141,159 @@ export const AdminCreateCard = () => {
             <p>Добавьте изображение</p>
           </div>
         </StyledTopBox>
-        <StyledSelect
-          label={"Выберите категорию"}
-          value={carValues.category}
-          onChange={(e) =>
-            setCarValues({ ...carValues, category: e.target.value })
-          }
-          options={categoryOptions}
-          name="category"
-        />
-        <StyledSelect
-          label={"Выберите марку"}
-          value={carValues.brand}
-          onChange={handleChange}
-          options={brandOptions}
-          name="brand"
-        />
-        <StyledInput
-          inputLabel="Модель"
-          fullWidth
-          placeholder="Введите модель"
-          value={carValues.model}
-          onChange={handleChange}
-          name="model"
-        />
-        <StyledInput
-          inputLabel="Цвет"
-          fullWidth
-          placeholder="Введите цвет"
-          value={carValues.color}
-          onChange={handleChange}
-          name="color"
-        />
-        <StyledInput
-          inputLabel="Год выпуска"
-          fullWidth
-          type="number"
-          placeholder="Введите год выпуска"
-          value={carValues.yearOfRelease}
-          onChange={handleChange}
-          name="yearOfRelease"
-        />
-        <StyledInput
-          inputLabel="Страна производства"
-          fullWidth
-          placeholder="Введите страну производства"
-          value={carValues.madeInCountry}
-          onChange={handleChange}
-          name="madeInCountry"
-        />
-        <StyledInput
-          inputLabel="Сумма аренды"
-          fullWidth
-          placeholder="Введите сумму аренды"
-          value={carValues.rentPrice}
-          onChange={handleChange}
-          name="rentPrice"
-        />
-        <Select
-          label={"Выберите тип топливо"}
-          value={carValues.fuelType}
-          onChange={handleChange}
-          options={fuelTypeOptions}
-          name="fuelType"
-        />
-        <StyledInput
-          inputLabel="Количество сидений"
-          fullWidth
-          type="number"
-          placeholder="Введите количество сидений"
-          value={carValues.numberOfSeats}
-          onChange={handleChange}
-          name="numberOfSeats"
-        />
-        <StyledSelect
-          label={"Выберите тип трансмиссии"}
-          value={carValues.transmission}
-          onChange={handleChange}
-          options={transmissionOptions}
-          name="transmission"
-        />
-        <StyledSelect
-          label={"Выберите тип привода"}
-          value={carValues.driveType}
-          onChange={handleChange}
-          options={driveTypeOptions}
-          name="driveType"
-        />
+        <StyledInputWrapper>
+          <StyledSelect
+            label={
+              <p className="label">
+                Выберите категорию<em>*</em>
+              </p>
+            }
+            value={carValues.category}
+            onChange={(e) =>
+              setCarValues({ ...carValues, category: e.target.value })
+            }
+            options={categoryOptions}
+            name="category"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <StyledSelect
+            label={
+              <p className="label">
+                Выберите марку<em>*</em>
+              </p>
+            }
+            value={carValues.brand}
+            onChange={handleChange}
+            options={brandOptions}
+            name="brand"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <StyledInput
+            inputLabel={
+              <p className="label">
+                Модель<em>*</em>
+              </p>
+            }
+            fullWidth
+            placeholder="Введите модель"
+            value={carValues.model}
+            onChange={handleChange}
+            name="model"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <StyledInput
+            inputLabel={
+              <p className="label">
+                Цвет<em>*</em>
+              </p>
+            }
+            fullWidth
+            placeholder="Введите цвет"
+            value={carValues.color}
+            onChange={handleChange}
+            name="color"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <StyledInput
+            inputLabel={
+              <p className="label">
+                Год выпуска<em>*</em>
+              </p>
+            }
+            fullWidth
+            type="number"
+            placeholder="Введите год выпуска"
+            value={carValues.yearOfRelease}
+            onChange={handleChange}
+            name="yearOfRelease"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <StyledInput
+            inputLabel={
+              <p className="label">
+                Страна производства<em>*</em>
+              </p>
+            }
+            fullWidth
+            placeholder="Введите страну производства"
+            value={carValues.madeInCountry}
+            onChange={handleChange}
+            name="madeInCountry"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <StyledInput
+            inputLabel={
+              <p className="label">
+                Сумма аренды<em>*</em>
+              </p>
+            }
+            fullWidth
+            placeholder="Введите сумму аренды"
+            value={carValues.rentPrice}
+            onChange={handleChange}
+            name="rentPrice"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <Select
+            label={
+              <p className="label">
+                Выберите тип топливо<em>*</em>
+              </p>
+            }
+            value={carValues.fuelType}
+            onChange={handleChange}
+            options={fuelTypeOptions}
+            name="fuelType"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <StyledInput
+            inputLabel={
+              <p className="label">
+                Количество сидений<em>*</em>
+              </p>
+            }
+            fullWidth
+            type="number"
+            placeholder="Введите количество сидений"
+            value={carValues.numberOfSeats}
+            onChange={handleChange}
+            name="numberOfSeats"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <StyledSelect
+            label={
+              <p className="label">
+                Выберите тип трансмиссии<em>*</em>
+              </p>
+            }
+            value={carValues.transmission}
+            onChange={handleChange}
+            options={transmissionOptions}
+            name="transmission"
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <StyledSelect
+            label={
+              <p className="label">
+                Выберите тип привода<em>*</em>
+              </p>
+            }
+            value={carValues.driveType}
+            onChange={handleChange}
+            options={driveTypeOptions}
+            name="driveType"
+          />
+        </StyledInputWrapper>
         <ButtonsWrapper>
           <StyledButton
             variant="outlined"
@@ -354,11 +420,21 @@ const StyledDeleteIcon = styled(Icons.DeleteDropZoneImage)`
   z-index: 25;
 `;
 const StyledSelect = muiStyled(Select)({
-  height: "39px",
+  "&.MuiFormLabel-root": {
+    height: "39px",
+    "& .label em": {
+      color: "red",
+      fontStyle: "normal",
+    },
+  },
 });
 const StyledInput = muiStyled(Input)({
   "& .MuiInputBase-input": {
     height: "39px !important",
+    "& .label em": {
+      color: "red",
+      fontStyle: "normal",
+    },
   },
   "& input": {
     height: "39px",
@@ -368,4 +444,18 @@ const StyledInput = muiStyled(Input)({
 });
 const StyledButton = muiStyled(Button)({
   width: "245px !important",
+});
+const StyledInputWrapper = styled("div")({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "start",
+  gap: "12px",
+  "& label": {
+    color: "#00000099",
+    "& em": {
+      color: "red",
+      fontStyle: "normal",
+    },
+  },
 });

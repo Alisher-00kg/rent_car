@@ -9,6 +9,8 @@ import { BaseModal } from "../UI/modal/BaseModal";
 import { LogoutModal } from "../UI/modal/LogoutModal";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { MdOutlineFavorite } from "react-icons/md";
+import Cookies from "js-cookie";
+
 const Header = () => {
   const [localValue, setLocalValue] = useState("");
   const { role } = useSelector((state) => state.auth);
@@ -29,8 +31,9 @@ const Header = () => {
     setIsOpen(false);
   };
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("auth")) || {};
-    setLocalValue(data?.data?.firstName);
+    const authUserCookie = Cookies.get("auth");
+    const userData = JSON.parse(authUserCookie);
+    setLocalValue(userData?.data?.firstName);
   }, []);
   return (
     <StyledHeader>
@@ -147,7 +150,7 @@ const StyledIconButton = styled(IconButton)`
   span {
     color: #fff902;
     font-size: 18px;
-    font-weight: 600;
+    font: 600;
   }
 `;
 

@@ -1,0 +1,214 @@
+import { styled } from "@mui/material";
+import Input from "../input/Input";
+import Button from "../button/Button";
+import { styled as muiStyled } from "@mui/material/styles";
+import { DateRangePickerField } from "../date-picker/DateRangePickerField";
+import { useForm, Controller } from "react-hook-form";
+
+export const BookingInnerModal = ({ onSuccess }) => {
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      pickupLocation: "",
+      reportErroreturnLocation: "",
+      comment: "",
+      dateRange: {
+        startDate: new Date(),
+        endDate: new Date(),
+      },
+      agreeToTerms: false,
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log("Booking data:", data);
+    reset();
+    onSuccess();
+  };
+
+  return (
+    <FormBook onSubmit={handleSubmit(onSubmit)}>
+      <StyledInputWrapper>
+        <StyledInput
+          required
+          inputLabel="Имя"
+          placeholder="Введите имя"
+          {...register("firstName", { required: "Имя обязательно" })}
+          error={!!errors.firstName}
+          helperText={errors.firstName?.message}
+        />
+      </StyledInputWrapper>
+
+      <StyledInputWrapper>
+        <StyledInput
+          required
+          inputLabel="Фамилия"
+          placeholder="Введите фамилию"
+          {...register("lastName", { required: "Фамилия обязательна" })}
+          error={!!errors.lastName}
+          helperText={errors.lastName?.message}
+        />
+      </StyledInputWrapper>
+
+      <StyledInputWrapper>
+        <StyledInput
+          required
+          inputLabel="Телефон"
+          placeholder="+7 ( _ _ _ ) - _ _ _ - _ _ - _ _"
+          {...register("phoneNumber", { required: "Телефон обязателен" })}
+          error={!!errors.phone}
+          helperText={errors.phone?.message}
+        />
+      </StyledInputWrapper>
+
+      <StyledInputWrapper>
+        <StyledInput
+          required
+          inputLabel="Стартовый адрес"
+          placeholder="Введите адрес"
+          {...register("pickupLocation", {
+            required: "Введите стартовый адрес",
+          })}
+          error={!!errors.fromAddress}
+          helperText={errors.fromAddress?.message}
+        />
+      </StyledInputWrapper>
+
+      <StyledInputWrapper>
+        <StyledInput
+          required
+          inputLabel="Конечный адрес"
+          placeholder="Введите адрес"
+          {...register("returnLocation", {
+            required: "Введите конечный адрес",
+          })}
+          error={!!errors.toAddress}
+          helperText={errors.toAddress?.message}
+        />
+      </StyledInputWrapper>
+
+      <StyledInputWrapper>
+        <Controller
+          name="dateRange"
+          control={control}
+          rules={{
+            validate: (value) =>
+              value.startDate && value.endDate ? true : "Выберите обе даты",
+          }}
+          render={({ field }) => (
+            <DateRangePickerField
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        />
+        {errors.dateRange && (
+          <span style={{ color: "red", fontSize: "12px" }}>
+            {errors.dateRange.message}
+          </span>
+        )}
+      </StyledInputWrapper>
+
+      <StyledInputWrapper>
+        <label htmlFor="comment">Комментарий</label>
+        <textarea
+          id="comment"
+          {...register("comment")}
+          rows={3}
+          style={{
+            width: "100%",
+            borderRadius: "6px",
+            padding: "10px",
+            fontFamily: "inherit",
+          }}
+        />
+      </StyledInputWrapper>
+      <StyledCheckboxWrapper>
+        <input
+          type="checkbox"
+          id="rules"
+          {...register("agreeToTerms", {
+            required: "Вы должны согласиться с правилами",
+          })}
+        />
+        <label htmlFor="rules">
+          Я согласен с{" "}
+          <a href="/rules" target="_blank">
+            правилами
+          </a>
+        </label>
+        {errors.agree && (
+          <span style={{ color: "red", fontSize: "12px" }}>
+            {errors.agree.message}
+          </span>
+        )}
+      </StyledCheckboxWrapper>
+
+      <Button variant="contained" type="submit">
+        Забронировать
+      </Button>
+    </FormBook>
+  );
+};
+
+const FormBook = styled("form")({
+  width: "500px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "20px",
+  margin: "20px 10px",
+});
+
+const StyledInputWrapper = styled("div")({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "start",
+  gap: "12px",
+  "& label": {
+    color: "#00000099",
+    "& em": {
+      color: "red",
+      fontStyle: "normal",
+    },
+  },
+});
+
+const StyledInput = muiStyled(Input)({
+  "& .MuiInputBase-input": {
+    width: "100%",
+    height: "39px !important",
+  },
+  "& input": {
+    width: "100%",
+    height: "39px",
+    padding: "8px 14px",
+    boxSizing: "border-box",
+  },
+});
+const StyledCheckboxWrapper = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  fontSize: "14px",
+  "& input": {
+    width: "18px",
+    height: "18px",
+  },
+  "& label": {
+    color: "#000",
+    cursor: "pointer",
+    "& a": {
+      color: "#007BFF",
+      textDecoration: "underline",
+    },
+  },
+});

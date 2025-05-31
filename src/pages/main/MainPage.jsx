@@ -19,6 +19,7 @@ const MainPage = () => {
   }, [dispatch]);
 
   const openLink = (url) => window.open(url, "_blank");
+  console.log(cars, "sssd");
 
   return (
     <Wrapper>
@@ -30,7 +31,6 @@ const MainPage = () => {
         <Icons.Telegram />
       </TelegramButton>
       <ChoseUs />
-
       <StyledUl>
         {cars?.map((item) => (
           <Card key={item.id} {...item} />

@@ -8,11 +8,11 @@ const getInitialState = () => {
     try {
       const userData = JSON.parse(authUserCookie);
       return {
-        name: userData.name || "",
-        email: userData.email || "",
+        name: userData.data.firstName || "",
+        email: userData.data.email || "",
         token: userData.token || null,
-        role: userData.role || "GUEST",
-        localDate: userData.localDate || null,
+        role: userData.data.role || "GUEST",
+        localDate: userData.data.localDate || null,
         isAuthorized: !!userData.token,
       };
     } catch (error) {
@@ -22,12 +22,12 @@ const getInitialState = () => {
   }
 
   return {
-    name: "",
+    firstName: "",
     email: "",
-    token: "asdfasdf",
-    role: "USER",
+    token: null,
+    role: "GUEST",
     localDate: null,
-    isAuthorized: true,
+    isAuthorized: false,
   };
 };
 
@@ -37,10 +37,10 @@ export const authSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.isAuthorized = true;
-      state.role = action.payload.role;
-      state.name = action.payload.name;
-      state.email = action.payload.email;
-      state.localDate = action.payload.localDate;
+      state.role = action.payload.data.role;
+      state.name = action.payload.data.firstName;
+      state.email = action.payload.data.email;
+      state.localDate = action.payload.data.localDate;
       state.token = action.payload.token;
 
       Cookies.set("auth", JSON.stringify(action.payload), { expires: 7 });
@@ -48,7 +48,7 @@ export const authSlice = createSlice({
     logOut: (state) => {
       state.isAuthorized = false;
       state.role = "GUEST";
-      state.name = "";
+      state.firstName = "";
       state.email = "";
       state.localDate = null;
       state.token = null;
@@ -61,15 +61,15 @@ export const authSlice = createSlice({
         try {
           const userData = JSON.parse(authUserCookie);
           state.isAuthorized = !!userData.token;
-          state.role = userData.role || "GUEST";
-          state.name = userData.name || "";
-          state.email = userData.email || "";
-          state.localDate = userData.localDate || null;
+          state.role = userData.data.role || "GUEST";
+          state.firstName = userData.data.firstName || "";
+          state.email = userData.data.email || "";
+          state.localDate = userData.data.localDate || null;
           state.token = userData.token || null;
         } catch (error) {
           state.isAuthorized = false;
           state.role = "GUEST";
-          state.name = "";
+          state.firstName = "";
           state.email = "";
           state.localDate = null;
           state.token = null;

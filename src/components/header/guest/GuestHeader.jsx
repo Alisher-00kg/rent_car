@@ -23,6 +23,9 @@ const GuestHeader = () => {
   const handleCloseModal = () => {
     setIsOpen(false);
   };
+  const handleNavigateToLogin = () => {
+    navigate(PATHS.SIGN_IN);
+  };
   return (
     <StyledHeader>
       <NavLink to={PATHS.GUEST.ROOT} className={"link"}>
@@ -45,7 +48,7 @@ const GuestHeader = () => {
           TransitionComponent={Fade}
         >
           <StyledMenuItem onClick={handleClose}>
-            <StyledLink onClick={handleOpenModal}>Войти</StyledLink>
+            <StyledLink onClick={handleNavigateToLogin}>Войти</StyledLink>
           </StyledMenuItem>
         </StyledMenu>
         <StyledIconButton onClick={handleClick}>

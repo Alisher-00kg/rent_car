@@ -17,6 +17,8 @@ export const SignUp = () => {
   // const [signUp] = useSignUpMutation();
   // const { data } = useGetAllQuery();
   // console.log(data);
+  const dispatch = useDispatch()
+  const { isLoading } = useSelector(state => state.auth)
 
   const {
     register,
@@ -26,7 +28,7 @@ export const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  // const password = watch("password");
+  const password = watch("password");
 
   const onSubmit = (data) => {
     const signUpData = {
@@ -34,13 +36,18 @@ export const SignUp = () => {
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
-      role: "USER", // или можете сделать это динамическим
-      localDate: new Date().toISOString().split("T")[0], // текущая дата в формате YYYY-MM-DD
+      role: "USER",
+      localDate: new Date().toISOString().split("T")[0], 
     };
 
     // signUp(signUpData);
     // reset();
   };
+
+
+
+
+
 
   return (
     <StyledWrapper>
@@ -164,8 +171,9 @@ export const SignUp = () => {
         </StyledForm>
       </StyledInnerWrapper>
     </StyledWrapper>
-  );
-};
+  )
+}
+
 
 const StyledWrapper = styled.div`
   width: 100%;

@@ -48,7 +48,7 @@ const GuestHeader = () => {
           TransitionComponent={Fade}
         >
           <StyledMenuItem onClick={handleClose}>
-            <StyledLink onClick={handleOpenModal}>Войти</StyledLink>
+            <StyledLink onClick={handleOpenModal} to="/sign-in">Войти</StyledLink>
           </StyledMenuItem>
         </StyledMenu>
         <StyledIconButton onClick={handleClick}>

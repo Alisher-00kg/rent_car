@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   createBrowserRouter,
   Navigate,
@@ -15,15 +15,22 @@ import { GuestLayout } from "../layout/GuestLayout";
 import { GuestRoutes } from "./Guest/GuestRoutes";
 import { SignIn } from "../auth/SignIn";
 import { SignUp } from "../auth/SignUp";
+import { useEffect } from "react";
+import { refreshFromCookie } from "../store/slices/authSlice";
 
 export const AppRoutes = () => {
   const { isAuthorized, role } = useSelector((state) => state.auth);
-
+  const dispatch = useDispatch();
   const routeByRole = {
     ADMIN: PATHS.ADMIN.ROOT,
     USER: PATHS.USER.ROOT,
     GUEST: PATHS.GUEST.ROOT,
   };
+
+  useEffect(() => {
+    dispatch(refreshFromCookie());
+  }, [dispatch]);
+
   const routes = createBrowserRouter([
     {
       path: "/",

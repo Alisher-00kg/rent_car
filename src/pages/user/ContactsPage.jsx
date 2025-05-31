@@ -150,6 +150,9 @@ export const ContactsPage = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Напишите сообщение"
+              fullWidth
+              multiline
+              minRows={3}
             />
           </div>
           <Button variant={"contained"} onClick={handleClick}>

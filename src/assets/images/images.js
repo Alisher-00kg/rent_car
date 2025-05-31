@@ -11,3 +11,4 @@ export { default as UserProfile1 } from "./uiProfile1.png";
 export { default as UserProfile2 } from "./uiProfile2.png";
 export { default as UserProfile3 } from "./uiProfile3.png";
 export { default as UserProfile4 } from "./userProfile4.jpg";
+export { default as SuccesCheck } from "./succes-check.jpg";

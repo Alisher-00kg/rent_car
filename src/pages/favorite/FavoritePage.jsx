@@ -5,7 +5,7 @@ import { styled as muiStyled } from "@mui/material/styles";
 import { Icons } from "../../assets";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PATHS } from "../../utils/constants/constants";
 import Card from "../../components/UI/card/Card";
 import { getAllCars } from "../../store/thunks/allCars";
@@ -13,12 +13,19 @@ import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
 
 export const FavoritePage = () => {
   const { cars } = useSelector((state) => state.allCars);
+  const [favorites, setFavorites] = useState(null);
+
+  useEffect(() => {
+    setFavorites(cars.filter((item) => item.isFavorite === true));
+  }, [cars]);
   const { role } = useSelector((state) => state.auth);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllCars());
   }, [dispatch]);
+
   const handleNavigateToBack = () => {
     switch (role) {
       case "USER":
@@ -51,7 +58,7 @@ export const FavoritePage = () => {
         <Typography variant="h4">Избранное</Typography>
       </StyledHeader>
       <StyledMainContent>
-        {cars?.length === 0 ? (
+        {favorites?.length === 0 ? (
           <StyledEmptyBlock>
             <StyledEmptyIcon />
             <StyledInnerBox>
@@ -71,7 +78,7 @@ export const FavoritePage = () => {
               <Icons.XSymbol /> Очистить список машин
             </StyledIconButton>
             <StyledUl>
-              {cars?.slice(0).map((item) => (
+              {favorites?.slice(0).map((item) => (
                 <Card key={item.id} {...item} />
               ))}
             </StyledUl>

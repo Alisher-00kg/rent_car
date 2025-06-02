@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { styled } from "@mui/material";
+import { IconButton, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../utils/constants/constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../button/Button";
 import { Icons } from "../../../assets";
+import { updateFavoriteStatus } from "../../../store/thunks/allCars";
 const Card = ({
   id,
   brand,
@@ -14,9 +15,11 @@ const Card = ({
   transmission,
   driveType,
   images,
+  isFavorite,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { role } = useSelector((state) => state.auth);
 
   const nextSlide = () => {
@@ -36,12 +39,21 @@ const Card = ({
         : PATHS.USER.PAGE + "/" + id
     );
   };
-
+  const handleChangeFavorite = (favoriteID) => {
+    // console.log(favoriteID);
+    dispatch(
+      updateFavoriteStatus({ currentFavorite: !isFavorite, carID: favoriteID })
+    );
+  };
   return (
     <StyledDiv>
       <li>
         <div id="box_cars">
-          {role === "USER" && <StyledHeart />}
+          {role === "USER" && (
+            <StyledIconButton onClick={() => handleChangeFavorite(id)}>
+              {isFavorite ? <StyledHeart /> : <Icons.ChevronLeft />}
+            </StyledIconButton>
+          )}
 
           <div className="slider">
             <button
@@ -203,14 +215,26 @@ const StyledDescription = styled("div")({
     },
   },
 });
-const StyledHeart = styled(Icons.WhiteHeart)({
-  position: "absolute",
-  zIndex: "10",
-  top: "15px",
-  right: "15px",
-  stroke: "white",
-  transition: "transform 0.3s ease-out",
-  "&:hover": {
-    transform: "scale(1.3)",
+const StyledIconButton = styled(IconButton)({
+  "&.MuiButtonBase-root": {
+    width: "fit-content",
+    height: "fit-content",
+    position: "absolute",
+    zIndex: "10",
+    top: "10px",
+    right: "15px",
+    margin: "0px",
+    padding: "0px",
+    transition: "transform 0.3s ease-out",
+    "&:hover": {
+      transform: "scale(1.3)",
+    },
+    "& .yellow-heart": {
+      fill: "red !important",
+      stroke: "red",
+    },
   },
+});
+const StyledHeart = styled(Icons.WhiteHeart)({
+  stroke: "white",
 });

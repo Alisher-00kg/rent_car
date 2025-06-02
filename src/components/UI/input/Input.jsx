@@ -19,7 +19,7 @@ const Input = forwardRef(
     const inputField = (
       <StyledInput
         type="text"
-        id={id ?? inputLabel}
+        id={typeof id === "string" ? id : undefined}
         placeholder={placeholder}
         label={label}
         inputRef={ref}
@@ -34,7 +34,9 @@ const Input = forwardRef(
     if (inputLabel) {
       return (
         <StyledInputWrapper>
-          <label htmlFor={inputLabel}>{inputLabel}</label>
+          <label htmlFor={typeof id === "string" ? id : undefined}>
+            {inputLabel}
+          </label>
           {inputField}
         </StyledInputWrapper>
       );

@@ -19,11 +19,13 @@ export const brandOptions = [
   { value: "lada", label: "Lada" },
 ];
 export const fuelTypeOptions = [
-  { value: "standart", label: "Стандартная выхлопная система" },
-  { value: "sport", label: "Спортивная выхлопная система" },
-  { value: "straight", label: "Прямоточная система (стрейтпайп)" },
-  { value: "active", label: "Активная выхлопная система" },
+  { value: "Бензин", label: "Бензин" },
+  { value: "Дизель", label: "Дизель" },
+  { value: "Электричество", label: "Электричество" },
+  { value: "Гибрид", label: "Гибрид" },
+  { value: "Метан (CNG)", label: "Метан (CNG)" },
 ];
+
 export const transmissionOptions = [
   {
     value: "mt",

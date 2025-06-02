@@ -4,8 +4,6 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Icons } from "../../../assets";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { IoIosNotificationsOutline } from "react-icons/io";
-import { MdOutlineFavorite } from "react-icons/md";
 
 const GuestHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +35,6 @@ const GuestHeader = () => {
         <StyledNavLink to={PATHS.GUEST.SALES}>Акции</StyledNavLink>
         <StyledNavLink to={PATHS.GUEST.CONTACTS}>Контакты</StyledNavLink>
         <StyledNavLink to={PATHS.GUEST.ABOUTUS}>О нас</StyledNavLink>
-        <StyledNavLink to={PATHS.GUEST.PROFILE}>Профиль</StyledNavLink>
       </nav>
       <StyledRightBox>
         <StyledMenu
@@ -58,29 +55,6 @@ const GuestHeader = () => {
           <span>Гость</span>
           <Icons.ArrowDown />
         </StyledIconButton>
-        <div>
-          <IconButton>
-            <IoIosNotificationsOutline
-              style={{
-                color: "white",
-                width: "25",
-                height: "25",
-                cursor: "pointer",
-              }}
-            />
-          </IconButton>
-          <IconButton onClick={() => navigate(PATHS.GUEST.FAVORITE)}>
-            <MdOutlineFavorite
-              style={{
-                color: "white",
-                width: "25",
-                height: "25",
-                fill: "white",
-                cursor: "pointer",
-              }}
-            />
-          </IconButton>
-        </div>
       </StyledRightBox>
     </StyledHeader>
   );
@@ -159,7 +133,8 @@ const StyledIconButton = styled(IconButton)`
   align-items: center;
   gap: 8px;
   span {
-    color: #fff;
-    font-size: 16px;
+    color: #fff902;
+    font-size: 18px;
+    font-weight: 600;
   }
 `;

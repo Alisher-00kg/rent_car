@@ -9,8 +9,10 @@ export const GuestLayout = () => {
     <>
       <ScrollToTop />
       <StyledMain>
-        <GuestHeader />
-        <Outlet />
+        <div>
+          <GuestHeader />
+          <Outlet />
+        </div>
         <Footer />
       </StyledMain>
     </>
@@ -18,6 +20,9 @@ export const GuestLayout = () => {
 };
 const StyledMain = styled("div")({
   marginTop: "100px",
+  minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
+  gap: "250px",
+  background: "#f3f3f3",
 });

@@ -48,6 +48,7 @@ const Wrapper = styled("div")({
   display: "flex",
   flexDirection: "column",
   gap: "100px",
+  background: "#fff",
 });
 
 const StyledUl = styled("ul")({

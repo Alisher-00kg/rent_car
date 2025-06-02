@@ -3,9 +3,10 @@ import { PATHS } from "../../utils/constants/constants";
 import { useSelector } from "react-redux";
 import { PrivateRoute } from "../PrivateRoute";
 import { AdminPage } from "../../pages/admin/AdminPage";
-import { AdminOrders } from "../../pages/admin/AdminOrders";
+
 import { AdminDetailsPage } from "../../pages/admin/AdminDetailsPage";
 import { AdminCreateCard } from "../../pages/admin/AdminCreateCard";
+import { AdminOrders } from "../../pages/admin/AdminOrders";
 
 export const AdminRoutes = () => {
   const { isAuthorized } = useSelector((state) => state.auth);

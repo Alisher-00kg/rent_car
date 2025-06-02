@@ -18,7 +18,7 @@ export const AdminPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
-  // Фильтрация машин по поисковому запросу
+
   const filteredCars = useMemo(() => {
     if (!searchQuery.trim()) {
       return cars;

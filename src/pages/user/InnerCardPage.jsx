@@ -110,7 +110,6 @@ export const InnerCardPage = () => {
             href: `/user/user-page/${car.id}`,
           },
         ];
-        break;
       case "ADMIN":
         return [
           {
@@ -129,8 +128,8 @@ export const InnerCardPage = () => {
             href: "/guest/main-page",
           },
           {
-            label: "Избранное",
-            href: "/guest/favorite",
+            label: `${car.brand}  ${car.model}`,
+            href: `/guest/main-page/${car.id}`,
           },
         ];
     }
@@ -208,9 +207,11 @@ export const InnerCardPage = () => {
                 <StyledButton onClick={handleOpenModal} variant={"contained"}>
                   Забронировать
                 </StyledButton>
-                <IconButton>
-                  <StyledHeart />
-                </IconButton>
+                {role === "USER" && (
+                  <IconButton>
+                    <StyledHeart />
+                  </IconButton>
+                )}
               </LowerLayout>
             </StyledRightBar>
           </article>
@@ -219,19 +220,25 @@ export const InnerCardPage = () => {
             {role === "GUEST" ? (
               <StyledBackInfo>
                 <Typography
-                  variant="h6"
+                  variant="h5"
                   sx={{
                     textAlign: "center",
                   }}
                 >
-                  Чтобы забронировать вам сначала надо войти в аккаунт или
+                  Чтобы забронировать, вам сначала надо войти в аккаунт или
                   зарегистрироваться!
                 </Typography>
                 <StyledBtnsWrapper>
-                  <StyledButton onClick={() => navigate(PATHS.SIGN_IN)}>
+                  <StyledButton
+                    variant={"contained"}
+                    onClick={() => navigate(PATHS.SIGN_IN)}
+                  >
                     Войти
                   </StyledButton>
-                  <StyledButton onClick={() => navigate(PATHS.SIGN_UP)}>
+                  <StyledButton
+                    variant={"outlined"}
+                    onClick={() => navigate(PATHS.SIGN_UP)}
+                  >
                     Зарегистрироваться
                   </StyledButton>
                 </StyledBtnsWrapper>
@@ -455,6 +462,7 @@ const StyledCap = styled("nav")({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  paddingTop: "30px",
 });
 const StyledHeart = styled(Icons.WhiteHeart)({
   width: "34px",

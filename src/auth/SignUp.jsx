@@ -9,6 +9,7 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../components/UI/error/ErrorMessage";
+import { useDispatch, useSelector } from "react-redux";
 // import { useGetAllQuery, useSignUpMutation } from "../store/api/auth.service";
 
 export const SignUp = () => {
@@ -17,8 +18,8 @@ export const SignUp = () => {
   // const [signUp] = useSignUpMutation();
   // const { data } = useGetAllQuery();
   // console.log(data);
-  const dispatch = useDispatch()
-  const { isLoading } = useSelector(state => state.auth)
+
+
 
   const {
     register,

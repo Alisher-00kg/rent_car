@@ -145,8 +145,9 @@ const StyledIconButton = styled(IconButton)`
   align-items: center;
   gap: 8px;
   span {
-    color: #fff;
-    font-size: 16px;
+    color: #fff902;
+    font-size: 18px;
+    font-weight: 600;
   }
 `;
 

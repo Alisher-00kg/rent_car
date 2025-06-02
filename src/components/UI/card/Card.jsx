@@ -41,7 +41,8 @@ const Card = ({
     <StyledDiv>
       <li>
         <div id="box_cars">
-          <StyledHeart />
+          {role === "USER" && <StyledHeart />}
+
           <div className="slider">
             <button
               className="slider-btn left"

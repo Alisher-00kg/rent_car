@@ -16,6 +16,8 @@ import { getAllCars, getSingleCar } from "../../store/thunks/allCars";
 import { Icons } from "../../assets";
 import Card from "../../components/UI/card/Card";
 import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
+import { BookingInnerModal } from "../../components/UI/modal/BookingInnerModal";
+import { SuccessMessage } from "../../components/UI/modal/SuccesMessage";
 
 export const InnerCardPage = () => {
   const navigate = useNavigate();
@@ -24,9 +26,8 @@ export const InnerCardPage = () => {
   const { singleCar, cars } = useSelector((state) => state.allCars);
   const [isOpen, setIsOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(4);
+  const [isBookingSuccess, setIsBookingSuccess] = useState(false);
   const dispatch = useDispatch();
-  console.log(singleCar);
-  console.log(carId);
 
   useEffect(() => {
     if (carId) {
@@ -39,7 +40,6 @@ export const InnerCardPage = () => {
   }, [dispatch]);
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  const handleReservation = () => {};
   const handleOpenModal = () => {
     setIsOpen(true);
   };
@@ -134,6 +134,16 @@ export const InnerCardPage = () => {
         ];
     }
   }
+  useEffect(() => {
+    if (isBookingSuccess) {
+      const timer = setTimeout(() => {
+        handleCloseModal();
+        setIsBookingSuccess(false);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [isBookingSuccess]);
+
   return (
     <StyledMainWrapper>
       <StyledInnerWrapper>
@@ -243,13 +253,10 @@ export const InnerCardPage = () => {
                   </StyledButton>
                 </StyledBtnsWrapper>
               </StyledBackInfo>
+            ) : isBookingSuccess ? (
+              <SuccessMessage />
             ) : (
-              <FormBook>
-                <Input label="Имя" />
-                <Input label="Фамилия" />
-                <Input label="Номер телефон" />
-                <Button variant="contained">Забронировать</Button>
-              </FormBook>
+              <BookingInnerModal onSuccess={() => setIsBookingSuccess(true)} />
             )}
           </BaseModal>
         </GalleryWrapper>
@@ -523,12 +530,4 @@ const StyledUl = styled("ul")({
   justifyContent: "center",
   gap: "30px",
   flexWrap: "wrap",
-});
-
-const FormBook = styled("form")({
-  width: "285px",
-  display: "flex",
-  flexDirection: "column",
-  gap: "10px",
-  margin: "20px 10px",
 });

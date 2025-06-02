@@ -96,7 +96,9 @@ export const SignIn = () => {
             />
             <ErrorMessage>{errors?.password?.message}</ErrorMessage>
           </InputWrapper>
-          <StyledButton type="submit">Вход</StyledButton>
+          <StyledButton type="submit" variant={"contained"}>
+            Вход
+          </StyledButton>
           <StyledInfoText>
             <p>Создать аккаунт?</p>
             <StyledLink to={PATHS.SIGN_UP}>Зарегистрироваться</StyledLink>

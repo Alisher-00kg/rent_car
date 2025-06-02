@@ -9,6 +9,7 @@ const Input = forwardRef(
       borderradius = null,
       label,
       inputLabel,
+      required = false,
       value,
       onChange,
       id = null,
@@ -36,6 +37,7 @@ const Input = forwardRef(
         <StyledInputWrapper>
           <label htmlFor={typeof id === "string" ? id : undefined}>
             {inputLabel}
+            {required && <em>*</em>}
           </label>
           {inputField}
         </StyledInputWrapper>
@@ -48,6 +50,7 @@ const Input = forwardRef(
 
 export default Input;
 const StyledInput = styled(TextField)(({ borderradius }) => ({
+  width: "100%",
   "& .MuiInputBase-root": {
     borderRadius: borderradius || "6px",
     height: "fit-content",
@@ -64,5 +67,12 @@ const StyledInputWrapper = styled("div")({
   gap: "12px",
   "& label": {
     color: "#00000099",
+    fontSize: "14px",
+    fontWeight: 500,
+    "& em": {
+      color: "red",
+      marginLeft: 2,
+      fontStyle: "normal",
+    },
   },
 });

@@ -9,12 +9,14 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../components/UI/error/ErrorMessage";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { signUpThunk } from "../store/thunks/authThunk";
 // import { useGetAllQuery, useSignUpMutation } from "../store/api/auth.service";
 
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const dispatch = useDispatch();
   // const [signUp] = useSignUpMutation();
   // const { data } = useGetAllQuery();
   // console.log(data);
@@ -33,16 +35,17 @@ export const SignUp = () => {
 
   const onSubmit = (data) => {
     const signUpData = {
-      name: data.name,
+      firstName: data.firstName,
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
       role: "USER",
-      localDate: new Date().toISOString().split("T")[0], 
+      localDate: new Date().toISOString().split("T")[0],
     };
+    console.log("submit");
 
-    // signUp(signUpData);
-    // reset();
+    dispatch(signUpThunk(signUpData));
+    reset();
   };
 
 
@@ -68,7 +71,7 @@ export const SignUp = () => {
               fullWidth
               placeholder="Имя"
               type="text"
-              {...register("name", {
+              {...register("firstName", {
                 required: {
                   value: true,
                   message: "Обязательное поле",
@@ -164,7 +167,9 @@ export const SignUp = () => {
             />
             <ErrorMessage>{errors?.confirmPassword?.message}</ErrorMessage>
           </InputWrapper>
-          <StyledButton type="submit">Зарегистрироваться</StyledButton>
+          <StyledButton type="submit" variant={"contained"}>
+            Зарегистрироваться
+          </StyledButton>
           <StyledInfoText>
             <p>У вас уже есть аккаунт?</p>
             <StyledLink to={PATHS.SIGN_IN}>Войти</StyledLink>

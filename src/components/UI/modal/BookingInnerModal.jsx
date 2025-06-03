@@ -4,8 +4,14 @@ import Button from "../button/Button";
 import { styled as muiStyled } from "@mui/material/styles";
 import { DateRangePickerField } from "../date-picker/DateRangePickerField";
 import { useForm, Controller } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { postBookingCar } from "../../../store/thunks/allCars";
 
-export const BookingInnerModal = ({ onSuccess }) => {
+export const BookingInnerModal = ({ onSuccess, car }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.allUsers);
+  console.log(user, "book");
+
   const {
     handleSubmit,
     control,
@@ -14,12 +20,16 @@ export const BookingInnerModal = ({ onSuccess }) => {
     reset,
   } = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
+      id: user.id - 1,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phoneNumber: user.phoneNumber,
       pickupLocation: "",
-      reportErroreturnLocation: "",
       comment: "",
+      car: `${car.brand} ${car.model}`,
+      rentPrice: car.rentPrice,
+      bookingStatus: "Неподтвержденная",
+      payment: "Карта",
       dateRange: {
         startDate: new Date(),
         endDate: new Date(),
@@ -27,9 +37,8 @@ export const BookingInnerModal = ({ onSuccess }) => {
       agreeToTerms: false,
     },
   });
-
   const onSubmit = (data) => {
-    console.log("Booking data:", data);
+    dispatch(postBookingCar(data));
     reset();
     onSuccess();
   };
@@ -64,8 +73,8 @@ export const BookingInnerModal = ({ onSuccess }) => {
           inputLabel="Телефон"
           placeholder="+7 ( _ _ _ ) - _ _ _ - _ _ - _ _"
           {...register("phoneNumber", { required: "Телефон обязателен" })}
-          error={!!errors.phone}
-          helperText={errors.phone?.message}
+          error={!!errors.phoneNumber}
+          helperText={errors.phoneNumber?.message}
         />
       </StyledInputWrapper>
 
@@ -77,8 +86,8 @@ export const BookingInnerModal = ({ onSuccess }) => {
           {...register("pickupLocation", {
             required: "Введите стартовый адрес",
           })}
-          error={!!errors.fromAddress}
-          helperText={errors.fromAddress?.message}
+          error={!!errors.pickupLocation}
+          helperText={errors.pickupLocation?.message}
         />
       </StyledInputWrapper>
 
@@ -90,8 +99,8 @@ export const BookingInnerModal = ({ onSuccess }) => {
           {...register("returnLocation", {
             required: "Введите конечный адрес",
           })}
-          error={!!errors.toAddress}
-          helperText={errors.toAddress?.message}
+          error={!!errors.returnLocation}
+          helperText={errors.returnLocation?.message}
         />
       </StyledInputWrapper>
 
@@ -140,14 +149,14 @@ export const BookingInnerModal = ({ onSuccess }) => {
           })}
         />
         <label htmlFor="rules">
-          Я согласен с{" "}
+          Я согласен с
           <a href="/rules" target="_blank">
             правилами
           </a>
         </label>
-        {errors.agree && (
+        {errors.agreeToTerms?.message && (
           <span style={{ color: "red", fontSize: "12px" }}>
-            {errors.agree.message}
+            {errors.agreeToTerms.message}
           </span>
         )}
       </StyledCheckboxWrapper>

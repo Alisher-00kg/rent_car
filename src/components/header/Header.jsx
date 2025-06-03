@@ -1,8 +1,8 @@
-import { Fade, IconButton, Menu, MenuItem, styled } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { Badge, Fade, IconButton, Menu, MenuItem, styled } from "@mui/material";
+import { useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { PATHS } from "../../utils/constants/constants";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { Icons } from "../../assets";
 import { BaseModal } from "../UI/modal/BaseModal";
@@ -10,6 +10,7 @@ import { LogoutModal } from "../UI/modal/LogoutModal";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { MdOutlineFavorite } from "react-icons/md";
 import Cookies from "js-cookie";
+import { FavoriteContext } from "../../context/FavoriteContext";
 
 const Header = () => {
   const [localValue, setLocalValue] = useState("");
@@ -17,6 +18,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const { counter } = useContext(FavoriteContext);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -83,15 +85,25 @@ const Header = () => {
             />
           </IconButton>
           <IconButton onClick={() => navigate(PATHS.USER.FAVORITE)}>
-            <MdOutlineFavorite
-              style={{
-                color: "white",
-                width: "25",
-                height: "25",
-                fill: "white",
-                cursor: "pointer",
+            <Badge
+              badgeContent={counter}
+              sx={{
+                "& .MuiBadge-badge": {
+                  backgroundColor: "rgb(250, 223, 70)",
+                  color: "#03045e",
+                },
               }}
-            />
+            >
+              <MdOutlineFavorite
+                style={{
+                  color: "white",
+                  width: "25",
+                  height: "25",
+                  fill: "white",
+                  cursor: "pointer",
+                }}
+              />
+            </Badge>
           </IconButton>
         </div>
       </StyledRightBox>
@@ -114,7 +126,7 @@ const StyledHeader = styled("header")({
   position: "fixed",
   top: "0",
   left: "0",
-  zIndex: 2,
+  zIndex: 10,
   "& .nav": {
     display: "flex",
     gap: "50px",

@@ -3,28 +3,18 @@ import Button from "../../components/UI/button/Button";
 import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
 import { Icons } from "../../assets";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { PATHS } from "../../utils/constants/constants";
 import Card from "../../components/UI/card/Card";
-import { getAllCars } from "../../store/thunks/allCars";
 import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
+import { FavoriteContext } from "../../context/FavoriteContext";
 
 export const FavoritePage = () => {
-  const { cars } = useSelector((state) => state.allCars);
-  const [favorites, setFavorites] = useState(null);
-
-  useEffect(() => {
-    setFavorites(cars.filter((item) => item.isFavorite === true));
-  }, [cars]);
+  const { onClearAllFavorites, favorites } = useContext(FavoriteContext);
   const { role } = useSelector((state) => state.auth);
-
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAllCars());
-  }, [dispatch]);
 
   const handleNavigateToBack = () => {
     switch (role) {
@@ -34,6 +24,7 @@ export const FavoritePage = () => {
         return navigate(PATHS.GUEST.PAGE);
     }
   };
+
   function getRouteByRole() {
     switch (role) {
       case "USER":
@@ -74,7 +65,7 @@ export const FavoritePage = () => {
           </StyledEmptyBlock>
         ) : (
           <StyledMainCardsBlock>
-            <StyledIconButton>
+            <StyledIconButton onClick={onClearAllFavorites}>
               <Icons.XSymbol /> Очистить список машин
             </StyledIconButton>
             <StyledUl>

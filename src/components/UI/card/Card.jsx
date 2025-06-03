@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { IconButton, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../utils/constants/constants";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Button from "../button/Button";
 import { Icons } from "../../../assets";
-import { updateFavoriteStatus } from "../../../store/thunks/allCars";
+import { keyframes } from "@emotion/react";
+import { FavoriteContext } from "../../../context/FavoriteContext";
+
 const Card = ({
   id,
   brand,
@@ -19,8 +21,9 @@ const Card = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { role } = useSelector((state) => state.auth);
+
+  const { animatedHearts, onChangeFavorite } = useContext(FavoriteContext);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -39,19 +42,17 @@ const Card = ({
         : PATHS.USER.PAGE + "/" + id
     );
   };
-  const handleChangeFavorite = (favoriteID) => {
-    // console.log(favoriteID);
-    dispatch(
-      updateFavoriteStatus({ currentFavorite: !isFavorite, carID: favoriteID })
-    );
-  };
+
   return (
     <StyledDiv>
       <li>
         <div id="box_cars">
           {role === "USER" && (
-            <StyledIconButton onClick={() => handleChangeFavorite(id)}>
-              {isFavorite ? <StyledHeart /> : <Icons.ChevronLeft />}
+            <StyledIconButton
+              animate={animatedHearts[id]}
+              onClick={() => onChangeFavorite(id, isFavorite)}
+            >
+              {isFavorite ? <StyledHeartTrue /> : <StyledHeartFalse />}
             </StyledIconButton>
           )}
 
@@ -215,26 +216,49 @@ const StyledDescription = styled("div")({
     },
   },
 });
-const StyledIconButton = styled(IconButton)({
+const bounce = keyframes`
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(0.7);
+  }
+   80% {
+    transform: scale(0.7);
+  }
+ 
+`;
+
+const StyledIconButton = styled(IconButton, {
+  shouldForwardProp: (prop) => prop !== "animate",
+})(({ animate }) => ({
   "&.MuiButtonBase-root": {
     width: "fit-content",
     height: "fit-content",
     position: "absolute",
-    zIndex: "10",
+    zIndex: "5",
     top: "10px",
     right: "15px",
     margin: "0px",
     padding: "0px",
     transition: "transform 0.3s ease-out",
+    ...(animate && {
+      animation: `${bounce} 0.4s ease`,
+    }),
     "&:hover": {
       transform: "scale(1.3)",
     },
-    "& .yellow-heart": {
-      fill: "red !important",
-      stroke: "red",
-    },
   },
-});
-const StyledHeart = styled(Icons.WhiteHeart)({
+}));
+const StyledHeartFalse = styled(Icons.WhiteHeart)({
+  width: "32px",
+  height: "32px",
   stroke: "white",
+});
+const StyledHeartTrue = styled(Icons.WhiteHeart)({
+  width: "32px",
+  height: "32px",
+  stroke: "white",
+  fill: "#FFFF00",
 });

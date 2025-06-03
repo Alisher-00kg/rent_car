@@ -1,8 +1,10 @@
 
 import { Box, FormControl, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table } from '../../components/UI/table';
 import Button from '../../components/UI/button/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { getorderThunks } from '../../store/thunks/ordersThunks';
 
 const dummyOrders = [
   {
@@ -17,14 +19,79 @@ const dummyOrders = [
     payment: 'Карта',
     location: 'Бишкек, ул. Киевская',
   },
+  {
+    id: 'RNT-002',
+    customer: 'Айбек А.',
+    phone: '+996 500 123 456',
+    car: 'Toyota Camry',
+    from: '2025-06-01',
+    to: '2025-06-07',
+    status: 'В ожидании',
+    amount: 35000,
+    payment: 'Карта',
+    location: 'Бишкек, ул. Киевская',
+  },
+  {
+    id: 'RNT-003',
+    customer: 'Айбек А.',
+    phone: '+996 500 123 456',
+    car: 'Toyota Camry',
+    from: '2025-06-01',
+    to: '2025-06-07',
+    status: 'В ожидании',
+    amount: 35000,
+    payment: 'Карта',
+    location: 'Бишкек, ул. Киевская',
+  },
+  {
+    id: 'RNT-004',
+    customer: 'Айбек А.',
+    phone: '+996 500 123 456',
+    car: 'Toyota Camry',
+    from: '2025-06-01',
+    to: '2025-06-07',
+    status: 'В ожидании',
+    amount: 35000,
+    payment: 'Карта',
+    location: 'Бишкек, ул. Киевская',
+  }, {
+    id: 'RNT-05',
+    customer: 'Айбек А.',
+    phone: '+996 500 123 456',
+    car: 'Toyota Camry',
+    from: '2025-06-01',
+    to: '2025-06-07',
+    status: 'Отменён',
+    amount: 35000,
+    payment: 'Карта',
+    location: 'Бишкек, ул. Киевская',
+  },
+  {
+    id: 'RNT-06',
+    customer: 'Айбек А.',
+    phone: '+996 500 123 456',
+    car: 'Toyota Camry',
+    from: '2025-06-01',
+    to: '2025-06-07',
+    status: 'Отменён',
+    amount: 35000,
+    payment: 'Карта',
+    location: 'Бишкек, ул. Киевская',
+  },
 
 ]
 
 
 export const AdminOrders = () => {
-  const [orders] = useState(dummyOrders);
+  const [orders, setOrders] = useState(dummyOrders);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [statusFilter, setStatusFilter] = useState('');
+  const dispatch = useDispatch();
+  const { order, isLoading, error } = useSelector((state) => state.order);
+
+  useEffect(() => {
+    dispatch(getorderThunks());
+  }, [dispatch]);
 
   const filteredOrders = statusFilter
     ? orders.filter(order => order.status === statusFilter)
@@ -47,7 +114,7 @@ export const AdminOrders = () => {
             bgcolor: {
               'В ожидании': 'warning.light',
               'Подтвержден': 'info.light',
-              'Завершен': 'success.light',
+
               'Отменён': 'error.light',
             }[value],
             px: 1.5,
@@ -75,6 +142,22 @@ export const AdminOrders = () => {
       ),
     },
   ];
+  const handleApprove = (orderId) => {
+    setOrders(prev =>
+      prev.map(order =>
+        order.id === orderId ? { ...order, status: 'Подтвержден' } : order
+      )
+    );
+    setSelectedOrder(null);
+  };
+  const handleCancel = (orderId) => {
+    setOrders(prev =>
+      prev.map(order =>
+        order.id === orderId ? { ...order, status: 'Отменён' } : order
+      )
+    );
+    setSelectedOrder(null);
+  };
 
   return <div>   
     <Box p={3}>
@@ -91,8 +174,7 @@ export const AdminOrders = () => {
         >
           <MenuItem value="">Все</MenuItem>
           <MenuItem value="В ожидании">В ожидании</MenuItem>
-          <MenuItem value="Подтвержден">Подтвержден</MenuItem>
-          <MenuItem value="Завершен">Завершен</MenuItem>
+            <MenuItem value="Подтвержден">Подтвержден</MenuItem>
           <MenuItem value="Отменён">Отменён</MenuItem>
         </Select>
       </FormControl>
@@ -100,26 +182,46 @@ export const AdminOrders = () => {
 
     <Table columns={columns} data={filteredOrders} />
 
-    <Modal open={!!selectedOrder} onClose={() => setSelectedOrder(null)}>
-      <Box sx={{ p: 4, bgcolor: 'white', width: 400, mx: 'auto', my: '20vh', borderRadius: 2 }}>
-        {selectedOrder && (
-          <>
-            <Typography variant="h6">Детали заказа</Typography>
-            <Typography><strong>Клиент:</strong> {selectedOrder.customer}</Typography>
-            <Typography><strong>Телефон:</strong> {selectedOrder.phone}</Typography>
-            <Typography><strong>Машина:</strong> {selectedOrder.car}</Typography>
-            <Typography><strong>Срок аренды:</strong> {selectedOrder.from} - {selectedOrder.to}</Typography>
-            <Typography><strong>Сумма:</strong> {selectedOrder.amount} руб</Typography>
-            <Typography><strong>Локация:</strong> {selectedOrder.location}</Typography>
-            <Typography><strong>Оплата:</strong> {selectedOrder.payment}</Typography>
-            <Typography><strong>Статус:</strong> {selectedOrder.status}</Typography>
-            <Box mt={2}>
-              <Button fullWidth onClick={() => setSelectedOrder(null)}>Закрыть</Button>
-            </Box>
-          </>
-        )}
-      </Box>
-    </Modal>
+      <Modal open={!!selectedOrder} onClose={() => setSelectedOrder(null)}>
+        <Box sx={{ p: 4, bgcolor: 'white', width: 400, mx: 'auto', my: '20vh', borderRadius: 2 }}>
+          {selectedOrder && (
+            <>
+              <Typography variant="h6">Детали заказа</Typography>
+              <Typography><strong>Клиент:</strong> {selectedOrder.customer}</Typography>
+              <Typography><strong>Телефон:</strong> {selectedOrder.phone}</Typography>
+              <Typography><strong>Машина:</strong> {selectedOrder.car}</Typography>
+              <Typography><strong>Срок аренды:</strong> {selectedOrder.from} - {selectedOrder.to}</Typography>
+              <Typography><strong>Сумма:</strong> {selectedOrder.amount} р</Typography>
+              <Typography><strong>Локация:</strong> {selectedOrder.location}</Typography>
+              <Typography><strong>Оплата:</strong> {selectedOrder.payment}</Typography>
+              <Typography><strong>Статус:</strong> {selectedOrder.status}</Typography>
+
+              {selectedOrder.status === 'В ожидании' && (
+                <Box mt={2} display="flex" gap={2}>
+                  <Button
+                    fullWidth
+                    color="success"
+                    onClick={() => handleApprove(selectedOrder.id)}
+                  >
+                    Одобрить
+                  </Button>
+                  <Button
+                    fullWidth
+                    color="error"
+                    onClick={() => handleCancel(selectedOrder.id)}
+                  >
+                    Отменить
+                  </Button>
+                </Box>
+              )}
+
+              <Box mt={2}>
+                <Button fullWidth onClick={() => setSelectedOrder(null)}>Закрыть</Button>
+              </Box>
+            </>
+          )}
+        </Box>
+      </Modal>
   </Box>
   </div>
 };

@@ -1,10 +1,7 @@
 import axios from "axios";
 
-
-
 export const axiosInstance = axios.create({
-  baseURL: "http://3.68.159.72:8080/",
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 8000,
   headers: { Accept: "application/json" },
 });
-

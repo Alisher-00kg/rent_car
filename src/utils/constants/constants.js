@@ -149,6 +149,7 @@ export const PATHS = {
     PAGE_DETAILS: "/admin/admin-page/:carId",
     ORDERS: "/admin/admin-orders",
     CREATE: "/admin/admin-page/create-card",
+    FEEDBACK: '/admin/feedback'
   },
   NOT_FOUND: "*",
   SIGN_IN: "/sign-in",

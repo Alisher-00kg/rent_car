@@ -21,6 +21,8 @@ export const SignUp = () => {
   // const { data } = useGetAllQuery();
   // console.log(data);
 
+
+
   const {
     register,
     handleSubmit,
@@ -45,6 +47,11 @@ export const SignUp = () => {
     dispatch(signUpThunk(signUpData));
     reset();
   };
+
+
+
+
+
 
   return (
     <StyledWrapper>
@@ -170,8 +177,9 @@ export const SignUp = () => {
         </StyledForm>
       </StyledInnerWrapper>
     </StyledWrapper>
-  );
-};
+  )
+}
+
 
 const StyledWrapper = styled.div`
   width: 100%;

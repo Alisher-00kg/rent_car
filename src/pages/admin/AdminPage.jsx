@@ -15,17 +15,14 @@ import { getAllCars } from "../../store/thunks/allCars";
 export const AdminPage = () => {
   const { cars } = useSelector((state) => state.allCars);
   const dispatch = useDispatch();
-  console.log(cars);
 
   useEffect(() => {
     dispatch(getAllCars());
   }, [dispatch]);
-  // const [cars, setCars] = useState(CARS);
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
-  // Фильтрация машин по поисковому запросу
   const filteredCars = useMemo(() => {
     if (!searchQuery.trim()) {
       return cars;

@@ -134,7 +134,7 @@ const StyledInnerPanel = styled.div`
   justify-content: space-between;
 `;
 
-const StyledInput = styled(Input)({
+const StyledInput = muistyled(Input)({
   width: "550px",
 });
 

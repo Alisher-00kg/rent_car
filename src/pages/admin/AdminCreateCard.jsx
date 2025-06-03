@@ -17,6 +17,7 @@ import { BaseModal } from "../../components/UI/modal/BaseModal";
 import { styled as muiStyled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { postNewCarCard } from "../../store/thunks/allCars";
+import { uploadDocuments } from "../../store/thunks/usersThunk";
 export const AdminCreateCard = () => {
   const initialCarValues = {
     category: categoryOptions[0].value,
@@ -48,18 +49,22 @@ export const AdminCreateCard = () => {
   }, []);
 
   const onDrop = (acceptedFiles) => {
-    const newImages = acceptedFiles.map((file) => URL.createObjectURL(file));
-    setTempImages((prev) => [...prev, ...newImages]);
+    setTempImages((prev) => [...prev, ...acceptedFiles]);
   };
-  const handleUploadImages = () => {
-    setCarValues((prev) => ({
-      ...prev,
-      images: [...prev.images, ...tempImages],
-    }));
-    setTempImages([]);
-    setIsOpen(false);
+  const handleUploadImages = async () => {
+    try {
+      const uploadedUrls = await dispatch(uploadDocuments(tempImages)).unwrap();
+      setCarValues((prev) => ({
+        ...prev,
+        images: [...prev.images, ...uploadedUrls],
+      }));
+      setTempImages([]);
+      setIsOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Ошибка при загрузке изображений");
+    }
   };
-  console.log(tempImages);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -71,10 +76,9 @@ export const AdminCreateCard = () => {
   });
 
   const deleteTempImage = (indexToDelete) => {
-    const imageToRevoke = tempImages[indexToDelete];
-    URL.revokeObjectURL(imageToRevoke);
     setTempImages((prev) => prev.filter((_, i) => i !== indexToDelete));
   };
+
   const handleResetForm = () => {
     setCarValues(initialCarValues);
     setTempImages([]);
@@ -85,6 +89,7 @@ export const AdminCreateCard = () => {
     dispatch(postNewCarCard(carValues));
     handleResetForm();
   };
+  
   return (
     <StyledMainWrapper>
       <StyledForm onSubmit={handleSubmit}>
@@ -112,13 +117,13 @@ export const AdminCreateCard = () => {
                       <StyledDownloadedImagesBox
                         $imagesCount={tempImages.length}
                       >
-                        {tempImages.map((image, index) => (
+                        {tempImages.map((file, index) => (
                           <div key={index} className="downloaded_box">
                             <StyledDeleteIcon
                               onClick={() => deleteTempImage(index)}
                             />
                             <StyledDroppedImage
-                              src={image}
+                              src={URL.createObjectURL(file)}
                               alt={`Preview ${index}`}
                             />
                           </div>

@@ -4,7 +4,6 @@ import Mers from "../../assets/images/biznez5.png";
 import Bently from "../../assets/images/biznez16.png";
 import WhiteCar from "../../assets/images/mersedes4.png";
 import React from "react";
-import { Icons } from "../../assets";
 import { ActionCell } from "../helpers/action-cell";
 export const CARS = [
   {
@@ -149,7 +148,7 @@ export const PATHS = {
     PAGE_DETAILS: "/admin/admin-page/:carId",
     ORDERS: "/admin/admin-orders",
     CREATE: "/admin/admin-page/create-card",
-    FEEDBACK: '/admin/feedback'
+    FEEDBACK: "/admin/feedback",
   },
   NOT_FOUND: "*",
   SIGN_IN: "/sign-in",

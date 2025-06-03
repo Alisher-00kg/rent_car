@@ -13,7 +13,6 @@ import {
   uploadDocuments,
 } from "../../store/thunks/usersThunk";
 import { toast } from "react-toastify";
-import { logOut } from "../../store/slices/authSlice";
 import { LogoutModal } from "../../components/UI/modal/LogoutModal";
 import { BaseModal } from "../../components/UI/modal/BaseModal";
 
@@ -143,38 +142,6 @@ const ProfilePage = () => {
             </InfoItem>
           </InfoGrid>
         </Section>
-
-        {/* <div>
-          <Title>Водительские права и паспорт</Title>
-          <DropZoneWrapper>
-            <DropArea {...getRootProps()}>
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <p>Отпустите изображения...</p>
-              ) : (
-                <p>Перетащите или нажмите для загрузки (до 4 фото)</p>
-              )}
-            </DropArea>
-
-            <PreviewList>
-              {images.map((file, index) => (
-                <ImageWrapper key={index}>
-                  <PreviewImage src={file.preview} alt={`preview-${index}`} />
-                  <RemoveIcon onClick={() => removeImage(index)}>
-                    &times;
-                  </RemoveIcon>
-                </ImageWrapper>
-              ))}
-            </PreviewList>
-            <UploadButton
-              variant={"outlined"}
-              disabled={images.length === 0}
-              onClick={() => handleUploadClick()}
-            >
-              Загрузить
-            </UploadButton>
-          </DropZoneWrapper>
-        </div> */}
         <div>
           <Title>Водительские права и паспорт</Title>
 

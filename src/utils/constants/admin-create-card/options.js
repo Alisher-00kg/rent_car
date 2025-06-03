@@ -1,22 +1,22 @@
 export const categoryOptions = [
-  { value: "econom", label: "Эконом" },
-  { value: "standart", label: "Стандарт" },
-  { value: "business", label: "Бизнес" },
-  { value: "premium", label: "Премиум" },
-  { value: "minivan", label: "Минивен" },
-  { value: "crossover", label: "Кроссовер" },
-  { value: "suv", label: "Внедорожник" },
+  { value: "Эконом", label: "Эконом" },
+  { value: "Стандарт", label: "Стандарт" },
+  { value: "Бизнес", label: "Бизнес" },
+  { value: "Премиум", label: "Премиум" },
+  { value: "Минивен", label: "Минивен" },
+  { value: "Кроссовер", label: "Кроссовер" },
+  { value: "Внедорожник", label: "Внедорожник" },
 ];
 export const brandOptions = [
-  { value: "toyota", label: "Toyota" },
-  { value: "mercedes", label: "Mercedes" },
-  { value: "bmw", label: "BMW" },
-  { value: "audi", label: "Audi" },
-  { value: "jeep", label: "Jeep" },
-  { value: "honda", label: "Honda" },
-  { value: "hyundai", label: "Hyundai" },
-  { value: "skoda", label: "Skoda" },
-  { value: "lada", label: "Lada" },
+  { value: "Toyota", label: "Toyota" },
+  { value: "Mercedes", label: "Mercedes" },
+  { value: "BMW", label: "BMW" },
+  { value: "Audi", label: "Audi" },
+  { value: "Jeep", label: "Jeep" },
+  { value: "Honda", label: "Honda" },
+  { value: "Hyundai", label: "Hyundai" },
+  { value: "Skoda", label: "Skoda" },
+  { value: "Lada", label: "Lada" },
 ];
 export const fuelTypeOptions = [
   { value: "Бензин", label: "Бензин" },
@@ -28,37 +28,37 @@ export const fuelTypeOptions = [
 
 export const transmissionOptions = [
   {
-    value: "mt",
+    value: "МКПП",
     label: "МКПП (Manual Transmission) — Механическая коробка передач",
   },
   {
-    value: "at",
+    value: "АКПП",
     label: "АКПП (Automatic Transmission) — Классический автомат",
   },
   {
-    value: "robot",
+    value: "КПП",
     label: "Роботизированная КПП (AMT / RMT)",
   },
   {
-    value: "dsg",
+    value: "DSG",
     label: "DSG (Dual-Clutch Transmission) — Робот с двумя сцеплениями",
   },
   {
-    value: "cvt",
+    value: "Вариатор",
     label: "CVT (Continuously Variable Transmission) — Вариатор",
   },
 ];
 export const driveTypeOptions = [
   {
-    value: "fwd",
+    value: "Передний привод",
     label: "Передний привод (FWD – Front-Wheel Drive)",
   },
   {
-    value: "rwd",
+    value: "Задний привод",
     label: "Задний привод (RWD – Rear-Wheel Drive)",
   },
   {
-    value: "awd",
+    value: "Полный привод",
     label: "Полный привод (AWD/4WD – All-Wheel Drive / Four-Wheel Drive)",
   },
 ];

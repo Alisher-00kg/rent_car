@@ -15,6 +15,8 @@ import { Select } from "../../components/UI/select/Select";
 import { IconButton } from "@mui/material";
 import { BaseModal } from "../../components/UI/modal/BaseModal";
 import { styled as muiStyled } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
+import { postNewCarCard } from "../../store/thunks/allCars";
 export const AdminCreateCard = () => {
   const initialCarValues = {
     category: categoryOptions[0].value,
@@ -35,6 +37,7 @@ export const AdminCreateCard = () => {
   const [carValues, setCarValues] = useState(initialCarValues);
   const [isOpen, setIsOpen] = useState(false);
   const [tempImages, setTempImages] = useState([]);
+  const dispatch = useDispatch();
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -56,6 +59,7 @@ export const AdminCreateCard = () => {
     setTempImages([]);
     setIsOpen(false);
   };
+  console.log(tempImages);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -65,10 +69,7 @@ export const AdminCreateCard = () => {
     multiple: true,
     maxFiles: 4,
   });
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(carValues);
-  };
+
   const deleteTempImage = (indexToDelete) => {
     const imageToRevoke = tempImages[indexToDelete];
     URL.revokeObjectURL(imageToRevoke);
@@ -77,6 +78,12 @@ export const AdminCreateCard = () => {
   const handleResetForm = () => {
     setCarValues(initialCarValues);
     setTempImages([]);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(carValues);
+    dispatch(postNewCarCard(carValues));
+    handleResetForm();
   };
   return (
     <StyledMainWrapper>

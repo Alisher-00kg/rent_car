@@ -19,7 +19,6 @@ const MainPage = () => {
   }, [dispatch]);
 
   const openLink = (url) => window.open(url, "_blank");
-  console.log(cars, "sssd");
 
   return (
     <Wrapper>

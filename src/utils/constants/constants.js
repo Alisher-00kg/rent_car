@@ -78,7 +78,7 @@ export const COLUMNS = [
     accessor: "image",
     Cell: ({ row }) => {
       return React.createElement("img", {
-        src: row.image[0],
+        src: row.images[0] || "",
         style: {
           width: "120px",
           height: "30px",

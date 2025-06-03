@@ -3,21 +3,25 @@ import Input from "../../components/UI/input/Input";
 import Button from "../../components/UI/button/Button";
 import { CiSearch } from "react-icons/ci";
 import { IconButton, InputAdornment, Typography } from "@mui/material";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { CreateDiscount } from "../../components/UI/modal/CreateDiscount";
 import { COLUMNS, PATHS } from "../../utils/constants/constants";
 import { useNavigate } from "react-router-dom";
-
 import { styled as muistyled } from "@mui/material";
-import { CARS } from "../../utils/constants/constants";
 import { Table } from "../../components/UI/table";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCars } from "../../store/thunks/allCars";
 
 export const AdminPage = () => {
-  const [cars, setCars] = useState(CARS);
+  const { cars } = useSelector((state) => state.allCars);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllCars());
+  }, [dispatch]);
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-
 
   const filteredCars = useMemo(() => {
     if (!searchQuery.trim()) {

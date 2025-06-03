@@ -1,57 +1,47 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { styled } from "@mui/material";
 import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
 import Input from "../../components/UI/input/Input";
-import { styled } from "@mui/material";
 import Button from "../../components/UI/button/Button";
-import { useSelector } from "react-redux";
+import { postFeedBack } from "../../store/thunks/allCars";
 
 export const ContactsPage = () => {
   const { role } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   function getRouteByRole() {
     switch (role) {
       case "USER":
         return [
-          {
-            label: "Главная",
-            href: "/user/user-page",
-          },
-          {
-            label: "Контакты",
-            href: "/user/contacts",
-          },
+          { label: "Главная", href: "/user/user-page" },
+          { label: "Контакты", href: "/user/contacts" },
         ];
       default:
         return [
-          {
-            label: "Главная",
-            href: "/guest/main-page",
-          },
-          {
-            label: "Контакты",
-            href: "/guest/contacts",
-          },
+          { label: "Главная", href: "/guest/main-page" },
+          { label: "Контакты", href: "/guest/contacts" },
         ];
     }
   }
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [surname, setSurname] = useState("");
-  const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
-  const handleClick = () => {
-    setName("");
-    setEmail("");
-    setSurname("");
-    setPhone("");
-    setMessage("");
+  const onSubmit = (data) => {
+    dispatch(postFeedBack(data));
+    reset();
   };
+
   return (
     <ContainerDiv>
       <StyledTitleAndBr>
         <BreadCrumbs breadcrumbs={getRouteByRole()} />
       </StyledTitleAndBr>
+
       <Container>
         <StyledLeftContainer>
           <Title>
@@ -77,89 +67,93 @@ export const ContactsPage = () => {
             <p>10:00 - 21:00</p>
           </Box>
         </StyledLeftContainer>
-        <StyledForm>
+
+        <StyledForm onSubmit={handleSubmit(onSubmit)}>
           <p className="form_title">Напишите нам</p>
-          <div>
-            <div className="right_parent">
-              <StyledInputs>
-                <div>
-                  <Input
-                    inputLabel={
-                      <p className="label">
-                        Имя<em>*</em>
-                      </p>
-                    }
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Напишите ваше имя"
-                  />
-                </div>
-                <div>
-                  <Input
-                    inputLabel={
-                      <p className="label">
-                        Фамилия<em>*</em>
-                      </p>
-                    }
-                    type="text"
-                    value={surname}
-                    onChange={(e) => setSurname(e.target.value)}
-                    placeholder="Напишите вашу фамилию"
-                  />
-                </div>
-              </StyledInputs>
-              <StyledInputs>
-                <div>
-                  <Input
-                    inputLabel={
-                      <p className="label">
-                        Email<em>*</em>
-                      </p>
-                    }
-                    type="text"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Напишите ваш email"
-                  />
-                </div>
-                <div>
-                  <Input
-                    inputLabel={
-                      <p className="label">
-                        Телефон<em>*</em>
-                      </p>
-                    }
-                    type="text"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+7 (_ _ _) _ _ _  _ _  _ _"
-                  />
-                </div>
-              </StyledInputs>
-            </div>
+          <div className="right_parent">
+            <StyledInputs>
+              <div>
+                <Input
+                  inputLabel="Имя"
+                  placeholder="Напишите ваше имя"
+                  required
+                  {...register("name", { required: "Имя обязательно" })}
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
+                  multiline
+                />
+              </div>
+              <div>
+                <Input
+                  inputLabel="Фамилия"
+                  placeholder="Напишите вашу фамилию"
+                  required
+                  {...register("surname", { required: "Фамилия обязательна" })}
+                  error={!!errors.surname}
+                  helperText={errors.surname?.message}
+                  multiline
+                />
+              </div>
+            </StyledInputs>
+
+            <StyledInputs>
+              <div>
+                <Input
+                  inputLabel="Email"
+                  placeholder="Напишите ваш email"
+                  required
+                  {...register("email", {
+                    required: "Email обязателен",
+                    pattern: {
+                      value: /^\S+@\S+\.\S+$/,
+                      message: "Введите корректный email",
+                    },
+                  })}
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                  multiline
+                />
+              </div>
+              <div>
+                <Input
+                  inputLabel="Телефон"
+                  placeholder="+7 (_ _ _) _ _ _  _ _  _ _"
+                  required
+                  {...register("phone", {
+                    required: "Телефон обязателен",
+                    pattern: {
+                      value: /^[\d\s()+-]+$/,
+                      message: "Введите корректный номер",
+                    },
+                  })}
+                  error={!!errors.phone}
+                  helperText={errors.phone?.message}
+                  multiline
+                />
+              </div>
+            </StyledInputs>
           </div>
+
           <div>
             <StyledInput
-              inputLabel={
-                <p className="label">
-                  Сообщение<em>*</em>
-                </p>
-              }
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              inputLabel="Сообщение"
               placeholder="Напишите сообщение"
+              required
+              {...register("message", { required: "Сообщение обязательно" })}
+              error={!!errors.message}
+              helperText={errors.message?.message}
               fullWidth
               multiline
               minRows={3}
             />
           </div>
-          <Button variant={"contained"} onClick={handleClick}>
+
+          <Button variant="contained" type="submit">
             Отправить
           </Button>
         </StyledForm>
       </Container>
+
       <MapContainer>
         <iframe
           title="Google Maps"
@@ -175,7 +169,6 @@ export const ContactsPage = () => {
     </ContainerDiv>
   );
 };
-
 const ContainerDiv = styled("div")(() => ({
   width: "100%",
   minHeight: "100vh",
@@ -253,7 +246,7 @@ const Box = styled("div")(() => ({
   },
 }));
 
-const Title = styled("p")(() => ({
+const Title = styled("div")(() => ({
   fontFamily: "Inter",
   fontWeight: "500",
   fontSize: "24px",

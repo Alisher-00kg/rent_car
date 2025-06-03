@@ -3,21 +3,26 @@ import { Navigation, Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../components/UI/button/Button";
 import { PATHS } from "../../utils/constants/constants";
 import { useDispatch, useSelector } from "react-redux";
-import Input from "../../components/UI/input/Input";
 import { BaseModal } from "../../components/UI/modal/BaseModal";
-import { IconButton, Typography } from "@mui/material";
+import {
+  IconButton,
+  keyframes,
+  Typography,
+  styled as muiStyled,
+} from "@mui/material";
 import { getAllCars, getSingleCar } from "../../store/thunks/allCars";
 import { Icons } from "../../assets";
 import Card from "../../components/UI/card/Card";
 import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
 import { BookingInnerModal } from "../../components/UI/modal/BookingInnerModal";
 import { SuccessMessage } from "../../components/UI/modal/SuccesMessage";
+import { FavoriteContext } from "../../context/FavoriteContext";
 
 export const InnerCardPage = () => {
   const navigate = useNavigate();
@@ -28,6 +33,7 @@ export const InnerCardPage = () => {
   const [visibleCount, setVisibleCount] = useState(4);
   const [isBookingSuccess, setIsBookingSuccess] = useState(false);
   const dispatch = useDispatch();
+  const { animatedHearts, onChangeFavorite } = useContext(FavoriteContext);
 
   useEffect(() => {
     if (carId) {
@@ -35,9 +41,10 @@ export const InnerCardPage = () => {
     }
   }, [carId, dispatch]);
 
-  useEffect(() => {
-    dispatch(getAllCars());
-  }, [dispatch]);
+  const handleToggle = async () => {
+    await onChangeFavorite(singleCar.id, singleCar.isFavorite);
+    dispatch(getSingleCar(singleCar.id));
+  };
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const handleOpenModal = () => {
@@ -215,12 +222,19 @@ export const InnerCardPage = () => {
               </section>
               <LowerLayout>
                 <StyledButton onClick={handleOpenModal} variant={"contained"}>
-                  Забронировать
+                  {role === "ADMIN" ? "Редактировать" : "Забронировать"}
                 </StyledButton>
                 {role === "USER" && (
-                  <IconButton>
-                    <StyledHeart />
-                  </IconButton>
+                  <MUIStyledIconButton
+                    animate={animatedHearts[singleCar?.id]}
+                    onClick={handleToggle}
+                  >
+                    {singleCar?.isFavorite ? (
+                      <StyledHeartTrue />
+                    ) : (
+                      <StyledHeartFalse />
+                    )}
+                  </MUIStyledIconButton>
                 )}
               </LowerLayout>
             </StyledRightBar>
@@ -256,7 +270,10 @@ export const InnerCardPage = () => {
             ) : isBookingSuccess ? (
               <SuccessMessage />
             ) : (
-              <BookingInnerModal onSuccess={() => setIsBookingSuccess(true)} />
+              <BookingInnerModal
+                onSuccess={() => setIsBookingSuccess(true)}
+                car={singleCar}
+              />
             )}
           </BaseModal>
         </GalleryWrapper>
@@ -471,15 +488,7 @@ const StyledCap = styled("nav")({
   justifyContent: "space-between",
   paddingTop: "30px",
 });
-const StyledHeart = styled(Icons.WhiteHeart)({
-  width: "34px",
-  height: "34px",
-  stroke: "#000",
-  transition: "transform 0.4s ease-out",
-  "&:hover": {
-    transform: "scale(1.2)",
-  },
-});
+
 const WrapperSlider = styled("div")({
   width: "760px",
   display: "flex",
@@ -530,4 +539,46 @@ const StyledUl = styled("ul")({
   justifyContent: "center",
   gap: "30px",
   flexWrap: "wrap",
+});
+const bounce = keyframes`
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(0.7);
+  }
+   80% {
+    transform: scale(0.7);
+  }
+ 
+`;
+
+const MUIStyledIconButton = muiStyled(IconButton, {
+  shouldForwardProp: (prop) => prop !== "animate",
+})(({ animate }) => ({
+  "&.MuiButtonBase-root": {
+    width: "fit-content",
+    height: "fit-content",
+    margin: "0px",
+    padding: "0px",
+    transition: "transform 0.3s ease-out",
+    ...(animate && {
+      animation: `${bounce} 0.4s ease`,
+    }),
+    "&:hover": {
+      transform: "scale(1.3)",
+    },
+  },
+}));
+const StyledHeartFalse = styled(Icons.WhiteHeart)({
+  width: "38px",
+  height: "38px",
+  stroke: "white",
+});
+const StyledHeartTrue = styled(Icons.WhiteHeart)({
+  width: "38px",
+  height: "38px",
+  stroke: "white",
+  fill: "#FFFF00",
 });

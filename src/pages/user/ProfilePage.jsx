@@ -1,14 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import Button from "../../components/UI/button/Button";
 import { styled as muiStyled } from "@mui/material/styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
+import Cookies from "js-cookie";
+import {
+  getAllBookings,
+  getSingleUserData,
+  patchUserDocuments,
+  uploadDocuments,
+} from "../../store/thunks/usersThunk";
+import { toast } from "react-toastify";
+import { logOut } from "../../store/slices/authSlice";
+import { LogoutModal } from "../../components/UI/modal/LogoutModal";
+import { BaseModal } from "../../components/UI/modal/BaseModal";
 
 const ProfilePage = () => {
   const [images, setImages] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const { role } = useSelector((state) => state.auth);
+  const { user, bookings } = useSelector((state) => state.allUsers);
+  const dispatch = useDispatch();
+
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
   function getRouteByRole() {
     switch (role) {
       case "USER":
@@ -29,7 +50,7 @@ const ProfilePage = () => {
 
   const onDrop = (acceptedFiles) => {
     if (images.length + acceptedFiles.length > 4) {
-      alert("Максимум 4 фото");
+      toast.warning("Максимум 4 фото");
       return;
     }
 
@@ -54,6 +75,43 @@ const ProfilePage = () => {
     setImages(images.filter((_, i) => i !== indexToRemove));
   };
 
+  useEffect(() => {
+    const userData = JSON.parse(Cookies.get("auth"));
+
+    if (!user?.id) {
+      dispatch(getSingleUserData(userData.data.id));
+      dispatch(getAllBookings(userData.data.id));
+    }
+  }, [dispatch, user?.id]);
+
+  const isoString = bookings.dateRange?.endDate;
+  const date = new Date(isoString);
+
+  const formatted = date.toLocaleString("ru-RU", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const handleUploadClick = async () => {
+    try {
+      const uploaded = await dispatch(uploadDocuments(images)).unwrap();
+
+      const documentUrls = uploaded.documentUrls || uploaded;
+
+      await dispatch(
+        patchUserDocuments({ userId: user.id, documentUrls })
+      ).unwrap();
+
+      toast.success("Документы успешно загружены и сохранены!");
+      setImages([]);
+    } catch (error) {
+      console.error(error);
+      toast.error("Произошла ошибка. Повторите позже.");
+    }
+  };
+
   return (
     <StyledWrapper>
       <StyledTitleAndBr>
@@ -71,20 +129,22 @@ const ProfilePage = () => {
           <InfoGrid>
             <InfoItem>
               <Label>Имя</Label>
-              <Value>Айбек Омуров</Value>
+              <Value>
+                {user.firstName} {user.lastName}
+              </Value>
             </InfoItem>
             <InfoItem>
               <Label>Телефон</Label>
-              <Value>+7 903 263 18 65</Value>
+              <Value>{user.phoneNumber}</Value>
             </InfoItem>
             <InfoItem>
               <Label>Email</Label>
-              <Value>aibek@gmail.com</Value>
+              <Value>{user.email}</Value>
             </InfoItem>
           </InfoGrid>
         </Section>
 
-        <div>
+        {/* <div>
           <Title>Водительские права и паспорт</Title>
           <DropZoneWrapper>
             <DropArea {...getRootProps()}>
@@ -106,15 +166,72 @@ const ProfilePage = () => {
                 </ImageWrapper>
               ))}
             </PreviewList>
-            <UploadButton variant={"outlined"} disabled={images.length === 0}>
+            <UploadButton
+              variant={"outlined"}
+              disabled={images.length === 0}
+              onClick={() => handleUploadClick()}
+            >
               Загрузить
             </UploadButton>
           </DropZoneWrapper>
+        </div> */}
+        <div>
+          <Title>Водительские права и паспорт</Title>
+
+          {user.documents && user.documents.length > 0 ? (
+            <DocumentsInfo>
+              <InfoText>Документы успешно загружены:</InfoText>
+              <DocumentsList>
+                {user.documents.map((doc, idx) => (
+                  <DocumentItem key={idx}>
+                    <DocumentLink
+                      href={doc}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      📄 Документ {idx + 1}
+                    </DocumentLink>
+                  </DocumentItem>
+                ))}
+              </DocumentsList>
+            </DocumentsInfo>
+          ) : (
+            <DropZoneWrapper>
+              <DropArea {...getRootProps()}>
+                <input {...getInputProps()} />
+                {isDragActive ? (
+                  <p>Отпустите изображения...</p>
+                ) : (
+                  <p>Перетащите или нажмите для загрузки (до 4 фото)</p>
+                )}
+              </DropArea>
+
+              <PreviewList>
+                {images.map((file, index) => (
+                  <ImageWrapper key={index}>
+                    <PreviewImage src={file.preview} alt={`preview-${index}`} />
+                    <RemoveIcon onClick={() => removeImage(index)}>
+                      &times;
+                    </RemoveIcon>
+                  </ImageWrapper>
+                ))}
+              </PreviewList>
+              <UploadButton
+                variant={"outlined"}
+                disabled={images.length === 0}
+                onClick={() => handleUploadClick()}
+              >
+                Загрузить
+              </UploadButton>
+            </DropZoneWrapper>
+          )}
         </div>
 
         <Section>
           <Title>Аренды</Title>
-          <Card>Kia K5 — 01.06–05.06 — Активна</Card>
+          <Card>
+            {bookings.car} — {formatted} — {bookings.bookingStatus}
+          </Card>
           <Card>Toyota Camry — 10.05–12.05 — Завершена</Card>
           <ActionLink>Посмотреть все</ActionLink>
         </Section>
@@ -129,14 +246,20 @@ const ProfilePage = () => {
               <Value>Русский</Value>
             </SettingItem>
 
-            <Button variant={"text"}>Сменить пароль</Button>
             <Button variant={"text"}>Уведомления</Button>
-            <Button variant={"outlined"} width="220px">
+            <Button
+              variant={"outlined"}
+              width="220px"
+              onClick={handleOpenModal}
+            >
               Выйти из аккаунта
             </Button>
           </SettingsGrid>
         </ProfileConfig>
       </ProfileWrapper>
+      <BaseModal open={isOpen} onClose={handleCloseModal}>
+        <LogoutModal onClose={handleCloseModal} />
+      </BaseModal>
     </StyledWrapper>
   );
 };
@@ -329,4 +452,45 @@ const SettingItem = styled.div`
   background-color: #f8f9fa;
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+`;
+const DocumentsInfo = styled.div`
+  background-color: #e0f2ff;
+  border: 1px solid #7ac1ff;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+`;
+
+const InfoText = styled.p`
+  font-size: 1.1rem;
+  color: #0366d6;
+  margin-bottom: 16px;
+  font-weight: 600;
+`;
+
+const DocumentsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+`;
+
+const DocumentItem = styled.li`
+  background: #fff;
+  border: 1px solid #7ac1ff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(122, 193, 255, 0.4);
+`;
+
+const DocumentLink = styled.a`
+  color: #0366d6;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;

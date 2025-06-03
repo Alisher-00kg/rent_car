@@ -41,8 +41,8 @@ export const SignUp = () => {
       confirmPassword: data.confirmPassword,
       role: "USER",
       localDate: new Date().toISOString().split("T")[0],
+      documents: null,
     };
-    console.log("submit");
 
     dispatch(signUpThunk(signUpData));
     reset();

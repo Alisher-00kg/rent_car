@@ -1,99 +1,115 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/UI/button/Button";
 import Input from "../../components/UI/input/Input";
+import { fetchFeedbackMessages, sendFeedbackReply } from "../../store/thunks/adminfeedbackThunks";
+import { useDispatch, useSelector } from "react-redux";
+import { Table } from "../../components/UI/table";
+
+import { BaseModal } from "../../components/UI/modal/BaseModal";
 
 const feedbackMessages = [
   {
     id: 1,
-    name: "Владимир",
-    surname: "Владимирович",
+    fullName: "Владимир Владимирович",
     email: "vlad10@gmail.com",
-    phone: "+7 999 111 2233",
+    phoneNumber: "+7 999 111 2233",
     message: "Здравствуйте! Как арендовать машину?",
-    adminReply: "",
+    adminReply: "рплап",
+  },
+  {
+    id: 2,
+    fullName: "Владимир Владимирович",
+    email: "vlad10@gmail.com",
+    phoneNumber: "+7 999 111 2233",
+    message: "Здравствуйте! Как продлить время?",
+    adminReply: "вавв",
   },
 ];
-const AdminFeedbackPage = () => {
-  const [messages, setMessages] = useState(feedbackMessages);
-  const [replies, setReplies] = useState({});
 
-  const handleReplyChange = (id, value) => {
-    setReplies((prev) => ({ ...prev, [id]: value }));
+const AdminFeedbackPage = () => {
+  // const dispatch = useDispatch();
+  // const messages = useSelector((state) => state.feedback?.massages);
+  // const [replies, setReplies] = useState({});
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [replyText, setReplyText] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openReplyModal = (message) => {
+    console.log("Opening modal for message:", message);
+    setSelectedMessage(message);
+    setReplyText("");
+    setIsModalOpen(true);
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedMessage(null);
+    setReplyText("");
+  };
+
+  // useEffect(() => {
+  //   dispatch(fetchFeedbackMessages());
+  // }, [dispatch]);
+
+
 
   const handleSendReply = (id) => {
-    const replyText = replies[id] || "";
-    setMessages((prevMessages) =>
-      prevMessages.map((msg) =>
-        msg.id === id ? { ...msg, adminReply: replyText } : msg
-      )
-    );
-    setReplies((prev) => ({ ...prev, [id]: "" }));
-  };
+    console.log("Отправка ответа на сообщение с id:", id);
+    console.log("Текст ответа:", replyText);
 
-  return (
-    <div
-      style={{
-        background:
-          "hsla(234.89361702127658, 74.60317460317464%, 87.6470588235294%, 0.702)",
-        height: "100%",
-        padding: "40px",
-        borderRadius: "12px",
-      }}
-    >
-      <h2>Сообщения с формы обратной связи</h2>
-      {messages.map((item) => (
-        <div
-          key={item.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "12px",
-            margin: "10px 0",
+    closeModal();
+  };
+  const columns = [
+    { Header: "Имя", accessor: "fullName" },
+    { Header: "Телефон", accessor: "phoneNumber" },
+    { Header: "Электронная почта", accessor: "email" },
+    { Header: "Сообщение", accessor: "message" },
+    {
+      Header: "Ответ администратора",
+      Cell: ({ row }) => (
+        <Button
+          variant="outlined"
+          onClick={(e) => {
+            e.stopPropagation();
+            openReplyModal(row)
           }}
         >
-          <p>
-            <strong>Имя:</strong> {item.name} {item.surname}
-          </p>
-          <p>
-            <strong>Email:</strong> {item.email}
-          </p>
-          <p>
-            <strong>Телефон:</strong> {item.phone}
-          </p>
-          <p>
-            <strong>Сообщение:</strong> {item.message}
-          </p>
-          <p>
-            <strong>Ответ администратора:</strong> {item.adminReply || "—"}
-          </p>
+          Ответить
+        </Button>
+      ),
+    },
 
-          <div
-            style={{
-              marginTop: "10px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-            }}
-          >
-            <Input
-              value={replies[item.id] || ""}
-              onChange={(e) => handleReplyChange(item.id, e.target.value)}
-              placeholder="Напишите ответ..."
-              multiline
-              rows={4}
-              style={{ width: "50%" }}
-            />
-            <Button
-              width="300px"
-              variant="contained"
-              onClick={() => handleSendReply(item.id)}
-            >
-              Отправить ответ
-            </Button>
-          </div>
-        </div>
-      ))}
+  ]
+
+
+  return (
+
+    <div style={{ padding: "20px" }}>
+      <h2>Сообщения с формы обратной связи</h2>
+      <Table columns={columns} data={feedbackMessages} />
+
+      {isModalOpen && selectedMessage && (
+        <BaseModal open={isModalOpen} onClose={closeModal}>
+          <h3>Ответ на сообщение от {selectedMessage.fullName}</h3>
+          <p>
+            <strong>Сообщение:</strong> {selectedMessage.message}
+          </p>
+          <Input
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
+            placeholder="Напишите ответ..."
+            multiline
+            rows={5}
+            fullWidth
+            style={{ margin: "20px 0" }}
+          />
+          <Button onClick={handleSendReply} variant="contained">
+            Отправить
+          </Button>
+        </BaseModal>
+      )}
     </div>
   );
 };
 export default AdminFeedbackPage;
+

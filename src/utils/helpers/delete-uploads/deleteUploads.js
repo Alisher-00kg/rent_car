@@ -1,3 +1,5 @@
+import { axiosInstance } from "../../../api/axiosInstance";
+
 const deleteFile = async (id) => {
   try {
     await axiosInstance.delete(`/uploads/${id}`);
@@ -7,4 +9,4 @@ const deleteFile = async (id) => {
   }
 };
 
-// deleteFile(2928);
+// deleteFile(2937);

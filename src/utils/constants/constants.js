@@ -1,67 +1,5 @@
-import Audi from "../../assets/images/Audi2.png";
-import Bizness from "../../assets/images/biznez4.png";
-import Mers from "../../assets/images/biznez5.png";
-import Bently from "../../assets/images/biznez16.png";
-import WhiteCar from "../../assets/images/mersedes4.png";
 import React from "react";
 import { ActionCell } from "../helpers/action-cell";
-export const CARS = [
-  {
-    id: 1,
-    category: "Стандарт класс",
-    image: [Audi, WhiteCar],
-    model: "Audi B-klasse",
-    year: 2022,
-    transmission: "АКПП",
-    fuel: "Бензин",
-    engine: "1.5л",
-    pricePerDay: 6500,
-  },
-  {
-    id: 2,
-    category: "Минивены",
-    image: [WhiteCar, Bently],
-    model: "Audi B-klasse",
-    year: 2022,
-    transmission: "АКПП",
-    fuel: "Бензин",
-    engine: "1.5л",
-    pricePerDay: 6500,
-  },
-  {
-    id: 3,
-    category: "Комфорт класс",
-    image: [Bizness, WhiteCar],
-    model: "Mercedes-Benz Citan",
-    year: 2017,
-    transmission: "АКПП",
-    fuel: "Бензин",
-    engine: "1.6л",
-    pricePerDay: 7500,
-  },
-  {
-    id: 4,
-    category: "Бизнес класс",
-    image: [Mers, WhiteCar],
-    model: "Mercedes-Benz Vito",
-    year: 2015,
-    transmission: "АКПП",
-    fuel: "Бензин",
-    engine: "1.5л",
-    pricePerDay: 5500,
-  },
-  {
-    id: 5,
-    category: "Внедорожники",
-    image: [Bently, WhiteCar],
-    model: "Mercedes-Benz V-klasse",
-    year: 2020,
-    transmission: "АКПП",
-    fuel: "Бензин",
-    engine: "1.5л",
-    pricePerDay: 8500,
-  },
-];
 
 export const COLUMNS = [
   {
@@ -77,7 +15,7 @@ export const COLUMNS = [
     accessor: "image",
     Cell: ({ row }) => {
       return React.createElement("img", {
-        src: row.images[0] || "",
+        src: row.original.images[0] || "",
         style: {
           width: "120px",
           height: "30px",
@@ -93,7 +31,7 @@ export const COLUMNS = [
   },
   {
     Header: "Год",
-    accessor: "year",
+    accessor: "yearOfRelease",
   },
   {
     Header: "Коробка передач",
@@ -101,15 +39,15 @@ export const COLUMNS = [
   },
   {
     Header: "Топливо",
-    accessor: "fuel",
+    accessor: "fuelType",
   },
   {
-    Header: "Двигатель",
-    accessor: "engine",
+    Header: "Страна прозводства",
+    accessor: "madeInCountry",
   },
   {
     Header: "Цена за день",
-    accessor: "pricePerDay",
+    accessor: "rentPrice",
   },
   {
     Header: "Действие",

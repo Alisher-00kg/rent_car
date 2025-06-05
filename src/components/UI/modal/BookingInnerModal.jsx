@@ -6,41 +6,69 @@ import { DateRangePickerField } from "../date-picker/DateRangePickerField";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { postBookingCar } from "../../../store/thunks/allCars";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { getSingleUserData } from "../../../store/thunks/usersThunk";
 
 export const BookingInnerModal = ({ onSuccess, car }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.allUsers);
-  console.log(user, "book");
+  const defaultValues = {
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    pickupLocation: "",
+    comment: "",
+    returnLocation: "",
+    car: "",
+    rentPrice: 0,
+    bookingStatus: "В ожидании",
+    payment: "Карта",
+    dateRange: {
+      startDate: new Date(),
+      endDate: new Date(),
+    },
+    agreeToTerms: false,
+  };
 
+  const prepareFormValues = (user, car) => ({
+    ...defaultValues,
+    id: user?.id ? user.id - 1 : undefined,
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    phoneNumber: user?.phoneNumber || "",
+    car: car ? `${car.brand} ${car.model}` : "",
+    rentPrice: car?.rentPrice || 0,
+    bookingStatus: "В ожидании",
+  });
   const {
     handleSubmit,
     control,
     register,
     formState: { errors },
     reset,
-  } = useForm({
-    defaultValues: {
-      id: user.id - 1,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phoneNumber: user.phoneNumber,
-      pickupLocation: "",
-      comment: "",
-      car: `${car.brand} ${car.model}`,
-      rentPrice: car.rentPrice,
-      bookingStatus: "Неподтвержденная",
-      payment: "Карта",
-      dateRange: {
-        startDate: new Date(),
-        endDate: new Date(),
-      },
-      agreeToTerms: false,
-    },
-  });
+  } = useForm({ defaultValues });
+
+  useEffect(() => {
+    const auth = Cookies.get("auth");
+    if (auth) {
+      const userData = JSON.parse(auth);
+      if (!user?.id && userData?.data?.id) {
+        dispatch(getSingleUserData(userData.data.id));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user?.id) {
+      reset(prepareFormValues(user, car));
+    }
+  }, [user, car, reset]);
+
   const onSubmit = (data) => {
     dispatch(postBookingCar(data));
-    reset();
     onSuccess();
+    reset(prepareFormValues(user, car));
   };
 
   return (

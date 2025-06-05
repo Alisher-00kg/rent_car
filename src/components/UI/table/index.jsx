@@ -10,20 +10,12 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export const Table = ({ columns, data }) => {
+export const Table = ({ columns, data, disableRowClick = false }) => {
   const [selected, setSelected] = useState([]);
   const navigate = useNavigate();
 
   const handleClick = (id) => {
     navigate(`/admin/admin-page/${id}`);
-    // const selectedIndex = selected.indexOf(id);
-    // let newSelected = [];
-    // if (selectedIndex === -1) {
-    //   newSelected = [...selected, id];
-    // } else {
-    //   newSelected = selected.filter((itemId) => itemId !== id);
-    // }
-    // setSelected(newSelected);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -47,7 +39,10 @@ export const Table = ({ columns, data }) => {
     } else if (column.type === "price") {
       return value;
     } else if (column.Cell) {
-      return column.Cell({ row, value });
+      // return column.Cell({ row, value });
+      // return column.Cell({ row: { original: row }, value });
+      const CellComponent = column.Cell;
+      return <CellComponent row={{ original: row }} value={value} />;
     } else {
       return value;
     }
@@ -75,7 +70,7 @@ export const Table = ({ columns, data }) => {
             <StyledTableRow
               key={row.id}
               selected={isItemSelected}
-              onClick={() => handleClick(row.id)}
+              onClick={!disableRowClick ? () => handleClick(row.id) : undefined}
             >
               {columns.map((column) => {
                 const cellKey =

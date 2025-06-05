@@ -16,7 +16,7 @@ import {
   Typography,
   styled as muiStyled,
 } from "@mui/material";
-import { getAllCars, getSingleCar } from "../../store/thunks/allCars";
+import { getSingleCar } from "../../store/thunks/allCars";
 import { Icons } from "../../assets";
 import Card from "../../components/UI/card/Card";
 import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";

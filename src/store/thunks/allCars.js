@@ -110,3 +110,15 @@ export const postFeedBack = createAsyncThunk(
     }
   }
 );
+
+export const deleteCarFromAdmin = createAsyncThunk(
+  "allCars/deleteCarFromAdmin",
+  async (carID, { rejectWithValue, dispatch }) => {
+    try {
+      await axiosInstance.delete("/cars/" + carID);
+      dispatch(getAllCars());
+    } catch (error) {
+      return rejectWithValue(error?.message || "Не удалось удалить машину!");
+    }
+  }
+);

@@ -1,7 +1,10 @@
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { Icons } from "../../../assets";
+import { useDispatch } from "react-redux";
+import { deleteCarFromAdmin } from "../../../store/thunks/allCars";
 
 export const ActionCell = ({ row }) => {
+  const dispatch = useDispatch();
   const handleEdit = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -13,7 +16,8 @@ export const ActionCell = ({ row }) => {
     e.preventDefault();
     e.stopPropagation();
     e.nativeEvent?.stopImmediatePropagation();
-    console.log("Удалить:", row.original);
+    console.log("Удалить:", row.original.id);
+    dispatch(deleteCarFromAdmin(row.original.id));
   };
 
   return (
@@ -24,12 +28,16 @@ export const ActionCell = ({ row }) => {
         e.stopPropagation();
       }}
     >
-      <IconButton onClick={handleEdit} size="small">
-        <Icons.EditIcon />
-      </IconButton>
-      <IconButton onClick={handleDelete} size="small">
-        <Icons.DeleteIcon />
-      </IconButton>
+      <Tooltip title="Редактировать" arrow>
+        <IconButton onClick={handleEdit} size="small">
+          <Icons.EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Удалить" arrow>
+        <IconButton onClick={handleDelete} size="small">
+          <Icons.DeleteIcon />
+        </IconButton>
+      </Tooltip>
     </div>
   );
 };

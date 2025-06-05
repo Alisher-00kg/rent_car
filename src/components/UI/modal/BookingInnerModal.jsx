@@ -22,7 +22,7 @@ export const BookingInnerModal = ({ onSuccess, car }) => {
     returnLocation: "",
     car: "",
     rentPrice: 0,
-    bookingStatus: "В обработке",
+    bookingStatus: "В ожидании",
     payment: "Карта",
     dateRange: {
       startDate: new Date(),
@@ -39,7 +39,7 @@ export const BookingInnerModal = ({ onSuccess, car }) => {
     phoneNumber: user?.phoneNumber || "",
     car: car ? `${car.brand} ${car.model}` : "",
     rentPrice: car?.rentPrice || 0,
-    bookingStatus: "В обработке",
+    bookingStatus: "В ожидании",
   });
   const {
     handleSubmit,

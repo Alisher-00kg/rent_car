@@ -41,7 +41,12 @@ const ScrollableTabList = styled(TabList)(({ theme }) => ({
   },
   "& .MuiTabs-flexContainer": {
     display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "70px",
     gap: "20px",
+    background: "#214af1",
+    borderRadius: "8px",
   },
 
   "& .MuiTabs-indicator": {
@@ -49,7 +54,7 @@ const ScrollableTabList = styled(TabList)(({ theme }) => ({
   },
 }));
 const TabsStyle = styled(Tab)(({ theme }) => ({
-  color: "#c4bb15",
+  color: "#fff",
   fontFamily: "Inter",
   fontWeight: "500",
   fontSize: "22px",
@@ -62,7 +67,7 @@ const TabsStyle = styled(Tab)(({ theme }) => ({
   position: "relative",
 
   ":hover": {
-    color: "#7E52FF",
+    color: "#f8db1b",
   },
 
   ":hover::after": {
@@ -80,7 +85,7 @@ const TabsStyle = styled(Tab)(({ theme }) => ({
   },
 
   "&.Mui-selected": {
-    color: "black",
-    borderBottom: "2px solid red",
+    color: "#fff902",
+    borderBottom: "2px solid rgb(252, 249, 50)",
   },
 }));

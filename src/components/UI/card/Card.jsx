@@ -20,6 +20,7 @@ const Card = ({
   isFavorite,
   madeInCountry,
   color,
+  discount,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
@@ -59,6 +60,9 @@ const Card = ({
             >
               {isFavorite ? <StyledHeartTrue /> : <StyledHeartFalse />}
             </StyledIconButton>
+          )}
+          {discount?.percentage && (
+            <div className="discount_div">-{discount?.percentage}%</div>
           )}
 
           <div className="slider">
@@ -188,6 +192,22 @@ const StyledDiv = styled("div")({
         fontSize: "80px",
         color: "#fff",
       },
+    },
+    "& .discount_div": {
+      position: "absolute",
+      left: "15px",
+      top: "10px",
+      zIndex: "5",
+      background: "red",
+      color: "#fff",
+      width: "38px",
+      height: "38px",
+      borderRadius: "50%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      fontWeight: "900",
+      fontSize: "14px",
     },
   },
 });

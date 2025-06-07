@@ -62,3 +62,29 @@ export const driveTypeOptions = [
     label: "Полный привод (AWD/4WD – All-Wheel Drive / Four-Wheel Drive)",
   },
 ];
+export const transmissionOptionsTariffs = [
+  {
+    value: "Все",
+    label: "Все",
+  },
+  {
+    value: "МКПП",
+    label: "МКПП (Manual Transmission) — Механическая коробка передач",
+  },
+  {
+    value: "АКПП",
+    label: "АКПП (Automatic Transmission) — Классический автомат",
+  },
+  {
+    value: "КПП",
+    label: "Роботизированная КПП (AMT / RMT)",
+  },
+  {
+    value: "DSG",
+    label: "DSG (Dual-Clutch Transmission) — Робот с двумя сцеплениями",
+  },
+  {
+    value: "Вариатор",
+    label: "CVT (Continuously Variable Transmission) — Вариатор",
+  },
+];

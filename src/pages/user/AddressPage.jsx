@@ -60,7 +60,7 @@ const AboutUsPage = () => {
           </FeatureCard>
           <FeatureCard>
             <span>📍</span>
-            <p>По всему миру</p>
+            <p>По всей России</p>
           </FeatureCard>
         </FeaturesGrid>
 

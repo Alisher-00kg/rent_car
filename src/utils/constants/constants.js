@@ -56,6 +56,10 @@ export const COLUMNS = [
     accessor: "rentPrice",
   },
   {
+    Header: "Скидка",
+    accessor: (row) => `${row.discount?.percentage ?? "Нет"}`,
+  },
+  {
     Header: "Действие",
     accessor: "action",
     Cell: ActionCell,

@@ -61,6 +61,7 @@ export const InnerCardPage = () => {
         return navigate(PATHS.GUEST.PAGE);
     }
   };
+  const hasDiscount = Boolean(singleCar?.discount?.percentage);
   const aboutCar = [
     {
       text: "Категория:",
@@ -100,9 +101,20 @@ export const InnerCardPage = () => {
     },
     {
       text: "Цена за сутки:",
-      value: `${singleCar?.rentPrice}руб`,
+      value: `${singleCar?.rentPrice} ₽`,
+      textDecoration: hasDiscount ? "line-through 2px red" : "none",
     },
-  ];
+    hasDiscount && {
+      text: "Цена со скидкой",
+      value: `${Math.round(
+        singleCar?.rentPrice -
+          (singleCar?.rentPrice / 100) * singleCar?.discount?.percentage
+      )} ₽`,
+      color: "#dc2e10",
+      fontWeight: "600",
+      fontSize: "20px",
+    },
+  ].filter(Boolean);
 
   function getRouteByRole(car) {
     switch (role) {
@@ -211,13 +223,40 @@ export const InnerCardPage = () => {
             <StyledRightBar>
               <section>
                 <CarInfoList>
-                  {aboutCar?.map(({ text, value }, index) => (
-                    <li key={index}>
-                      <span className="label">{text}</span>
-                      <span className="dots" />
-                      <span className="value">{value}</span>
-                    </li>
-                  ))}
+                  {singleCar?.discount && (
+                    <div className="discount_div">
+                      <p>-{singleCar?.discount?.percentage}%</p>
+                      <span>{singleCar?.discount?.nameOfDiscount}</span>
+                    </div>
+                  )}
+
+                  {aboutCar?.map(
+                    (
+                      {
+                        text,
+                        value,
+                        color,
+                        fontWeight,
+                        fontSize,
+                        textDecoration,
+                      },
+                      index
+                    ) => (
+                      <li
+                        key={index}
+                        style={{
+                          color: `${color && color}`,
+                          fontWeight: `${fontWeight && fontWeight}`,
+                          fontSize: `${fontSize && fontSize}`,
+                          textDecoration: textDecoration || "none",
+                        }}
+                      >
+                        <span className="label">{text}</span>
+                        <span className="dots" />
+                        <span className="value">{value}</span>
+                      </li>
+                    )
+                  )}
                 </CarInfoList>
               </section>
               <LowerLayout>
@@ -468,6 +507,30 @@ const CarInfoList = styled.ul`
   .value {
     white-space: nowrap;
     flex-shrink: 0;
+  }
+  .discount_div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    p {
+      width: 38px;
+      height: 38px;
+      background-color: red;
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    span {
+      font-weight: 500;
+      font-size: 22px;
+      color: #e81632;
+    }
   }
 `;
 

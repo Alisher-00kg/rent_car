@@ -1,187 +1,78 @@
-// import styled from "styled-components";
-// import {
-//   Box,
-//   Card,
-//   CardContent,
-//   Typography,
-//   Button,
-//   Container,
-//   Grid,
-// } from "@mui/material";
-// import {
-//   DirectionsCar,
-//   Person,
-//   AccessTime,
-//   ArrowForward,
-// } from "@mui/icons-material";
-// const services = [
-//   {
-//     title: "Прокат автомобилей",
-//     description:
-//       "Современные и надежные автомобили на любой вкус — от эконома до премиум-класса. Все авто проходят регулярное обслуживание и готовы к любым поездкам.",
-//     icon: <DirectionsCar sx={{ fontSize: 40, color: "white" }} />,
-//     bgColor: "#FF6B35",
-//     bgGradient: "linear-gradient(135deg, #FF6B35 0%, #F7931E 100%)",
-//     cta: "Свяжитесь с менеджером",
-//   },
-//   {
-//     title: "Аренда с водителем",
-//     description:
-//       "Профессиональные водители и комфортные автомобили — идеальное решение для деловых встреч, трансферов в аэропорт и особых мероприятий.",
-//     icon: <Person sx={{ fontSize: 40, color: "white" }} />,
-//     bgColor: "#2C3E50",
-//     bgGradient: "linear-gradient(135deg, #2C3E50 0%, #34495E 100%)",
-//     cta: "Напишите нам",
-//   },
-//   {
-//     title: "Долгосрочная аренда",
-//     description:
-//       "Гибкие условия аренды на длительный срок для бизнеса и личного пользования. Удобные тарифы и индивидуальный подход к каждому клиенту.",
-//     icon: <AccessTime sx={{ fontSize: 40, color: "white" }} />,
-//     bgColor: "#16A085",
-//     bgGradient: "linear-gradient(135deg, #bfa70a 0%, #fd9d43 100%)",
-//     cta: "Получить консультацию",
-//   },
-// ];
-// const openLink = (url) => window.open(url, "_blank");
-
-// const TariffsPage = () => {
-//   return (
-//     <StyledWrapper>
-//       <Container maxWidth="lg">
-//         <Grid container spacing={4} justifyContent="center">
-//           {services.map((service, index) => (
-//             <Grid item xs={12} md={4} key={index}>
-//               <Card
-//                 sx={{
-//                   height: "100%",
-//                   background: service.bgGradient,
-//                   color: "white",
-//                   borderRadius: 4,
-//                   overflow: "hidden",
-//                   position: "relative",
-//                   transition: "all 0.3s ease-in-out",
-//                   "&:hover": {
-//                     transform: "translateY(-8px)",
-//                     boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
-//                   },
-//                 }}
-//               >
-//                 <CardContent
-//                   sx={{
-//                     p: 4,
-//                     height: "100%",
-//                     display: "flex",
-//                     flexDirection: "column",
-//                   }}
-//                 >
-//                   <Box sx={{ mb: 3 }}>{service.icon}</Box>
-
-//                   <Typography
-//                     variant="h4"
-//                     component="h2"
-//                     sx={{
-//                       fontWeight: "bold",
-//                       mb: 3,
-//                       fontSize: { xs: "1.5rem", md: "2rem" },
-//                     }}
-//                   >
-//                     {service.title}
-//                   </Typography>
-
-//                   <Typography
-//                     variant="body1"
-//                     sx={{
-//                       mb: 4,
-//                       lineHeight: 1.6,
-//                       opacity: 0.95,
-//                       flexGrow: 1,
-//                     }}
-//                   >
-//                     {service.description}
-//                   </Typography>
-
-//                   <Button
-//                     variant="text"
-//                     endIcon={<ArrowForward />}
-//                     sx={{
-//                       color: "white",
-//                       fontSize: "1.1rem",
-//                       fontWeight: 600,
-//                       alignSelf: "flex-start",
-//                       p: 0,
-//                       "&:hover": {
-//                         backgroundColor: "rgba(255,255,255,0.1)",
-//                         transform: "translateX(5px)",
-//                       },
-//                       transition: "all 0.3s ease",
-//                     }}
-//                     onClick={() => openLink("https://wa.me/+79992781923")}
-//                   >
-//                     {service.cta}
-//                   </Button>
-//                 </CardContent>
-
-//                 <Box
-//                   sx={{
-//                     position: "absolute",
-//                     top: -50,
-//                     right: -50,
-//                     width: 100,
-//                     height: 100,
-//                     borderRadius: "50%",
-//                     background: "rgba(255,255,255,0.1)",
-//                     opacity: 0.3,
-//                   }}
-//                 />
-//               </Card>
-//             </Grid>
-//           ))}
-//         </Grid>
-//       </Container>
-//     </StyledWrapper>
-//   );
-// };
-
-// export default TariffsPage;
-// const StyledWrapper = styled.div`
-//   width: 100%;
-//   min-height: 100vh;
-//   display: flex;
-//   justify-content: center;
-//   align-items: start;
-//   font-size: 50px;
-//   font-weight: 700;
-//   color: yellowgreen;
-// `;
-import { useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  Box,
   Grid,
-  Card,
-  CardMedia,
-  CardContent,
   Typography,
-  Select,
+  Select as MuiSelect,
   MenuItem,
   InputLabel,
-  FormControl,
-  Slider,
   Container,
+  Slider,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import styled from "styled-components";
+import Card from "../../components/UI/card/Card";
+import { Select } from "../../components/UI/select/Select";
+import { transmissionOptionsTariffs } from "../../utils/constants/admin-create-card/options";
+import { styled as muiStyled } from "@mui/material/styles";
+import Button from "../../components/UI/button/Button";
+import Input from "../../components/UI/input/Input";
+import { CiSearch } from "react-icons/ci";
+import { getAllCars } from "../../store/thunks/allCars";
 
 const TariffsPage = () => {
   const { cars } = useSelector((state) => state.allCars);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const getFilter = (key, fallback = "") => searchParams.get(key) || fallback;
+  useEffect(() => {
+    dispatch(getAllCars());
+  }, [dispatch]);
+
+  const filteredCarsQuery = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return cars;
+    }
+
+    const query = searchQuery.toLowerCase().trim();
+
+    return cars.filter((car) => {
+      if (car.brand?.toLowerCase().includes(query)) return true;
+
+      if (car.model?.toLowerCase().includes(query)) return true;
+
+      if (car.category?.toLowerCase().includes(query)) return true;
+
+      if (car.yearOfRelease?.toString().includes(query)) return true;
+
+      if (car.transmission?.toLowerCase().includes(query)) return true;
+
+      if (car.fuelType?.toLowerCase().includes(query)) return true;
+
+      if (car.rentPrice?.toString().includes(query)) return true;
+
+      return false;
+    });
+  }, [cars, searchQuery]);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+  };
 
   const filters = {
-    category: getFilter("category"),
-    transmission: getFilter("transmission"),
-    year: getFilter("year"),
+    category: getFilter("category", "Все"),
+    transmission: getFilter("transmission", "Все"),
+    year: getFilter("year", "Все"),
     price: getFilter("price"),
   };
 
@@ -194,21 +85,27 @@ const TariffsPage = () => {
     }
     setSearchParams(newParams);
   };
-
   const filteredCars = useMemo(() => {
     return cars.filter((car) => {
-      const matchCategory = filters.category
-        ? car.category === filters.category
-        : true;
-      const matchTransmission = filters.transmission
-        ? car.transmission === filters.transmission
-        : true;
-      const matchYear = filters.year
-        ? car.yearOfRelease === filters.year
-        : true;
+      const matchCategory =
+        filters.category && filters.category !== "Все"
+          ? car.category === filters.category
+          : true;
+
+      const matchTransmission =
+        filters.transmission && filters.transmission !== "Все"
+          ? car.transmission === filters.transmission
+          : true;
+
+      const matchYear =
+        filters.year && filters.year !== "Все"
+          ? car.yearOfRelease === filters.year
+          : true;
+
       const matchPrice = filters.price
         ? Number(car.rentPrice) <= Number(filters.price)
         : true;
+
       return (
         matchCategory &&
         matchTransmission &&
@@ -223,56 +120,72 @@ const TariffsPage = () => {
   const uniqueYears = [...new Set(cars.map((car) => car.yearOfRelease))];
   const maxPrice = Math.max(...cars.map((car) => Number(car.rentPrice)));
 
+  const resetFilters = () => {
+    setSearchParams({});
+  };
+
   return (
     <Container sx={{ py: 4 }}>
+      <StyledInnerPanel>
+        <form onSubmit={handleSearchSubmit} style={{ display: "contents" }}>
+          <StyledInput
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Поиск по модели, категории, году..."
+            borderradius="11px"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" type="submit">
+                    <CiSearch />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </form>
+      </StyledInnerPanel>
       <Grid container spacing={2} mb={3}>
         <Grid item xs={12} sm={3}>
-          <FormControl fullWidth>
-            <InputLabel>Категория</InputLabel>
-            <Select
-              value={filters.category}
-              onChange={(e) => handleChange("category", e.target.value)}
-              label="Категория"
-            >
-              <MenuItem value="">Все</MenuItem>
-              {uniqueCategories.map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <StyledInputLabel>
+            Категория <em>*</em>
+          </StyledInputLabel>
+          <StyledSelect
+            value={filters.category}
+            onChange={(e) => handleChange("category", e.target.value)}
+          >
+            <MenuItem value="Все">Все</MenuItem>
+            {uniqueCategories.map((cat) => (
+              <MenuItem key={cat} value={cat}>
+                {cat}
+              </MenuItem>
+            ))}
+          </StyledSelect>
         </Grid>
         <Grid item xs={12} sm={3}>
-          <FormControl fullWidth>
-            <InputLabel>Трансмиссия</InputLabel>
-            <Select
-              value={filters.transmission}
-              onChange={(e) => handleChange("transmission", e.target.value)}
-              label="Трансмиссия"
-            >
-              <MenuItem value="">Все</MenuItem>
-              <MenuItem value="АКПП">АКПП</MenuItem>
-              <MenuItem value="МКПП">МКПП</MenuItem>
-            </Select>
-          </FormControl>
+          <Select
+            value={filters.transmission || "Все"}
+            onChange={(e) => handleChange("transmission", e.target.value)}
+            label="Трансмиссия"
+            required
+            options={transmissionOptionsTariffs}
+          />
         </Grid>
         <Grid item xs={12} sm={3}>
-          <FormControl fullWidth>
-            <InputLabel>Год выпуска</InputLabel>
-            <Select
-              value={filters.year}
-              onChange={(e) => handleChange("year", e.target.value)}
-              label="Год выпуска"
-            >
-              <MenuItem value="">Все</MenuItem>
-              {uniqueYears.map((year) => (
-                <MenuItem key={year} value={year}>
-                  {year}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <StyledInputLabel>
+            Год выпуска <em>*</em>
+          </StyledInputLabel>
+          <StyledSelect
+            value={filters.year}
+            onChange={(e) => handleChange("year", e.target.value)}
+          >
+            <MenuItem value="Все">Все</MenuItem>
+            {uniqueYears.map((year) => (
+              <MenuItem key={year} value={year}>
+                {year}
+              </MenuItem>
+            ))}
+          </StyledSelect>
         </Grid>
         <Grid item xs={12} sm={3}>
           <Typography gutterBottom>
@@ -285,37 +198,69 @@ const TariffsPage = () => {
             onChange={(_, value) => handleChange("price", value)}
           />
         </Grid>
+        <Button variant={"contained"} onClick={resetFilters}>
+          Сбросить фильтры
+        </Button>
       </Grid>
+      {searchQuery && (
+        <SearchResults>
+          Найдено результатов: {filteredCarsQuery.length} из {cars.length}
+        </SearchResults>
+      )}
 
-      <Grid container spacing={3}>
-        {filteredCars.map((car) => (
-          <Grid item xs={12} sm={6} md={4} key={car.id}>
-            <Card
-              sx={{ height: "100%", display: "flex", flexDirection: "column" }}
-            >
-              <CardMedia
-                component="img"
-                image={car.images?.[0]}
-                alt={car.brand}
-                sx={{ height: 200, objectFit: "cover" }}
-              />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {car.brand} {car.model}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {car.category} • {car.yearOfRelease} • {car.transmission}
-                </Typography>
-                <Typography variant="body1" sx={{ mt: 1 }}>
-                  {car.rentPrice} ₽ / день
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+      <StyledUl>
+        {filteredCars.map((item) => (
+          <Card key={item.id} {...item} />
         ))}
-      </Grid>
+      </StyledUl>
     </Container>
   );
 };
 
 export default TariffsPage;
+
+const StyledUl = styled.ul`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  flex-wrap: wrap;
+  padding: 0;
+  margin-top: 40px;
+`;
+const StyledSelect = muiStyled(MuiSelect)(() => ({
+  "&.MuiInputBase-root": {
+    borderRadius: "6px",
+    width: "100%",
+    width: "100%",
+  },
+}));
+const StyledInputLabel = muiStyled(InputLabel)({
+  textAlign: "start",
+  width: "100%",
+  color: "#00000099",
+  fontSize: "14px",
+  fontWeight: 500,
+  marginBottom: "12px",
+  "& em": {
+    color: "red",
+    marginLeft: 2,
+    fontStyle: "normal",
+  },
+});
+const SearchResults = styled.div`
+  color: #666;
+  font-size: 14px;
+  align-self: flex-start;
+  margin-left: 20px;
+`;
+const StyledInnerPanel = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const StyledInput = muiStyled(Input)({
+  width: "550px",
+});

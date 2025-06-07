@@ -75,7 +75,7 @@ const StyledHeader = styled("header")({
   position: "fixed",
   top: "0",
   left: "0",
-  zIndex: 2,
+  zIndex: 10,
   "& .nav": {
     display: "flex",
     gap: "50px",

@@ -1,23 +1,23 @@
 import styled from "styled-components";
 import TabsUi from "../../components/UI/tabs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/UI/card/Card";
 import { getAllCars } from "../../store/thunks/allCars";
 
 const secondTab = [
-  { value: "standart", label: "Стандарт класс" },
-  {
-    value: "comfort",
-    label: `Комфорт класс`,
-  },
-  { value: "bisuness", label: "Бизнес класс" },
-  { value: "miniven", label: "Минивэны" },
-  { value: "SUVs", label: "Внедорожники " },
+  { value: "", label: "Все" },
+  { value: "Стандарт", label: "Стандарт" },
+  { value: "Комфорт", label: "Комфорт" },
+  { value: "Бизнес", label: "Бизнес" },
+  { value: "Минивен", label: "Минивен" },
+  { value: "Внедорожник", label: "Внедорожник" },
+  { value: "Кроссовер", label: "Кроссовер" },
+  { value: "Эконом", label: "Эконом" },
 ];
 
 const SalesPage = () => {
-  const [activeTab, setActiveTab] = useState("standart");
+  const [activeTab, setActiveTab] = useState("");
   const { cars } = useSelector((state) => state.allCars);
   const dispatch = useDispatch();
 
@@ -28,6 +28,12 @@ const SalesPage = () => {
   const handleTabChange = (tabValue) => {
     setActiveTab(tabValue);
   };
+
+  const filteredCars = useMemo(() => {
+    if (!activeTab) return cars;
+    return cars.filter((car) => car.category === activeTab);
+  }, [cars, activeTab]);
+
   return (
     <StyledWrapper>
       <TabsUi
@@ -36,7 +42,7 @@ const SalesPage = () => {
         onTabChange={handleTabChange}
       />
       <StyledUl>
-        {cars?.map((item) => (
+        {filteredCars?.map((item) => (
           <Card key={item.id} {...item} />
         ))}
       </StyledUl>
@@ -45,6 +51,7 @@ const SalesPage = () => {
 };
 
 export default SalesPage;
+
 const StyledWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
@@ -52,9 +59,6 @@ const StyledWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 50px;
-  font-weight: 700;
-  color: yellowgreen;
 `;
 
 const StyledUl = styled.ul`
@@ -63,4 +67,6 @@ const StyledUl = styled.ul`
   align-items: center;
   gap: 50px;
   flex-wrap: wrap;
+  padding: 0;
+  margin-top: 40px;
 `;

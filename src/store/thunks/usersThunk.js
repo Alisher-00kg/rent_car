@@ -81,10 +81,10 @@ export const patchUserDocuments = createAsyncThunk(
   "user/patchUserDocuments",
   async ({ userId, documentUrls }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.patch(`/users/${userId}`, {
+      const { data } = await axiosInstance.patch(`/users/${userId}`, {
         documents: documentUrls,
       });
-      return response.data;
+      return data;
     } catch (error) {
       return rejectWithValue(
         "Ошибка при обновлении пользователя: " + error.message
@@ -92,14 +92,18 @@ export const patchUserDocuments = createAsyncThunk(
     }
   }
 );
-
-// const deleteFile = async (id) => {
-//   try {
-//     await axiosInstance.delete(`/uploads/${id}`);
-//     console.log(`Файл с ID ${id} удалён успешно`);
-//   } catch (error) {
-//     console.error("Ошибка при удалении файла:", error.message);
-//   }
-// };
-
-// deleteFile(2957);
+export const editUserProfile = createAsyncThunk(
+  "user/patchUserDocuments",
+  async ({ userId, ...rest }, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.patch(`/users/${userId}`, {
+        ...rest,
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        "Ошибка при обновлении пользователя: " + error.message
+      );
+    }
+  }
+);

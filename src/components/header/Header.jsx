@@ -1,5 +1,5 @@
 import { Badge, Fade, IconButton, Menu, MenuItem, styled } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { PATHS } from "../../utils/constants/constants";
 import { useContext, useEffect, useState } from "react";
@@ -9,11 +9,14 @@ import { BaseModal } from "../UI/modal/BaseModal";
 import { LogoutModal } from "../UI/modal/LogoutModal";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { MdOutlineFavorite } from "react-icons/md";
-import Cookies from "js-cookie";
 import { FavoriteContext } from "../../context/FavoriteContext";
+import Cookies from "js-cookie";
+import { getSingleUserData } from "../../store/thunks/usersThunk";
 
 const Header = () => {
-  const [localValue, setLocalValue] = useState("");
+  const { user } = useSelector((state) => state.allUsers);
+  console.log(user);
+  const dispatch = useDispatch();
   const { role } = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -33,10 +36,13 @@ const Header = () => {
     setIsOpen(false);
   };
   useEffect(() => {
-    const authUserCookie = Cookies.get("auth");
-    const userData = JSON.parse(authUserCookie);
-    setLocalValue(userData?.data?.firstName);
-  }, []);
+    const userData = JSON.parse(Cookies.get("auth"));
+
+    if (!user?.id) {
+      dispatch(getSingleUserData(userData.data.id));
+    }
+  }, [dispatch, user?.id]);
+
   return (
     <StyledHeader>
       <NavLink to={PATHS.USER.ROOT} className={"link"}>
@@ -70,7 +76,7 @@ const Header = () => {
           <FaRegCircleUser
             style={{ color: "white", width: "25", height: "25" }}
           />
-          <span>{localValue}</span>
+          <span>{user.firstName}</span>
           <Icons.ArrowDown />
         </StyledIconButton>
         <div>

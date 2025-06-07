@@ -18,6 +18,7 @@ import { styled as muiStyled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { postNewCarCard } from "../../store/thunks/allCars";
 import { uploadDocuments } from "../../store/thunks/usersThunk";
+
 export const AdminCreateCard = () => {
   const initialCarValues = {
     category: categoryOptions[0].value,
@@ -89,7 +90,7 @@ export const AdminCreateCard = () => {
     dispatch(postNewCarCard(carValues));
     handleResetForm();
   };
-  
+
   return (
     <StyledMainWrapper>
       <StyledForm onSubmit={handleSubmit}>

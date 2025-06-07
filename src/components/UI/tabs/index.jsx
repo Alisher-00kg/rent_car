@@ -48,19 +48,23 @@ const ScrollableTabList = styled(TabList)(({ theme }) => ({
     display: "none",
   },
 }));
-
 const TabsStyle = styled(Tab)(({ theme }) => ({
-  color: "#3a0acc",
+  color: "#c4bb15",
   fontFamily: "Inter",
   fontWeight: "500",
   fontSize: "22px",
   textTransform: "inherit",
   cursor: "pointer",
-  background: "#7E52FF1A",
-  borderRadius: "8px",
+  background: "transparent",
+  padding: "0px 0px 6px 0px",
+  minHeight: 0,
+  lineHeight: 1,
+  position: "relative",
+
   ":hover": {
     color: "#7E52FF",
   },
+
   ":hover::after": {
     content: '""',
     position: "absolute",
@@ -68,13 +72,15 @@ const TabsStyle = styled(Tab)(({ theme }) => ({
     left: "50%",
     transform: "translateX(-50%)",
     width: "80%",
+    height: "2px",
   },
 
   [theme.breakpoints.down("md")]: {
     fontSize: "18px",
   },
+
   "&.Mui-selected": {
-    color: "white",
-    background: "#3a0acc",
+    color: "black",
+    borderBottom: "2px solid red",
   },
 }));

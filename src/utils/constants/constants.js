@@ -3,6 +3,12 @@ import { ActionCell } from "../helpers/action-cell";
 
 export const COLUMNS = [
   {
+    id: "select",
+    Header: "",
+    accessor: "id",
+    type: "checkbox",
+  },
+  {
     Header: "ID",
     accessor: "id",
   },
@@ -26,8 +32,8 @@ export const COLUMNS = [
     },
   },
   {
-    Header: "Модель",
-    accessor: "model",
+    Header: "Бренд и модель",
+    accessor: (row) => `${row.brand}  ${row.model}`,
   },
   {
     Header: "Год",
@@ -87,6 +93,8 @@ export const PATHS = {
     ORDERS: "/admin/admin-orders",
     CREATE: "/admin/admin-page/create-card",
     FEEDBACK: "/admin/feedback",
+    USERS: "/admin/users",
+    USERS_PAGE_DETAILS: "/admin/users/:userId",
   },
   NOT_FOUND: "*",
   SIGN_IN: "/sign-in",

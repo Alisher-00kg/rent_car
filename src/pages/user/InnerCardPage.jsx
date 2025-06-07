@@ -221,9 +221,11 @@ export const InnerCardPage = () => {
                 </CarInfoList>
               </section>
               <LowerLayout>
-                <StyledButton onClick={handleOpenModal} variant={"contained"}>
-                  {role === "ADMIN" ? "Редактировать" : "Забронировать"}
-                </StyledButton>
+                {role !== "ADMIN" && (
+                  <StyledButton onClick={handleOpenModal} variant={"contained"}>
+                    Забронировать
+                  </StyledButton>
+                )}
                 {role === "USER" && (
                   <MUIStyledIconButton
                     animate={animatedHearts[singleCar?.id]}

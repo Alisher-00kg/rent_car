@@ -10,20 +10,33 @@ import { useNavigate } from "react-router-dom";
 import { styled as muistyled } from "@mui/material";
 import { Table } from "../../components/UI/table";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCars } from "../../store/thunks/allCars";
+import { getAllCars, removeCarsDiscount } from "../../store/thunks/allCars";
+import { toast } from "react-toastify";
 
 export const AdminPage = () => {
   const { cars } = useSelector((state) => state.allCars);
+  const [selectedCarIds, setSelectedCarIds] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(cars);
 
   useEffect(() => {
     dispatch(getAllCars());
   }, [dispatch]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
 
+  const handleRemoveDiscounts = async () => {
+    if (selectedCarIds.length === 0) {
+      toast.info("Выберите хотя бы одну машину для удаления скидки");
+      return;
+    }
+    try {
+      await dispatch(removeCarsDiscount(selectedCarIds)).unwrap();
+      setSelectedCarIds([]);
+    } catch (error) {
+      toast.error("Ошибка при удалении скидок: " + error);
+    }
+  };
   const filteredCars = useMemo(() => {
     if (!searchQuery.trim()) {
       return cars;
@@ -32,26 +45,19 @@ export const AdminPage = () => {
     const query = searchQuery.toLowerCase().trim();
 
     return cars.filter((car) => {
-      // Поиск по модели
+      if (car.brand?.toLowerCase().includes(query)) return true;
+
       if (car.model?.toLowerCase().includes(query)) return true;
 
-      // Поиск по категории
       if (car.category?.toLowerCase().includes(query)) return true;
 
-      // Поиск по году (конвертируем в строку)
-      if (car.year?.toString().includes(query)) return true;
+      if (car.yearOfRelease?.toString().includes(query)) return true;
 
-      // Поиск по коробке передач
       if (car.transmission?.toLowerCase().includes(query)) return true;
 
-      // Поиск по типу топлива
-      if (car.fuel?.toLowerCase().includes(query)) return true;
+      if (car.fuelType?.toLowerCase().includes(query)) return true;
 
-      // Поиск по двигателю
-      if (car.engine?.toLowerCase().includes(query)) return true;
-
-      // Поиск по цене
-      if (car.pricePerDay?.toString().includes(query)) return true;
+      if (car.rentPrice?.toString().includes(query)) return true;
 
       return false;
     });
@@ -60,7 +66,6 @@ export const AdminPage = () => {
   const handleOpenModal = () => {
     setIsOpen(true);
   };
-
   const handleCloseModal = () => {
     setIsOpen(false);
   };
@@ -71,7 +76,6 @@ export const AdminPage = () => {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    // Поиск уже работает через useMemo, но можно добавить дополнительную логику
   };
 
   return (
@@ -104,18 +108,36 @@ export const AdminPage = () => {
           >
             Добавить карточку
           </StyledButton>
+          <Button
+            onClick={handleRemoveDiscounts}
+            variant="showmore"
+            sx={{
+              textTransform: "Capitalize",
+            }}
+          >
+            Убрать скидку
+          </Button>
         </StyledWrapperButtons>
       </StyledInnerPanel>
-      <CreateDiscount isOpen={isOpen} onClose={handleCloseModal} />
+      <CreateDiscount
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        selectedIds={selectedCarIds}
+        setSelectedIds={setSelectedCarIds}
+      />
 
-      {/* Показываем результаты поиска */}
       {searchQuery && (
         <SearchResults>
           Найдено результатов: {filteredCars.length} из {cars.length}
         </SearchResults>
       )}
 
-      <Table columns={COLUMNS} data={filteredCars} />
+      <Table
+        columns={COLUMNS}
+        data={filteredCars}
+        selectedIds={selectedCarIds}
+        setSelectedIds={setSelectedCarIds}
+      />
     </StyledWrapper>
   );
 };

@@ -12,12 +12,14 @@ const Card = ({
   id,
   brand,
   model,
-  flueType,
+  fuelType,
   numberOfSeats,
   transmission,
   driveType,
   images,
   isFavorite,
+  madeInCountry,
+  color,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
@@ -35,12 +37,15 @@ const Card = ({
     );
   };
 
-  const handleNavigate = (id) => {
-    navigate(
-      role === "GUEST"
-        ? PATHS.GUEST.PAGE + "/" + id
-        : PATHS.USER.PAGE + "/" + id
-    );
+  const handleNavigateByRole = (carId) => {
+    switch (role) {
+      case "USER":
+        return navigate(`${PATHS.USER.PAGE}/${carId}`);
+      case "ADMIN":
+        return navigate(`${PATHS.ADMIN.PAGE}/${carId}`);
+      default:
+        return navigate(`${PATHS.GUEST.PAGE}/${carId}`);
+    }
   };
 
   return (
@@ -85,10 +90,14 @@ const Card = ({
             <div className="inner_box">
               <p className="title">{brand}</p>
               <p>
-                {model},{transmission}. {flueType}, {driveType}, {numberOfSeats}
+                {model},{transmission}, {fuelType}, {driveType}, {numberOfSeats}
+                ,{madeInCountry},{color}
               </p>
             </div>
-            <Button variant="contained" onClick={() => handleNavigate(id)}>
+            <Button
+              variant="contained"
+              onClick={() => handleNavigateByRole(id)}
+            >
               Посмотреть
             </Button>
           </StyledDescription>

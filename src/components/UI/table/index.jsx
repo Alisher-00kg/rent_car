@@ -8,19 +8,44 @@ import {
   Checkbox,
   styled,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export const Table = ({ columns, data, disableRowClick = false }) => {
-  const [selected, setSelected] = useState([]);
+export const Table = ({
+  columns,
+  data,
+  disableRowClick = false,
+  selectedIds,
+  setSelectedIds,
+}) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = (id) => {
-    navigate(`/admin/admin-page/${id}`);
+    if (location.pathname === "/admin/admin-page") {
+      navigate(`/admin/admin-page/${id}`);
+    }
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const handleCheckboxClick = (id) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((item) => item !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+
+  const isSelected = (id) => (selectedIds || []).includes(id);
 
   const renderCellContent = (column, row) => {
+    if (column.type === "checkbox") {
+      return (
+        <Checkbox
+          checked={isSelected(row.id)}
+          onChange={() => handleCheckboxClick(row.id)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      );
+    }
     const getValue = () => {
       if (typeof column.accessor === "function") {
         return column.accessor(row);
@@ -70,7 +95,26 @@ export const Table = ({ columns, data, disableRowClick = false }) => {
             <StyledTableRow
               key={row.id}
               selected={isItemSelected}
-              onClick={!disableRowClick ? () => handleClick(row.id) : undefined}
+              onClick={
+                !disableRowClick
+                  ? (e) => {
+                      const tagName = e.target.tagName.toLowerCase();
+                      const className = e.target.className?.toString?.() || "";
+
+                      if (
+                        ["button", "svg", "path"].includes(tagName) ||
+                        className.includes("MuiIconButton") ||
+                        className.includes("MuiSvgIcon")
+                      ) {
+                        return;
+                      }
+
+                      if (e.defaultPrevented) return;
+
+                      handleClick(row.id);
+                    }
+                  : undefined
+              }
             >
               {columns.map((column) => {
                 const cellKey =

@@ -15,14 +15,16 @@ export const Select = ({
   helperText,
   disabled = false,
   fullWidth = true,
+  required = false,
   ...rest
 }) => {
   return (
     <StyledWrapper>
       {label && (
-        <InputLabel sx={{ textAlign: "start", width: "100%" }}>
+        <StyledInputLabel>
           {label}
-        </InputLabel>
+          {required && <em>*</em>}
+        </StyledInputLabel>
       )}
       <StyledSelect
         value={value}
@@ -50,5 +52,18 @@ const StyledSelect = styled(MUISelect)(() => ({
   "&.MuiInputBase-root": {
     borderRadius: "6px",
     width: "100%",
+    width: "100%",
   },
 }));
+const StyledInputLabel = styled(InputLabel)({
+  textAlign: "start",
+  width: "100%",
+  color: "#00000099",
+  fontSize: "14px",
+  fontWeight: 500,
+  "& em": {
+    color: "red",
+    marginLeft: 2,
+    fontStyle: "normal",
+  },
+});

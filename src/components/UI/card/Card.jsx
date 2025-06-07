@@ -12,12 +12,15 @@ const Card = ({
   id,
   brand,
   model,
-  flueType,
+  fuelType,
   numberOfSeats,
   transmission,
   driveType,
   images,
   isFavorite,
+  madeInCountry,
+  color,
+  discount,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
@@ -35,12 +38,15 @@ const Card = ({
     );
   };
 
-  const handleNavigate = (id) => {
-    navigate(
-      role === "GUEST"
-        ? PATHS.GUEST.PAGE + "/" + id
-        : PATHS.USER.PAGE + "/" + id
-    );
+  const handleNavigateByRole = (carId) => {
+    switch (role) {
+      case "USER":
+        return navigate(`${PATHS.USER.PAGE}/${carId}`);
+      case "ADMIN":
+        return navigate(`${PATHS.ADMIN.PAGE}/${carId}`);
+      default:
+        return navigate(`${PATHS.GUEST.PAGE}/${carId}`);
+    }
   };
 
   return (
@@ -54,6 +60,9 @@ const Card = ({
             >
               {isFavorite ? <StyledHeartTrue /> : <StyledHeartFalse />}
             </StyledIconButton>
+          )}
+          {discount?.percentage && (
+            <div className="discount_div">-{discount?.percentage}%</div>
           )}
 
           <div className="slider">
@@ -85,10 +94,14 @@ const Card = ({
             <div className="inner_box">
               <p className="title">{brand}</p>
               <p>
-                {model},{transmission}. {flueType}, {driveType}, {numberOfSeats}
+                {model},{transmission}, {fuelType}, {driveType}, {numberOfSeats}
+                ,{madeInCountry},{color}
               </p>
             </div>
-            <Button variant="contained" onClick={() => handleNavigate(id)}>
+            <Button
+              variant="contained"
+              onClick={() => handleNavigateByRole(id)}
+            >
               Посмотреть
             </Button>
           </StyledDescription>
@@ -179,6 +192,22 @@ const StyledDiv = styled("div")({
         fontSize: "80px",
         color: "#fff",
       },
+    },
+    "& .discount_div": {
+      position: "absolute",
+      left: "15px",
+      top: "10px",
+      zIndex: "5",
+      background: "red",
+      color: "#fff",
+      width: "38px",
+      height: "38px",
+      borderRadius: "50%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      fontWeight: "900",
+      fontSize: "14px",
     },
   },
 });

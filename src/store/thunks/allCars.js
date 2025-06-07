@@ -122,3 +122,45 @@ export const deleteCarFromAdmin = createAsyncThunk(
     }
   }
 );
+export const updateCarFromAdmin = createAsyncThunk(
+  "allCars/updateCarFromAdmin",
+  async (carData, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await axiosInstance.patch(
+        `/cars/${carData.id}`,
+        carData.data
+      );
+      dispatch(getSingleCar(carData.id));
+    } catch (error) {
+      return rejectWithValue(error?.message);
+    }
+  }
+);
+export const updateCarsDiscount = createAsyncThunk(
+  "allCars/updateCarsDiscount",
+  async ({ carIds, discount }, { dispatch, getState, rejectWithValue }) => {
+    try {
+      for (const carId of carIds) {
+        await axiosInstance.patch(`/cars/${carId}`, { discount });
+      }
+      dispatch(getAllCars());
+      toast.success("Скидки успешно применены!");
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const removeCarsDiscount = createAsyncThunk(
+  "allCars/removeCarsDiscount",
+  async (carIds, { rejectWithValue, dispatch }) => {
+    try {
+      for (const carId of carIds) {
+        await axiosInstance.patch(`/cars/${carId}`, { discount: null });
+      }
+      dispatch(getAllCars());
+      toast.success("Скидки успешно удалены");
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

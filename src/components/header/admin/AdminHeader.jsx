@@ -35,6 +35,7 @@ export const AdminHeader = () => {
         <StyledNavLink to={PATHS.ADMIN.PAGE}>Машины</StyledNavLink>
         <StyledNavLink to={PATHS.ADMIN.ORDERS}>Заказы</StyledNavLink>
         <StyledNavLink to={PATHS.ADMIN.FEEDBACK}>Обращения</StyledNavLink>
+        <StyledNavLink to={PATHS.ADMIN.USERS}>Пользователи</StyledNavLink>
       </nav>
       <StyledRightBox>
         <MdAdminPanelSettings

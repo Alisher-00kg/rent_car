@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../api/axiosInstance";
+import { toast } from "react-toastify";
 
 export const getAllUsersData = createAsyncThunk(
   "allUsers/getAllUsersData",
@@ -36,9 +37,9 @@ export const getSingleUserData = createAsyncThunk(
 
 export const getAllBookings = createAsyncThunk(
   "allUsers/getAllBookings",
-  async (bookingID, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.get("/bookings/" + bookingID);
+      const { data } = await axiosInstance.get("/bookings");
       return data;
     } catch (error) {
       toast.error("Ошибка: " + error.message);
@@ -103,6 +104,21 @@ export const editUserProfile = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         "Ошибка при обновлении пользователя: " + error.message
+      );
+    }
+  }
+);
+
+export const deleteUserData = createAsyncThunk(
+  "user/deleteUserData",
+  async (userId, { rejectWithValue, dispatch }) => {
+    try {
+      await axiosInstance.delete("/users/" + userId);
+      dispatch(getAllUsersData());
+      toast.success("Успешно удалили пользователя!");
+    } catch (error) {
+      return rejectWithValue(
+        error.message || "Ошибка при удалении пользователя!"
       );
     }
   }

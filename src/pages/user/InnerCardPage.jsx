@@ -57,6 +57,8 @@ export const InnerCardPage = () => {
     switch (role) {
       case "USER":
         return navigate(PATHS.USER.PAGE);
+      case "ADMIN":
+        return navigate(PATHS.ADMIN.PAGE);
       default:
         return navigate(PATHS.GUEST.PAGE);
     }

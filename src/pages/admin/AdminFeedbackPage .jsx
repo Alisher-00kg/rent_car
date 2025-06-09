@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import Button from "../../components/UI/button/Button";
 import Input from "../../components/UI/input/Input";
-import { fetchFeedbackMessages, sendFeedbackReply } from "../../store/thunks/adminfeedbackThunks";
+import {
+  fetchFeedbackMessages,
+  sendFeedbackReply,
+} from "../../store/thunks/adminfeedbackThunks";
 import { useDispatch, useSelector } from "react-redux";
 import { Table } from "../../components/UI/table";
 import deleteIcon from "../../assets/icons/delete-icon.svg";
-
 
 import { BaseModal } from "../../components/UI/modal/BaseModal";
 import { Checkbox, IconButton } from "@mui/material";
 
 const feedbackMessages = [
-
   {
     id: 1,
     fullName: "Владимир Владимирович",
@@ -56,8 +57,6 @@ const AdminFeedbackPage = () => {
   //   dispatch(fetchFeedbackMessages());
   // }, [dispatch]);
 
-
-
   const handleSendReply = (id) => {
     console.log("Отправка ответа на сообщение с id:", id);
     console.log("Текст ответа:", replyText);
@@ -66,9 +65,8 @@ const AdminFeedbackPage = () => {
   };
   const columns = [
     {
-      id: "select",
       Header: "ID",
-      type: "checkbox",
+      accessor: "id",
     },
     { Header: "Имя", accessor: "fullName" },
     { Header: "Телефон", accessor: "phoneNumber" },
@@ -79,7 +77,6 @@ const AdminFeedbackPage = () => {
       Cell: ({ row }) => (
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <Button
-            variant="outlined"
             onClick={(e) => {
               e.stopPropagation();
               openReplyModal(row.original);
@@ -87,8 +84,6 @@ const AdminFeedbackPage = () => {
           >
             Ответить
           </Button>
-
-
         </div>
       ),
     },
@@ -102,42 +97,36 @@ const AdminFeedbackPage = () => {
             handleDeleteOne(row.original.id);
           }}
           aria-label="Удалить"
-          style={{marginLeft:'20px'}}
+          style={{ marginLeft: "20px" }}
         >
           <img src={deleteIcon} alt="" />
         </IconButton>
-      )
+      ),
     },
-
-
-
-
-  ]
+  ];
 
   const handleDeleteOne = (id) => {
     console.log("Удалить обращение с ID:", id);
-
   };
 
-
   return (
-
     <div style={{ padding: "20px" }}>
       <h2>Сообщения с формы обратной связи</h2>
-      <Table columns={columns} data={feedbackMessages} selectedIds={selectedFeedbackIds}
-        setSelectedIds={setSelectedFeedbackIds} />
-
-
-
-
+      <Table
+        columns={columns}
+        data={feedbackMessages}
+        selectedIds={selectedFeedbackIds}
+        setSelectedIds={setSelectedFeedbackIds}
+      />
       {isModalOpen && selectedMessage && (
         <BaseModal open={isModalOpen} onClose={closeModal}>
-          <div style={{ display: 'flex', gap: "15px", flexDirection: 'column' }}>
+          <div
+            style={{ display: "flex", gap: "15px", flexDirection: "column" }}
+          >
             <h3>Ответ на сообщение от {selectedMessage.fullName}</h3>
-            <p >
+            <p>
               <strong>Сообщение:</strong> {selectedMessage.message}
             </p>
-
           </div>
 
           <Input
@@ -149,7 +138,10 @@ const AdminFeedbackPage = () => {
             fullWidth
             style={{ margin: "20px 0" }}
           />
-          <Button onClick={() => handleSendReply(selectedMessage.id)} variant="contained">
+          <Button
+            onClick={() => handleSendReply(selectedMessage.id)}
+            variant="contained"
+          >
             Отправить
           </Button>
         </BaseModal>
@@ -158,4 +150,3 @@ const AdminFeedbackPage = () => {
   );
 };
 export default AdminFeedbackPage;
-

@@ -94,12 +94,14 @@ export const patchUserDocuments = createAsyncThunk(
   }
 );
 export const editUserProfile = createAsyncThunk(
-  "user/patchUserDocuments",
-  async ({ userId, ...rest }, { rejectWithValue }) => {
+  "user/editUserProfiles",
+  async ({ userId, ...rest }, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await axiosInstance.patch(`/users/${userId}`, {
         ...rest,
       });
+      dispatch(getSingleUserData(userId));
+      dispatch(getAllUsersData());
       return data;
     } catch (error) {
       return rejectWithValue(

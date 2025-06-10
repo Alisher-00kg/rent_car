@@ -2,9 +2,8 @@ import { IconButton, Tooltip } from "@mui/material";
 import { Icons } from "../../../assets";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { EditUserModal } from "../../../components/UI/modal/EditUserModal";
 import { deleteUserData } from "../../../store/thunks/usersThunk";
-
+import { EditUserModal } from "../../../components/UI/modal/EditUserModal";
 export const UsersActionCell = ({ row }) => {
   const dispatch = useDispatch();
   const [openEdit, setOpenEdit] = useState(false);

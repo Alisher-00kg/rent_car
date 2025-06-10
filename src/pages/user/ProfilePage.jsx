@@ -136,15 +136,26 @@ const ProfilePage = () => {
     }
   };
 
-  const isoString = bookings.dateRange?.endDate;
-  const date = new Date(isoString);
-  const formatted = date.toLocaleString("ru-RU", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleString("ru-RU", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
+  // const formatted = bookings.dateRange?.endDate
+  //   ? new Date(bookings.dateRange.endDate).toLocaleString("ru-RU", {
+  //       day: "2-digit",
+  //       month: "long",
+  //       year: "numeric",
+  //       hour: "2-digit",
+  //       minute: "2-digit",
+  //     })
+  //   : "Нет данных";
 
   return (
     <StyledWrapper>
@@ -284,27 +295,130 @@ const ProfilePage = () => {
             </DropZoneWrapper>
           )}
         </Section>
+        <Section>
+          <Title>Активные аренды</Title>
+          {bookings && bookings.length > 0 ? (
+            <>
+              {bookings
+                .filter((item) => item.bookingStatus !== "Завершенный")
+                .slice(0, 1)
+                .map((item, index) => (
+                  <StyledInfoList key={`active-${index}`}>
+                    <li>
+                      <span className="label">Машина</span>
+                      <span className="dots" />
+                      <span className="value">{item.car}</span>
+                    </li>
+                    <li>
+                      <span className="label">Статус аренды</span>
+                      <span className="dots" />
+                      <span className="value">{item.bookingStatus}</span>
+                    </li>
+                    <li>
+                      <span className="label">Оплата</span>
+                      <span className="dots" />
+                      <span className="value">{item.payment}</span>
+                    </li>
+                    <li>
+                      <span className="label">Сумма аренды</span>
+                      <span className="dots" />
+                      <span className="value">{item.rentPrice} ₽</span>
+                    </li>
+                    <li>
+                      <span className="label">Стартовая локация</span>
+                      <span className="dots" />
+                      <span className="value">{item.pickupLocation}</span>
+                    </li>
+                    <li>
+                      <span className="label">Конечная локация</span>
+                      <span className="dots" />
+                      <span className="value">{item.returnLocation}</span>
+                    </li>
+                    <li>
+                      <span className="label">Начало аренды</span>
+                      <span className="dots" />
+                      <span className="value">
+                        {formatDate(item.dateRange.startDate)}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="label">Конец аренды</span>
+                      <span className="dots" />
+                      <span className="value">
+                        {formatDate(item.dateRange.endDate)}
+                      </span>
+                    </li>
+                  </StyledInfoList>
+                ))}
+            </>
+          ) : (
+            <p>Нет активных аренд.</p>
+          )}
+        </Section>
 
         <Section>
-          <Title>Аренды</Title>
-          <Card>
-            {bookings.car} — {formatted} — {bookings.bookingStatus}
-          </Card>
-          <Card>Toyota Camry — 10.05–12.05 — Завершена</Card>
-          <ActionLink>Посмотреть все</ActionLink>
+          <Title>Завершенные аренды</Title>
+          {bookings && bookings.length > 0 ? (
+            <>
+              {bookings
+                .filter((item) => item.bookingStatus === "Завершенный")
+                .slice(0, 1)
+                .map((item, index) => (
+                  <StyledInfoList key={`completed-${index}`}>
+                    <li>
+                      <span className="label">Машина</span>
+                      <span className="dots" />
+                      <span className="value">{item.car}</span>
+                    </li>
+                    <li>
+                      <span className="label">Статус аренды</span>
+                      <span className="dots" />
+                      <span className="value">{item.bookingStatus}</span>
+                    </li>
+                    <li>
+                      <span className="label">Оплата</span>
+                      <span className="dots" />
+                      <span className="value">{item.payment}</span>
+                    </li>
+                    <li>
+                      <span className="label">Сумма аренды</span>
+                      <span className="dots" />
+                      <span className="value">{item.rentPrice} ₽</span>
+                    </li>
+                    <li>
+                      <span className="label">Стартовая локация</span>
+                      <span className="dots" />
+                      <span className="value">{item.pickupLocation}</span>
+                    </li>
+                    <li>
+                      <span className="label">Конечная локация</span>
+                      <span className="dots" />
+                      <span className="value">{item.returnLocation}</span>
+                    </li>
+                    <li>
+                      <span className="label">Начало аренды</span>
+                      <span className="dots" />
+                      <span className="value">
+                        {formatDate(item.dateRange.startDate)}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="label">Конец аренды</span>
+                      <span className="dots" />
+                      <span className="value">
+                        {formatDate(item.dateRange.endDate)}
+                      </span>
+                    </li>
+                  </StyledInfoList>
+                ))}
+            </>
+          ) : (
+            <p>Нет завершённых аренд.</p>
+          )}
         </Section>
 
         <ProfileConfig>
-          <HeaderRow>
-            <Title>Настройки</Title>
-          </HeaderRow>
-
           <SettingsGrid>
-            <SettingItem>
-              <Label>Язык</Label>
-              <Value>Русский</Value>
-            </SettingItem>
-            <Button variant="text">Уведомления</Button>
             <Button variant="outlined" width="220px" onClick={handleOpenModal}>
               Выйти из аккаунта
             </Button>
@@ -573,4 +687,43 @@ const Input = styled.input`
   border-radius: 6px;
   width: 60%;
   font-size: 14px;
+`;
+const StyledInfoList = styled.ul`
+  border: 1px solid rgb(18, 11, 142);
+  border-radius: 8px;
+  padding: 20px;
+  font-size: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #111;
+
+  & li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .label {
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-weight: 500;
+    color: #555;
+  }
+
+  .dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted rgb(13, 8, 8);
+    height: 1px;
+    margin: 0 8px;
+    overflow: hidden;
+  }
+
+  .value {
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-weight: 600;
+    color: #111;
+  }
 `;

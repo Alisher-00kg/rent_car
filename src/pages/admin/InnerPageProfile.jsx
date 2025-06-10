@@ -65,6 +65,7 @@ export const InnerPageProfile = () => {
       minute: "2-digit",
     });
   }
+
   useEffect(() => {
     if (userId) {
       dispatch(getSingleUserData(userId));
@@ -198,7 +199,7 @@ export const InnerPageProfile = () => {
                 ))}
               {activeRentalsToShow < activeBookings.length && (
                 <Button variant={"showmore"} onClick={showMoreActiveRentals}>
-                  Посмотреть ещё 
+                  Посмотреть ещё
                 </Button>
               )}
             </>

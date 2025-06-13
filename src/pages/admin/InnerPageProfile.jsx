@@ -31,10 +31,10 @@ export const InnerPageProfile = () => {
     item.email?.toLowerCase().includes(user.email)
   );
   const activeBookings =
-    filteredUser?.filter((item) => item.bookingStatus !== "Завершенный") || [];
+    filteredUser?.filter((item) => item.bookingStatus !== "Завершен") || [];
 
   const completedBookings =
-    filteredUser?.filter((item) => item.bookingStatus === "Завершенный") || [];
+    filteredUser?.filter((item) => item.bookingStatus === "Завершен") || [];
 
   const handleImageClick = (imgUrl) => {
     setSelectedImage(imgUrl);
@@ -107,7 +107,7 @@ export const InnerPageProfile = () => {
           </InfoGrid>
         </Section>
 
-        <Section>
+        <SectionDocument>
           <Title>Водительские права и паспорт</Title>
           {user.documents && user.documents.length > 0 ? (
             <DocumentsInfo>
@@ -141,7 +141,7 @@ export const InnerPageProfile = () => {
           ) : (
             <p>Документы не загружены</p>
           )}
-        </Section>
+        </SectionDocument>
 
         <Section>
           <Title>Аренды</Title>
@@ -359,12 +359,21 @@ const Section = styled.div`
   align-items: start;
   gap: 20px;
 `;
+const SectionDocument = styled.section`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+`;
 
 const Title = styled.h2`
+  width: 100%;
   font-size: 1.5rem;
   font-weight: 600;
   border-bottom: 1px solid #e5e7eb;
   padding-bottom: 0.5rem;
+  text-align: start;
 `;
 
 const DocumentsInfo = styled.div`

@@ -79,28 +79,31 @@ export const EditUserModal = ({ open, onClose, user }) => {
           />
           <Box sx={{ mt: 2 }}>
             <Typography variant="subtitle1">Документы:</Typography>
+
             <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-              {documents.map((doc, i) => (
-                <Box key={i} sx={{ position: "relative" }}>
-                  <img
-                    src={doc}
-                    alt={`doc-${i}`}
-                    style={{
-                      width: 100,
-                      height: 100,
-                      objectFit: "cover",
-                      borderRadius: 4,
-                    }}
-                  />
-                  <IconButton
-                    size="small"
-                    onClick={() => handleDeleteDocument(i)}
-                    sx={{ position: "absolute", top: 0, right: 0 }}
-                  >
-                    <Icons.DeleteDropZoneImage />
-                  </IconButton>
-                </Box>
-              ))}
+              {documents.length > 0
+                ? documents.map((doc, i) => (
+                    <Box key={i} sx={{ position: "relative" }}>
+                      <img
+                        src={doc}
+                        alt={`doc-${i}`}
+                        style={{
+                          width: 100,
+                          height: 100,
+                          objectFit: "cover",
+                          borderRadius: 4,
+                        }}
+                      />
+                      <IconButton
+                        size="small"
+                        onClick={() => handleDeleteDocument(i)}
+                        sx={{ position: "absolute", top: 0, right: 0 }}
+                      >
+                        <Icons.DeleteDropZoneImage />
+                      </IconButton>
+                    </Box>
+                  ))
+                : "Еще не загружены"}
             </Box>
           </Box>
           <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>

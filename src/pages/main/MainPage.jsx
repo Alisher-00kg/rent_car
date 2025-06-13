@@ -13,7 +13,7 @@ import { bannerImages } from "../../utils/constants/carsSlider.js";
 const MainPage = () => {
   const dispatch = useDispatch();
   const { cars } = useSelector((state) => state.allCars);
-
+  const filteredCars = cars?.filter((car) => car.discount === null);
   useEffect(() => {
     dispatch(getAllCars());
   }, [dispatch]);
@@ -31,7 +31,7 @@ const MainPage = () => {
       </TelegramButton>
       <ChoseUs />
       <StyledUl>
-        {cars?.map((item) => (
+        {filteredCars?.map((item) => (
           <Card key={item.id} {...item} />
         ))}
       </StyledUl>

@@ -16,7 +16,6 @@ import { Table } from "../../components/UI/table";
 
 export const AdminUsersPage = () => {
   const { users } = useSelector((state) => state.allUsers);
-  const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch();
 
@@ -40,13 +39,6 @@ export const AdminUsersPage = () => {
     });
   }, [users, searchQuery]);
 
-  const handleOpenModal = () => {
-    setIsOpen(true);
-  };
-  const handleCloseModal = () => {
-    setIsOpen(false);
-  };
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -59,14 +51,13 @@ export const AdminUsersPage = () => {
     dispatch(getAllUsersData());
   }, [dispatch]);
   return (
-    // <div>UsersPage надо добавить статус документов дефолтно в обработке</div>
     <StyledWrapper>
       <StyledInnerPanel>
         <form onSubmit={handleSearchSubmit} style={{ display: "contents" }}>
           <StyledInput
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Поиск по имени, фамилии, почте..."
+            placeholder="Поиск по имени, фамилии, почте, телефону..."
             borderradius="11px"
             InputProps={{
               endAdornment: (

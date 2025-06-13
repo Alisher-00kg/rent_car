@@ -16,6 +16,7 @@ export const Select = ({
   disabled = false,
   fullWidth = true,
   required = false,
+  sx,
   ...rest
 }) => {
   return (
@@ -34,6 +35,7 @@ export const Select = ({
         {...rest}
         sx={{
           marginTop: "12px",
+          ...sx,
         }}
       >
         {options.map((option) => (

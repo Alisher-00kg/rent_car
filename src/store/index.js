@@ -4,6 +4,7 @@ import { authSlice } from "./slices/authSlice";
 import { allCarsSlice } from "./slices/allCarsSlice";
 import { orderSlice } from "./slices/ordersSlice";
 import { usersSlice } from "./slices/userSlice";
+import { adminfeedbackSlice } from "./slices/adminfeedbackSlice";
 // import { authApi } from "./api/auth.service";
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
     [allCarsSlice.name]: allCarsSlice.reducer,
     [orderSlice.name]: orderSlice.reducer,
     [usersSlice.name]: usersSlice.reducer,
+    [adminfeedbackSlice.name]: adminfeedbackSlice.reducer,
     // [authApi.reducerPath]: authApi.reducer,
   },
   // middleware: (getDefaultMiddleware) =>

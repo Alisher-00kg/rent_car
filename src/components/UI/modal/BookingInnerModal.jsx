@@ -29,6 +29,7 @@ export const BookingInnerModal = ({ onSuccess, car }) => {
       endDate: new Date(),
     },
     agreeToTerms: false,
+    email: user.email,
   };
 
   const prepareFormValues = (user, car) => ({

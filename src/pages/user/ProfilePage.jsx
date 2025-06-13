@@ -1,324 +1,3 @@
-// import { useEffect, useState } from "react";
-// import { useDropzone } from "react-dropzone";
-// import styled from "styled-components";
-// import Button from "../../components/UI/button/Button";
-// import { styled as muiStyled } from "@mui/material/styles";
-// import { useDispatch, useSelector } from "react-redux";
-// import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
-// import Cookies from "js-cookie";
-// import {
-//   editUserProfile,
-//   getAllBookings,
-//   getSingleUserData,
-//   patchUserDocuments,
-//   uploadDocuments,
-// } from "../../store/thunks/usersThunk";
-// import { toast } from "react-toastify";
-// import { LogoutModal } from "../../components/UI/modal/LogoutModal";
-// import { BaseModal } from "../../components/UI/modal/BaseModal";
-
-// const ProfilePage = () => {
-//   const [images, setImages] = useState([]);
-//   const [isOpen, setIsOpen] = useState(false);
-//   const { role } = useSelector((state) => state.auth);
-//   const { user, bookings } = useSelector((state) => state.allUsers);
-//   const dispatch = useDispatch();
-//   const [isEditing, setIsEditing] = useState(false);
-
-//   const [editedData, setEditedData] = useState({
-//     firstName: "",
-//     lastName: "",
-//     phoneNumber: "",
-//     email: "",
-//   });
-
-//   const handleOpenModal = () => {
-//     setIsOpen(true);
-//   };
-//   const handleCloseModal = () => {
-//     setIsOpen(false);
-//   };
-//   function getRouteByRole() {
-//     switch (role) {
-//       case "USER":
-//         return [
-//           {
-//             label: "Главная",
-//             href: "/user/user-page",
-//           },
-//           {
-//             label: "Профиль",
-//             href: "/user/profile",
-//           },
-//         ];
-//       default:
-//         return role;
-//     }
-//   }
-
-//   const onDrop = (acceptedFiles) => {
-//     if (images.length + acceptedFiles.length > 4) {
-//       toast.warning("Максимум 4 фото");
-//       return;
-//     }
-
-//     const newImages = acceptedFiles.map((file) =>
-//       Object.assign(file, {
-//         preview: URL.createObjectURL(file),
-//       })
-//     );
-
-//     setImages([...images, ...newImages]);
-//   };
-
-//   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-//     onDrop,
-//     accept: {
-//       "image/*": [],
-//     },
-//     multiple: true,
-//     maxFiles: 4,
-//   });
-//   const removeImage = (indexToRemove) => {
-//     setImages(images.filter((_, i) => i !== indexToRemove));
-//   };
-
-//   useEffect(() => {
-//     const userData = JSON.parse(Cookies.get("auth"));
-
-//     if (!user?.id) {
-//       dispatch(getSingleUserData(userData.data.id));
-//       dispatch(getAllBookings(userData.data.id));
-//     }
-//   }, [dispatch, user?.id]);
-
-//   const isoString = bookings.dateRange?.endDate;
-//   const date = new Date(isoString);
-
-//   const formatted = date.toLocaleString("ru-RU", {
-//     day: "2-digit",
-//     month: "long",
-//     year: "numeric",
-//     hour: "2-digit",
-//     minute: "2-digit",
-//   });
-//   const handleUploadClick = async () => {
-//     try {
-//       const uploaded = await dispatch(uploadDocuments(images)).unwrap();
-
-//       const documentUrls = uploaded.documentUrls || uploaded;
-
-//       await dispatch(
-//         patchUserDocuments({ userId: user.id, documentUrls })
-//       ).unwrap();
-
-//       toast.success("Документы успешно загружены и сохранены!");
-//       setImages([]);
-//     } catch (error) {
-//       console.error(error);
-//       toast.error("Произошла ошибка. Повторите позже.");
-//     }
-//   };
-//   useEffect(() => {
-//     if (user) {
-//       setEditedData({
-//         firstName: user.firstName || "",
-//         lastName: user.lastName || "",
-//         phoneNumber: user.phoneNumber || "",
-//         email: user.email || "",
-//       });
-//     }
-//   }, [user]);
-
-//   const handleEditClick = () => {
-//     setIsEditing(true);
-//   };
-
-//   const handleChange = (field, value) => {
-//     setEditedData((prev) => ({ ...prev, [field]: value }));
-//   };
-
-//   const handleSave = async () => {
-//     try {
-//       await dispatch(
-//         editUserProfile({
-//           userId: user.id,
-//           ...editedData,
-//         })
-//       ).unwrap();
-//       await dispatch(getSingleUserData(user.id));
-//       toast.success("Профиль обновлён!");
-//       setIsEditing(false);
-//     } catch (err) {
-//       toast.error("Ошибка при обновлении профиля");
-//       console.error(err);
-//     }
-//   };
-
-//   return (
-//     <StyledWrapper>
-//       <StyledTitleAndBr>
-//         <BreadCrumbs breadcrumbs={getRouteByRole()} />
-//       </StyledTitleAndBr>
-//       <ProfileWrapper>
-//         <Section>
-//           <ProfileHeader>
-//             <Title>Персональные данные</Title>
-//             {isEditing ? (
-//               <Button variant="contained" width="180px" onClick={handleSave}>
-//                 Сохранить
-//               </Button>
-//             ) : (
-//               <Button
-//                 variant="contained"
-//                 width="180px"
-//                 onClick={handleEditClick}
-//               >
-//                 Редактировать
-//               </Button>
-//             )}
-//           </ProfileHeader>
-
-//           <InfoGrid>
-//             <InfoItem>
-//               <Label>Имя</Label>
-//               {isEditing ? (
-//                 <Input
-//                   value={editedData.firstName}
-//                   onChange={(e) => handleChange("firstName", e.target.value)}
-//                 />
-//               ) : (
-//                 <Value>{user.firstName}</Value>
-//               )}
-//             </InfoItem>
-
-//             <InfoItem>
-//               <Label>Фамилия</Label>
-//               {isEditing ? (
-//                 <Input
-//                   value={editedData.lastName}
-//                   onChange={(e) => handleChange("lastName", e.target.value)}
-//                 />
-//               ) : (
-//                 <Value>{user.lastName}</Value>
-//               )}
-//             </InfoItem>
-
-//             <InfoItem>
-//               <Label>Телефон</Label>
-//               {isEditing ? (
-//                 <Input
-//                   value={editedData.phoneNumber}
-//                   onChange={(e) => handleChange("phoneNumber", e.target.value)}
-//                 />
-//               ) : (
-//                 <Value>{user.phoneNumber}</Value>
-//               )}
-//             </InfoItem>
-
-//             <InfoItem>
-//               <Label>Email</Label>
-//               {isEditing ? (
-//                 <Input
-//                   value={editedData.email}
-//                   onChange={(e) => handleChange("email", e.target.value)}
-//                 />
-//               ) : (
-//                 <Value>{user.email}</Value>
-//               )}
-//             </InfoItem>
-//           </InfoGrid>
-//         </Section>
-
-//         <div>
-//           <Title>Водительские права и паспорт</Title>
-
-//           {user.documents && user.documents.length > 0 ? (
-//             <DocumentsInfo>
-//               <InfoText>Документы успешно загружены:</InfoText>
-//               <DocumentsList>
-//                 {user.documents.map((doc, idx) => (
-//                   <DocumentItem key={idx}>
-//                     <DocumentLink
-//                       href={doc}
-//                       target="_blank"
-//                       rel="noopener noreferrer"
-//                     >
-//                       📄 Документ {idx + 1}
-//                       <img src={doc} alt="" />
-//                     </DocumentLink>
-//                   </DocumentItem>
-//                 ))}
-//               </DocumentsList>
-//             </DocumentsInfo>
-//           ) : (
-//             <DropZoneWrapper>
-//               <DropArea {...getRootProps()}>
-//                 <input {...getInputProps()} />
-//                 {isDragActive ? (
-//                   <p>Отпустите изображения...</p>
-//                 ) : (
-//                   <p>Перетащите или нажмите для загрузки (до 4 фото)</p>
-//                 )}
-//               </DropArea>
-
-//               <PreviewList>
-//                 {images.map((file, index) => (
-//                   <ImageWrapper key={index}>
-//                     <PreviewImage src={file.preview} alt={`preview-${index}`} />
-//                     <RemoveIcon onClick={() => removeImage(index)}>
-//                       &times;
-//                     </RemoveIcon>
-//                   </ImageWrapper>
-//                 ))}
-//               </PreviewList>
-//               <UploadButton
-//                 variant={"outlined"}
-//                 disabled={images.length === 0}
-//                 onClick={() => handleUploadClick()}
-//               >
-//                 Загрузить
-//               </UploadButton>
-//             </DropZoneWrapper>
-//           )}
-//         </div>
-
-//         <Section>
-//           <Title>Аренды</Title>
-//           <Card>
-//             {bookings.car} — {formatted} — {bookings.bookingStatus}
-//           </Card>
-//           <Card>Toyota Camry — 10.05–12.05 — Завершена</Card>
-//           <ActionLink>Посмотреть все</ActionLink>
-//         </Section>
-//         <ProfileConfig>
-//           <HeaderRow>
-//             <Title>Настройки</Title>
-//           </HeaderRow>
-
-//           <SettingsGrid>
-//             <SettingItem>
-//               <Label>Язык</Label>
-//               <Value>Русский</Value>
-//             </SettingItem>
-
-//             <Button variant={"text"}>Уведомления</Button>
-//             <Button
-//               variant={"outlined"}
-//               width="220px"
-//               onClick={handleOpenModal}
-//             >
-//               Выйти из аккаунта
-//             </Button>
-//           </SettingsGrid>
-//         </ProfileConfig>
-//       </ProfileWrapper>
-//       <BaseModal open={isOpen} onClose={handleCloseModal}>
-//         <LogoutModal onClose={handleCloseModal} />
-//       </BaseModal>
-//     </StyledWrapper>
-//   );
-// };
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
@@ -338,22 +17,41 @@ import { toast } from "react-toastify";
 import { LogoutModal } from "../../components/UI/modal/LogoutModal";
 import { BaseModal } from "../../components/UI/modal/BaseModal";
 
-const ProfilePage = () => {
+export const ProfilePage = () => {
   const [images, setImages] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-  const { role } = useSelector((state) => state.auth);
-  const { user, bookings } = useSelector((state) => state.allUsers);
-  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
+  const [activeRentalsToShow, setActiveRentalsToShow] = useState(1);
+  const [completedRentalsToShow, setCompletedRentalsToShow] = useState(1);
+
+  const { role } = useSelector((state) => state.auth);
+  const { user = {}, bookings } = useSelector((state) => state.allUsers);
+  const dispatch = useDispatch();
 
   const [editedData, setEditedData] = useState({
     firstName: "",
     lastName: "",
     phoneNumber: "",
-    email: "",
   });
+
+  const showMoreActiveRentals = () => {
+    setActiveRentalsToShow((prev) => prev + 1);
+  };
+
+  const showMoreCompletedRentals = () => {
+    setCompletedRentalsToShow((prev) => prev + 1);
+  };
+
+  const filteredUser = bookings?.filter((item) =>
+    item.email?.toLowerCase().includes(user.email)
+  );
+  const activeBookings =
+    filteredUser?.filter((item) => item.bookingStatus !== "Завершен") || [];
+
+  const completedBookings =
+    filteredUser?.filter((item) => item.bookingStatus === "Завершен") || [];
 
   const handleOpenModal = () => setIsOpen(true);
   const handleCloseModal = () => setIsOpen(false);
@@ -381,8 +79,10 @@ const ProfilePage = () => {
   }
 
   const onDrop = (acceptedFiles) => {
-    if (images.length + acceptedFiles.length > 4) {
-      toast.warning("Максимум 4 фото");
+    if (user.documents.length + acceptedFiles.length > 4) {
+      toast.warning(
+        `Максимум 4 фото. У вас уже ${user.documents.length} документов.`
+      );
       return;
     }
 
@@ -396,31 +96,13 @@ const ProfilePage = () => {
     onDrop,
     accept: { "image/*": [] },
     multiple: true,
-    maxFiles: 4,
+    maxFiles: user?.documents ? 4 - user.documents.length : 4,
+    noClick: user?.documents?.length >= 4,
   });
 
   const removeImage = (indexToRemove) => {
     setImages(images.filter((_, i) => i !== indexToRemove));
   };
-
-  useEffect(() => {
-    const userData = JSON.parse(Cookies.get("auth"));
-    if (!user?.id) {
-      dispatch(getSingleUserData(userData.data.id));
-      dispatch(getAllBookings(userData.data.id));
-    }
-  }, [dispatch, user?.id]);
-
-  useEffect(() => {
-    if (user) {
-      setEditedData({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        phoneNumber: user.phoneNumber || "",
-        email: user.email || "",
-      });
-    }
-  }, [user]);
 
   const handleUploadClick = async () => {
     try {
@@ -457,16 +139,35 @@ const ProfilePage = () => {
     }
   };
 
-  const isoString = bookings.dateRange?.endDate;
-  const date = new Date(isoString);
-  const formatted = date.toLocaleString("ru-RU", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  console.log(user.documents);
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleString("ru-RU", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
+  useEffect(() => {
+    const userData = JSON.parse(Cookies.get("auth"));
+    if (!user?.id) {
+      dispatch(getSingleUserData(userData.data.id));
+      dispatch(getAllBookings());
+    }
+  }, [dispatch, user?.id]);
+
+  useEffect(() => {
+    if (user) {
+      setEditedData({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        phoneNumber: user.phoneNumber || "",
+        email: user.email || "",
+      });
+    }
+  }, [user]);
 
   return (
     <StyledWrapper>
@@ -532,49 +233,85 @@ const ProfilePage = () => {
 
             <InfoItem>
               <Label>Email</Label>
-              {isEditing ? (
-                <Input
-                  value={editedData.email}
-                  onChange={(e) => handleChange("email", e.target.value)}
-                />
-              ) : (
-                <Value>{user.email}</Value>
-              )}
+
+              <Value>{user.email}</Value>
             </InfoItem>
           </InfoGrid>
         </Section>
 
-        <Section>
+        <SectionDocument>
           <Title>Водительские права и паспорт</Title>
-          {user.documents && user.documents.length > 0 ? (
-            <DocumentsInfo>
-              <InfoText>Документы успешно загружены:</InfoText>
-              <DocumentsList>
-                {user.documents.map((doc, idx) => (
-                  <DocumentItem key={idx}>
-                    <DocumentLink
-                      href={doc}
-                      target="_blank"
-                      rel="noopener noreferrer"
+          {user?.documents?.length > 0 ? (
+            <>
+              <DocumentsInfo>
+                <InfoText>Документы успешно загружены:</InfoText>
+                <DocumentsList>
+                  {user.documents.map((doc, idx) => (
+                    <DocumentItem key={idx}>
+                      <DocumentLink
+                        href={doc}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        📄 Документ {idx + 1}
+                      </DocumentLink>
+                      <img
+                        src={doc}
+                        alt=""
+                        onClick={() => handleImageClick(doc)}
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </DocumentItem>
+                  ))}
+                </DocumentsList>
+              </DocumentsInfo>
+
+              {user.documents.length < 4 && (
+                <DropZoneWrapper>
+                  <DropArea {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    {isDragActive ? (
+                      <p>Отпустите изображения...</p>
+                    ) : (
+                      <p>
+                        Можно загрузить еще {4 - user.documents.length} фото.
+                        Максимум 4 документа.
+                      </p>
+                    )}
+                  </DropArea>
+
+                  <PreviewList>
+                    {images.map((file, index) => (
+                      <ImageWrapper key={index}>
+                        <PreviewImage
+                          src={file.preview}
+                          alt={`preview-${index}`}
+                        />
+                        <RemoveIcon onClick={() => removeImage(index)}>
+                          &times;
+                        </RemoveIcon>
+                      </ImageWrapper>
+                    ))}
+                  </PreviewList>
+
+                  {images.length > 0 && (
+                    <UploadButton
+                      variant="outlined"
+                      disabled={images.length === 0}
+                      onClick={handleUploadClick}
                     >
-                      📄 Документ {idx + 1}
-                    </DocumentLink>
-                    <img
-                      src={doc}
-                      alt=""
-                      onClick={() => handleImageClick(doc)}
-                      style={{
-                        width: "80px",
-                        height: "80px",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </DocumentItem>
-                ))}
-              </DocumentsList>
-            </DocumentsInfo>
+                      Загрузить ({images.length} файлов)
+                    </UploadButton>
+                  )}
+                </DropZoneWrapper>
+              )}
+            </>
           ) : (
             <DropZoneWrapper>
               <DropArea {...getRootProps()}>
@@ -596,37 +333,152 @@ const ProfilePage = () => {
                   </ImageWrapper>
                 ))}
               </PreviewList>
-              <UploadButton
-                variant="outlined"
-                disabled={images.length === 0}
-                onClick={handleUploadClick}
-              >
-                Загрузить
-              </UploadButton>
+
+              {images.length > 0 && (
+                <UploadButton
+                  variant="outlined"
+                  disabled={images.length === 0}
+                  onClick={handleUploadClick}
+                >
+                  Загрузить ({images.length} файлов)
+                </UploadButton>
+              )}
             </DropZoneWrapper>
+          )}
+        </SectionDocument>
+
+        <Section>
+          <Title>Активные аренды</Title>
+          {activeBookings.length > 0 ? (
+            <>
+              {activeBookings
+                .slice(0, activeRentalsToShow)
+                .map((item, index) => (
+                  <StyledInfoList key={`active-${index}`}>
+                    <li>
+                      <span className="label">Машина</span>
+                      <span className="dots" />
+                      <span className="value">{item.car}</span>
+                    </li>
+                    <li>
+                      <span className="label">Статус аренды</span>
+                      <span className="dots" />
+                      <span className="value">{item.bookingStatus}</span>
+                    </li>
+                    <li>
+                      <span className="label">Оплата</span>
+                      <span className="dots" />
+                      <span className="value">{item.payment}</span>
+                    </li>
+                    <li>
+                      <span className="label">Сумма аренды</span>
+                      <span className="dots" />
+                      <span className="value">{item.rentPrice} ₽</span>
+                    </li>
+                    <li>
+                      <span className="label">Стартовая локация</span>
+                      <span className="dots" />
+                      <span className="value">{item.pickupLocation}</span>
+                    </li>
+                    <li>
+                      <span className="label">Конечная локация</span>
+                      <span className="dots" />
+                      <span className="value">{item.returnLocation}</span>
+                    </li>
+                    <li>
+                      <span className="label">Начало аренды</span>
+                      <span className="dots" />
+                      <span className="value">
+                        {formatDate(item.dateRange.startDate)}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="label">Конец аренды</span>
+                      <span className="dots" />
+                      <span className="value">
+                        {formatDate(item.dateRange.endDate)}
+                      </span>
+                    </li>
+                  </StyledInfoList>
+                ))}
+              {activeRentalsToShow < activeBookings.length && (
+                <Button variant={"showmore"} onClick={showMoreActiveRentals}>
+                  Посмотреть ещё
+                </Button>
+              )}
+            </>
+          ) : (
+            <p>Нет активных аренд.</p>
           )}
         </Section>
 
         <Section>
-          <Title>Аренды</Title>
-          <Card>
-            {bookings.car} — {formatted} — {bookings.bookingStatus}
-          </Card>
-          <Card>Toyota Camry — 10.05–12.05 — Завершена</Card>
-          <ActionLink>Посмотреть все</ActionLink>
+          <Title>Завершенные аренды</Title>
+          {completedBookings.length > 0 ? (
+            <>
+              {completedBookings
+                .slice(0, completedRentalsToShow)
+                .map((item, index) => (
+                  <StyledInfoList key={`completed-${index}`}>
+                    <li>
+                      <span className="label">Машина</span>
+                      <span className="dots" />
+                      <span className="value">{item.car}</span>
+                    </li>
+                    <li>
+                      <span className="label">Статус аренды</span>
+                      <span className="dots" />
+                      <span className="value">{item.bookingStatus}</span>
+                    </li>
+                    <li>
+                      <span className="label">Оплата</span>
+                      <span className="dots" />
+                      <span className="value">{item.payment}</span>
+                    </li>
+                    <li>
+                      <span className="label">Сумма аренды</span>
+                      <span className="dots" />
+                      <span className="value">{item.rentPrice} ₽</span>
+                    </li>
+                    <li>
+                      <span className="label">Стартовая локация</span>
+                      <span className="dots" />
+                      <span className="value">{item.pickupLocation}</span>
+                    </li>
+                    <li>
+                      <span className="label">Конечная локация</span>
+                      <span className="dots" />
+                      <span className="value">{item.returnLocation}</span>
+                    </li>
+                    <li>
+                      <span className="label">Начало аренды</span>
+                      <span className="dots" />
+                      <span className="value">
+                        {formatDate(item.dateRange.startDate)}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="label">Конец аренды</span>
+                      <span className="dots" />
+                      <span className="value">
+                        {formatDate(item.dateRange.endDate)}
+                      </span>
+                    </li>
+                  </StyledInfoList>
+                ))}
+              {completedRentalsToShow < completedBookings.length && (
+                <Button variant={"showmore"} onClick={showMoreCompletedRentals}>
+                  Посмотреть ещё завершенные
+                </Button>
+              )}
+            </>
+          ) : (
+            <p>Нет завершённых аренд.</p>
+          )}
         </Section>
 
         <ProfileConfig>
-          <HeaderRow>
-            <Title>Настройки</Title>
-          </HeaderRow>
-
           <SettingsGrid>
-            <SettingItem>
-              <Label>Язык</Label>
-              <Value>Русский</Value>
-            </SettingItem>
-            <Button variant="text">Уведомления</Button>
             <Button variant="outlined" width="220px" onClick={handleOpenModal}>
               Выйти из аккаунта
             </Button>
@@ -634,12 +486,10 @@ const ProfilePage = () => {
         </ProfileConfig>
       </ProfileWrapper>
 
-      {/* Модалка выхода */}
       <BaseModal open={isOpen} onClose={handleCloseModal}>
         <LogoutModal onClose={handleCloseModal} />
       </BaseModal>
 
-      {/* Модалка для изображений */}
       <BaseModal open={isImageModalOpen} onClose={handleCloseImageModal}>
         <img
           src={selectedImage}
@@ -719,37 +569,16 @@ const Value = styled.span`
 const Section = styled.div`
   margin-bottom: 2.5rem;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
 `;
-
 const Title = styled.h2`
   font-size: 1.5rem;
   font-weight: 600;
   border-bottom: 1px solid #e5e7eb;
   padding-bottom: 0.5rem;
-`;
-
-const ActionLink = styled.button`
-  background: none;
-  border: none;
-  color: #7e52ff;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0;
-  margin-top: 0.5rem;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const Card = styled.div`
-  padding: 1rem 1.25rem;
-  background: #f9fafb;
-  border-radius: 0.75rem;
-  margin-bottom: 0.75rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-  font-size: 0.95rem;
-  color: #1f2937;
 `;
 
 const DropZoneWrapper = styled.div`
@@ -770,6 +599,13 @@ const DropArea = styled.div`
   &:hover {
     background-color: #f1f1f1;
   }
+`;
+const SectionDocument = styled.section`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 `;
 
 const PreviewList = styled.div`
@@ -823,13 +659,6 @@ const ProfileConfig = styled.div`
   margin-top: 40px;
 `;
 
-const HeaderRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
 const SettingsGrid = styled.div`
   display: flex;
   flex-direction: column;
@@ -837,15 +666,6 @@ const SettingsGrid = styled.div`
   gap: 16px;
 `;
 
-const SettingItem = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-`;
 const DocumentsInfo = styled.div`
   background-color: #e0f2ff;
   border: 1px solid #7ac1ff;
@@ -871,6 +691,10 @@ const DocumentsList = styled.ul`
 `;
 
 const DocumentItem = styled.li`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   background: #fff;
   border: 1px solid #7ac1ff;
   padding: 8px 12px;
@@ -893,4 +717,43 @@ const Input = styled.input`
   border-radius: 6px;
   width: 60%;
   font-size: 14px;
+`;
+const StyledInfoList = styled.ul`
+  border: 1px solid rgb(18, 11, 142);
+  border-radius: 8px;
+  padding: 20px;
+  font-size: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #111;
+
+  & li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .label {
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-weight: 500;
+    color: #555;
+  }
+
+  .dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted rgb(13, 8, 8);
+    height: 1px;
+    margin: 0 8px;
+    overflow: hidden;
+  }
+
+  .value {
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-weight: 600;
+    color: #111;
+  }
 `;

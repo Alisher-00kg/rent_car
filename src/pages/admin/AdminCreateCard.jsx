@@ -34,6 +34,8 @@ export const AdminCreateCard = () => {
     transmission: transmissionOptions[0].value,
     driveType: driveTypeOptions[0].value,
     images: [],
+    discount: null,
+    isFavorite: false,
   };
 
   const [carValues, setCarValues] = useState(initialCarValues);

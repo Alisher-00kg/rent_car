@@ -1,41 +1,28 @@
 import { useEffect, useState } from "react";
 import Button from "../../components/UI/button/Button";
 import Input from "../../components/UI/input/Input";
-import { fetchFeedbackMessages, sendFeedbackReply } from "../../store/thunks/adminfeedbackThunks";
+import {
+  deleteFeedBack,
+  fetchFeedbackMessages,
+  sendFeedbackReply,
+} from "../../store/thunks/adminfeedbackThunks";
 import { useDispatch, useSelector } from "react-redux";
 import { Table } from "../../components/UI/table";
+import deleteIcon from "../../assets/icons/delete-icon.svg";
 
 import { BaseModal } from "../../components/UI/modal/BaseModal";
-
-const feedbackMessages = [
-  {
-    id: 1,
-    fullName: "Владимир Владимирович",
-    email: "vlad10@gmail.com",
-    phoneNumber: "+7 999 111 2233",
-    message: "Здравствуйте! Как арендовать машину?",
-    adminReply: "рплап",
-  },
-  {
-    id: 2,
-    fullName: "Владимир Владимирович",
-    email: "vlad10@gmail.com",
-    phoneNumber: "+7 999 111 2233",
-    message: "Здравствуйте! Как продлить время?",
-    adminReply: "вавв",
-  },
-];
+import { IconButton, Tooltip } from "@mui/material";
 
 const AdminFeedbackPage = () => {
-  // const dispatch = useDispatch();
-  // const messages = useSelector((state) => state.feedback?.massages);
-  // const [replies, setReplies] = useState({});
+  const dispatch = useDispatch();
+  const { messages } = useSelector((state) => state.feedback);
+
+  const [selectedFeedbackIds, setSelectedFeedbackIds] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openReplyModal = (message) => {
-    console.log("Opening modal for message:", message);
     setSelectedMessage(message);
     setReplyText("");
     setIsModalOpen(true);
@@ -47,53 +34,88 @@ const AdminFeedbackPage = () => {
     setReplyText("");
   };
 
-  // useEffect(() => {
-  //   dispatch(fetchFeedbackMessages());
-  // }, [dispatch]);
-
-
+  useEffect(() => {
+    dispatch(fetchFeedbackMessages());
+  }, [dispatch]);
 
   const handleSendReply = (id) => {
-    console.log("Отправка ответа на сообщение с id:", id);
-    console.log("Текст ответа:", replyText);
-
+    dispatch(sendFeedbackReply({ id, response: replyText }));
     closeModal();
   };
+
   const columns = [
+    {
+      Header: "ID",
+      accessor: "id",
+    },
     { Header: "Имя", accessor: "fullName" },
     { Header: "Телефон", accessor: "phoneNumber" },
     { Header: "Электронная почта", accessor: "email" },
     { Header: "Сообщение", accessor: "message" },
     {
       Header: "Ответ администратора",
-      Cell: ({ row }) => (
-        <Button
-          variant="outlined"
-          onClick={(e) => {
-            e.stopPropagation();
-            openReplyModal(row)
-          }}
-        >
-          Ответить
-        </Button>
+      accessor: "response",
+      Cell: ({ value, row }) => (
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          {value ? (
+            <span>{value}</span>
+          ) : (
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                openReplyModal(row.original);
+              }}
+            >
+              Ответить
+            </Button>
+          )}
+        </div>
       ),
     },
+    {
+      Header: "Действие",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <Tooltip arrow title="Удалить">
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteOne(row.original.id);
+            }}
+            aria-label="Удалить"
+            style={{ marginLeft: "20px" }}
+          >
+            <img src={deleteIcon} alt="" />
+          </IconButton>
+        </Tooltip>
+      ),
+    },
+  ];
 
-  ]
-
+  const handleDeleteOne = (id) => {
+    dispatch(deleteFeedBack(id));
+  };
 
   return (
-
     <div style={{ padding: "20px" }}>
       <h2>Сообщения с формы обратной связи</h2>
-      <Table columns={columns} data={feedbackMessages} />
-
+      <Table
+        columns={columns}
+        data={messages}
+        selectedIds={selectedFeedbackIds}
+        setSelectedIds={setSelectedFeedbackIds}
+      />
       {isModalOpen && selectedMessage && (
         <BaseModal open={isModalOpen} onClose={closeModal}>
-          <h3>Ответ на сообщение от {selectedMessage.fullName}</h3>
-          <p>
-            <strong>Сообщение:</strong> {selectedMessage.message}
-          </p>
+          <div
+            style={{ display: "flex", gap: "15px", flexDirection: "column" }}
+          >
+            <h3>Ответ на сообщение от {selectedMessage.fullName}</h3>
+            <p>
+              <strong>Сообщение:</strong> {selectedMessage.message}
+            </p>
+          </div>
+
           <Input
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
@@ -103,7 +125,10 @@ const AdminFeedbackPage = () => {
             fullWidth
             style={{ margin: "20px 0" }}
           />
-          <Button onClick={handleSendReply} variant="contained">
+          <Button
+            onClick={() => handleSendReply(selectedMessage.id)}
+            variant="contained"
+          >
             Отправить
           </Button>
         </BaseModal>
@@ -112,4 +137,3 @@ const AdminFeedbackPage = () => {
   );
 };
 export default AdminFeedbackPage;
-

@@ -9,6 +9,7 @@ import { AdminCreateCard } from "../../pages/admin/AdminCreateCard";
 import { AdminOrders } from "../../pages/admin/AdminOrders";
 import AdminFeedbackPage from "../../pages/admin/AdminFeedbackPage ";
 import { AdminUsersPage } from "../../pages/admin/AdminUsersPage";
+import { InnerPageProfile } from "../../pages/admin/InnerPageProfile";
 
 export const AdminRoutes = () => {
   const { isAuthorized } = useSelector((state) => state.auth);
@@ -62,6 +63,14 @@ export const AdminRoutes = () => {
       element: (
         <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
           <AdminUsersPage />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: PATHS.ADMIN.USERS_PAGE_DETAILS,
+      element: (
+        <PrivateRoute isAllowed={isAuthorized} fallBackPath={PATHS.SIGN_IN}>
+          <InnerPageProfile />
         </PrivateRoute>
       ),
     },

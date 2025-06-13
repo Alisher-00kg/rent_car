@@ -12,16 +12,19 @@ import { MdOutlineFavorite } from "react-icons/md";
 import { FavoriteContext } from "../../context/FavoriteContext";
 import Cookies from "js-cookie";
 import { getSingleUserData } from "../../store/thunks/usersThunk";
+import { Notification } from "../UI/notification/Notification";
 
 const Header = () => {
   const { user } = useSelector((state) => state.allUsers);
-  console.log(user);
   const dispatch = useDispatch();
   const { role } = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
   const { counter } = useContext(FavoriteContext);
+  const [isOpenNotification, setIsOpenNotification] = useState(false);
+  const [anchorElNotification, setAnchorElNotification] = useState(null);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,6 +37,11 @@ const Header = () => {
   };
   const handleCloseModal = () => {
     setIsOpen(false);
+  };
+
+  const handleClickNotification = (event) => {
+    setAnchorElNotification(event.currentTarget);
+    setIsOpenNotification(true);
   };
   useEffect(() => {
     const userData = JSON.parse(Cookies.get("auth"));
@@ -80,7 +88,7 @@ const Header = () => {
           <Icons.ArrowDown />
         </StyledIconButton>
         <div>
-          <IconButton>
+          <IconButton onClick={handleClickNotification}>
             <IoIosNotificationsOutline
               style={{
                 color: "white",
@@ -90,6 +98,11 @@ const Header = () => {
               }}
             />
           </IconButton>
+          <Notification
+            open={isOpenNotification}
+            onClose={() => setIsOpenNotification(false)}
+            anchorEl={anchorElNotification}
+          />
           <IconButton onClick={() => navigate(PATHS.USER.FAVORITE)}>
             <Badge
               badgeContent={counter}

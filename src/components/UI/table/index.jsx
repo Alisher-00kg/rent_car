@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Table as MuiTable,
   TableBody,
@@ -8,7 +7,7 @@ import {
   Checkbox,
   styled,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const Table = ({
   columns,
@@ -16,13 +15,15 @@ export const Table = ({
   disableRowClick = false,
   selectedIds,
   setSelectedIds,
+  tableType,
 }) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleClick = (id) => {
-    if (location.pathname === "/admin/admin-page") {
+    if (tableType === "adminPage") {
       navigate(`/admin/admin-page/${id}`);
+    } else if (tableType === "users") {
+      navigate(`/admin/users/${id}`);
     }
   };
 
@@ -64,8 +65,6 @@ export const Table = ({
     } else if (column.type === "price") {
       return value;
     } else if (column.Cell) {
-      // return column.Cell({ row, value });
-      // return column.Cell({ row: { original: row }, value });
       const CellComponent = column.Cell;
       return <CellComponent row={{ original: row }} value={value} />;
     } else {

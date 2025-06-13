@@ -137,6 +137,7 @@ export const AdminPage = () => {
         data={filteredCars}
         selectedIds={selectedCarIds}
         setSelectedIds={setSelectedCarIds}
+        tableType="adminPage"
       />
     </StyledWrapper>
   );

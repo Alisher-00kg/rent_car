@@ -42,6 +42,8 @@ export const AdminOrders = () => {
 
   const statusOptions = [
     { value: "", label: "Все" },
+    { value: "Завершен", label: "Завершен" },
+
     {
       value: "В ожидании",
       label: "В ожидании",
@@ -87,6 +89,7 @@ export const AdminOrders = () => {
                 Подтвержден: "#2b65e4",
                 "В обработке": "#1976d2",
                 Отменён: "#d32f2f",
+                Завершен: "#27b422",
               }[value],
               py: 0.5,
               borderRadius: 1,

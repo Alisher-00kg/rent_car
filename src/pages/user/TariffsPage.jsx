@@ -5,10 +5,10 @@ import {
   Select as MuiSelect,
   MenuItem,
   InputLabel,
-  Container,
   Slider,
   InputAdornment,
   IconButton,
+  Paper,
 } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
@@ -125,7 +125,7 @@ const TariffsPage = () => {
   };
 
   return (
-    <Container sx={{ py: 4 }}>
+    <div style={{ width: "100%", padding: "50px 120px" }}>
       <StyledInnerPanel>
         <form onSubmit={handleSearchSubmit} style={{ display: "contents" }}>
           <StyledInput
@@ -145,63 +145,106 @@ const TariffsPage = () => {
           />
         </form>
       </StyledInnerPanel>
-      <Grid container spacing={2} mb={3}>
-        <Grid item xs={12} sm={3}>
-          <StyledInputLabel>
-            Категория <em>*</em>
-          </StyledInputLabel>
-          <StyledSelect
-            value={filters.category}
-            onChange={(e) => handleChange("category", e.target.value)}
+      <Paper
+        elevation={2}
+        style={{
+          padding: "20px",
+          borderRadius: "12px",
+          marginBottom: "30px",
+          background: "#f9f9f9",
+        }}
+      >
+        <Grid container spacing={2} alignItems="flex-end">
+          <Grid item xs={12} sm={3}>
+            <StyledInputLabel>
+              Категория <em>*</em>
+            </StyledInputLabel>
+            <StyledSelect
+              value={filters.category}
+              onChange={(e) => handleChange("category", e.target.value)}
+            >
+              <MenuItem value="Все">Все</MenuItem>
+              {uniqueCategories.map((cat) => (
+                <MenuItem key={cat} value={cat}>
+                  {cat}
+                </MenuItem>
+              ))}
+            </StyledSelect>
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Select
+              value={filters.transmission || "Все"}
+              onChange={(e) => handleChange("transmission", e.target.value)}
+              label="Трансмиссия"
+              required
+              options={transmissionOptionsTariffs}
+              sx={{
+                height: "44px",
+                borderRadius: "8px",
+                background: "#fff",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderRadius: "8px",
+                },
+                "& .MuiSelect-select": {
+                  padding: "10px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  height: "44px",
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            <StyledInputLabel>
+              Год выпуска <em>*</em>
+            </StyledInputLabel>
+            <StyledSelect
+              value={filters.year}
+              onChange={(e) => handleChange("year", e.target.value)}
+            >
+              <MenuItem value="Все">Все</MenuItem>
+              {uniqueYears.map((year) => (
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
+              ))}
+            </StyledSelect>
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            <Typography gutterBottom>
+              Макс. цена: {filters.price || maxPrice} ₽
+            </Typography>
+            <Slider
+              value={Number(filters.price || maxPrice)}
+              min={0}
+              max={maxPrice}
+              onChange={(_, value) => handleChange("price", value)}
+            />
+          </Grid>
+        </Grid>
+
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Button
+            variant="outlined"
+            onClick={resetFilters}
+            style={{
+              height: "40px",
+              padding: "0 16px",
+              borderRadius: "8px",
+              textTransform: "none",
+            }}
           >
-            <MenuItem value="Все">Все</MenuItem>
-            {uniqueCategories.map((cat) => (
-              <MenuItem key={cat} value={cat}>
-                {cat}
-              </MenuItem>
-            ))}
-          </StyledSelect>
-        </Grid>
-        <Grid item xs={12} sm={3}>
-          <Select
-            value={filters.transmission || "Все"}
-            onChange={(e) => handleChange("transmission", e.target.value)}
-            label="Трансмиссия"
-            required
-            options={transmissionOptionsTariffs}
-          />
-        </Grid>
-        <Grid item xs={12} sm={3}>
-          <StyledInputLabel>
-            Год выпуска <em>*</em>
-          </StyledInputLabel>
-          <StyledSelect
-            value={filters.year}
-            onChange={(e) => handleChange("year", e.target.value)}
-          >
-            <MenuItem value="Все">Все</MenuItem>
-            {uniqueYears.map((year) => (
-              <MenuItem key={year} value={year}>
-                {year}
-              </MenuItem>
-            ))}
-          </StyledSelect>
-        </Grid>
-        <Grid item xs={12} sm={3}>
-          <Typography gutterBottom>
-            Максимальная цена: {filters.price || maxPrice} ₽
-          </Typography>
-          <Slider
-            value={Number(filters.price || maxPrice)}
-            min={0}
-            max={maxPrice}
-            onChange={(_, value) => handleChange("price", value)}
-          />
-        </Grid>
-        <Button variant={"contained"} onClick={resetFilters}>
-          Сбросить фильтры
-        </Button>
-      </Grid>
+            Сбросить фильтры
+          </Button>
+        </div>
+      </Paper>
+
       {searchQuery && (
         <SearchResults>
           Найдено результатов: {filteredCarsQuery.length} из {cars.length}
@@ -209,11 +252,11 @@ const TariffsPage = () => {
       )}
 
       <StyledUl>
-        {filteredCars.map((item) => (
+        {(searchQuery ? filteredCarsQuery : filteredCars).map((item) => (
           <Card key={item.id} {...item} />
         ))}
       </StyledUl>
-    </Container>
+    </div>
   );
 };
 
@@ -226,15 +269,29 @@ const StyledUl = styled.ul`
   gap: 50px;
   flex-wrap: wrap;
   padding: 0;
-  margin-top: 40px;
+  margin-top: 80px;
 `;
-const StyledSelect = muiStyled(MuiSelect)(() => ({
-  "&.MuiInputBase-root": {
-    borderRadius: "6px",
-    width: "100%",
-    width: "100%",
+
+const StyledSelect = muiStyled(MuiSelect)({
+  height: "44px",
+  borderRadius: "8px",
+  width: "100%",
+  backgroundColor: "#fff",
+  "& .MuiSelect-select": {
+    height: "44px",
+    display: "flex",
+    alignItems: "center",
+    padding: "10px 14px",
+    borderRadius: "8px",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
   },
-}));
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderRadius: "8px",
+  },
+});
+
 const StyledInputLabel = muiStyled(InputLabel)({
   textAlign: "start",
   width: "100%",
@@ -259,6 +316,7 @@ const StyledInnerPanel = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 50px;
 `;
 
 const StyledInput = muiStyled(Input)({

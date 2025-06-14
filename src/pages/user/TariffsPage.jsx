@@ -21,14 +21,14 @@ import Button from "../../components/UI/button/Button";
 import Input from "../../components/UI/input/Input";
 import { CiSearch } from "react-icons/ci";
 import { getAllCars } from "../../store/thunks/allCars";
+import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
 
 const TariffsPage = () => {
   const { cars } = useSelector((state) => state.allCars);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { role } = useSelector((state) => state.auth);
 
   const getFilter = (key, fallback = "") => searchParams.get(key) || fallback;
   useEffect(() => {
@@ -123,9 +123,26 @@ const TariffsPage = () => {
   const resetFilters = () => {
     setSearchParams({});
   };
+  function getRouteByRole() {
+    switch (role) {
+      case "USER":
+        return [
+          { label: "Главная", href: "/user/user-page" },
+          { label: "Тарифы", href: "/user/tariffs" },
+        ];
+      default:
+        return [
+          { label: "Главная", href: "/guest/main-page" },
+          { label: "Тарифы", href: "/guest/tariffs" },
+        ];
+    }
+  }
 
   return (
-    <div style={{ width: "100%", padding: "50px 120px" }}>
+    <div style={{ width: "100%", padding: "0px 90px" }}>
+      <StyledTitleAndBr>
+        <BreadCrumbs breadcrumbs={getRouteByRole()} />
+      </StyledTitleAndBr>
       <StyledInnerPanel>
         <form onSubmit={handleSearchSubmit} style={{ display: "contents" }}>
           <StyledInput
@@ -322,3 +339,10 @@ const StyledInnerPanel = styled.div`
 const StyledInput = muiStyled(Input)({
   width: "550px",
 });
+const StyledTitleAndBr = muiStyled("div")(() => ({
+  width: "100%",
+  display: "flex",
+  justifyContent: "start",
+  borderBottom: "2px solid #cdcdcd",
+  marginBottom: "50px",
+}));

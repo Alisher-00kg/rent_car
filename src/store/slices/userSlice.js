@@ -3,6 +3,7 @@ import {
   getAllBookings,
   getAllUsersData,
   getSingleUserData,
+  getSingleUserFeedback,
 } from "../thunks/usersThunk";
 
 export const usersSlice = createSlice({
@@ -11,6 +12,7 @@ export const usersSlice = createSlice({
     users: [],
     user: {},
     bookings: [],
+    feedbacks: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -23,6 +25,9 @@ export const usersSlice = createSlice({
       })
       .addCase(getAllBookings.fulfilled, (state, action) => {
         state.bookings = action.payload;
+      })
+      .addCase(getSingleUserFeedback.fulfilled, (state, action) => {
+        state.feedbacks = action.payload;
       });
   },
 });

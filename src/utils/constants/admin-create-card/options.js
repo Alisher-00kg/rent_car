@@ -9,7 +9,7 @@ export const categoryOptions = [
 ];
 export const brandOptions = [
   { value: "Toyota", label: "Toyota" },
-  { value: "Mercedes", label: "Mercedes" },
+  { value: "Mercedes-Benz", label: "Mercedes-Benz" },
   { value: "BMW", label: "BMW" },
   { value: "Audi", label: "Audi" },
   { value: "Jeep", label: "Jeep" },
@@ -17,6 +17,8 @@ export const brandOptions = [
   { value: "Hyundai", label: "Hyundai" },
   { value: "Skoda", label: "Skoda" },
   { value: "Lada", label: "Lada" },
+  { value: "Peugeot", label: "Peugeot" },
+  { value: "Zeekr", label: "Zeekr" },
 ];
 export const fuelTypeOptions = [
   { value: "Бензин", label: "Бензин" },

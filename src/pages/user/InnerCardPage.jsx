@@ -227,8 +227,18 @@ export const InnerCardPage = () => {
                 <CarInfoList>
                   {singleCar?.discount && (
                     <div className="discount_div">
-                      <p>-{singleCar?.discount?.percentage}%</p>
-                      <span>{singleCar?.discount?.nameOfDiscount}</span>
+                      <div className="discount_div__main">
+                        <p>-{singleCar?.discount?.percentage}%</p>
+                        <span className="red">
+                          {singleCar?.discount?.nameOfDiscount}
+                        </span>
+                      </div>
+                      <div className="discount_div__time">
+                        <span className="before_time">Акция действует до</span>
+                        <span className="red">
+                          {singleCar?.discount?.endDate}
+                        </span>
+                      </div>
                     </div>
                   )}
 
@@ -513,22 +523,37 @@ const CarInfoList = styled.ul`
   .discount_div {
     width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-    p {
-      width: 38px;
-      height: 38px;
-      background-color: red;
-      border-radius: 50%;
-      color: #fff;
+    flex-direction: column;
+    gap: 30px;
+    .discount_div__main {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      font-weight: 900;
+      gap: 50px;
+      p {
+        width: 38px;
+        height: 38px;
+        background-color: red;
+        border-radius: 50%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 900;
+      }
     }
-    span {
+    .discount_div__time {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .before_time {
+        font-size: 22px;
+        font-weight: 600;
+      }
+    }
+    .red {
       font-weight: 500;
       font-size: 22px;
       color: #e81632;

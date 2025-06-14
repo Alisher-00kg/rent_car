@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../api/axiosInstance";
+import { toast } from "react-toastify";
 
 export const getorderThunks = createAsyncThunk(
   "order/getOrders",
@@ -32,6 +33,7 @@ export const deleteBookingFromAdmin = createAsyncThunk(
   async (bookingID, { rejectWithValue, dispatch }) => {
     try {
       await axiosInstance.delete("/bookings/" + bookingID);
+      toast.success("Заказ успешно удален!");
       dispatch(getorderThunks());
     } catch (error) {
       return rejectWithValue(error?.message || "Не удалось удалить бронь!");

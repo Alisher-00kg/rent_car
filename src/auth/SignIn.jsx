@@ -102,6 +102,9 @@ export const SignIn = () => {
           <StyledInfoText>
             <p>Создать аккаунт?</p>
             <StyledLink to={PATHS.SIGN_UP}>Зарегистрироваться</StyledLink>
+            <StyledLink to={PATHS.RESET_PASSWORD} className="red">
+              Сбросить пароль
+            </StyledLink>
           </StyledInfoText>
         </StyledForm>
       </StyledInnerWrapper>
@@ -142,6 +145,7 @@ const StyledInfoText = styled.div`
   width: 100%;
   display: flex;
   gap: 20px;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   p {
@@ -151,6 +155,10 @@ const StyledInfoText = styled.div`
 const StyledLink = styled(Link)`
   text-decoration: none;
   font-weight: 600;
+  color: #1976d2;
+  &.red {
+    color: red;
+  }
 `;
 const InputWrapper = styled.div`
   width: 100%;

@@ -17,9 +17,12 @@ import { SignIn } from "../auth/SignIn";
 import { SignUp } from "../auth/SignUp";
 import { useEffect } from "react";
 import { refreshFromCookie } from "../store/slices/authSlice";
+import { ResetPassword } from "../components/UI/reset/ResetPassword";
+import { getAllBookings } from "../store/thunks/usersThunk";
 
 export const AppRoutes = () => {
   const { isAuthorized, role } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
   const routeByRole = {
     ADMIN: PATHS.ADMIN.ROOT,
@@ -30,7 +33,9 @@ export const AppRoutes = () => {
   useEffect(() => {
     dispatch(refreshFromCookie());
   }, [dispatch]);
-
+  useEffect(() => {
+    dispatch(getAllBookings());
+  }, [dispatch]);
   const routes = createBrowserRouter([
     {
       path: "/",
@@ -95,6 +100,17 @@ export const AppRoutes = () => {
           fallBackPath={routeByRole[role]}
         >
           <SignUp />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: PATHS.RESET_PASSWORD,
+      element: (
+        <PrivateRoute
+          isAllowed={role === "GUEST"}
+          fallBackPath={routeByRole[role]}
+        >
+          <ResetPassword />
         </PrivateRoute>
       ),
     },

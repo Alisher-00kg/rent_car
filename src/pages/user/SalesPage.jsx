@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/UI/card/Card";
 import { getAllCars } from "../../store/thunks/allCars";
+import { styled as muiStyled } from "@mui/material/styles";
 
 const secondTab = [
   { value: "", label: "Все" },
@@ -31,6 +32,7 @@ import {
   ArrowForward,
   Map,
 } from "@mui/icons-material";
+import { BreadCrumbs } from "../../components/UI/breadcrumbs/BreadCrumbs";
 const services = [
   {
     title: "Прокат автомобилей",
@@ -64,6 +66,7 @@ const openLink = (url) => window.open(url, "_blank");
 const SalesPage = () => {
   const [activeTab, setActiveTab] = useState("");
   const { cars } = useSelector((state) => state.allCars);
+  const { role } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -80,12 +83,29 @@ const SalesPage = () => {
       (car) => car.category === activeTab
     );
   }, [filteredCarsDependenciesDiscount, activeTab]);
+  function getRouteByRole() {
+    switch (role) {
+      case "USER":
+        return [
+          { label: "Главная", href: "/user/user-page" },
+          { label: "Акции", href: "/user/sales" },
+        ];
+      default:
+        return [
+          { label: "Главная", href: "/guest/main-page" },
+          { label: "Акции", href: "/guest/sales" },
+        ];
+    }
+  }
 
   return (
     <StyledWrapper>
+      <StyledTitleAndBr>
+        <BreadCrumbs breadcrumbs={getRouteByRole()} />
+      </StyledTitleAndBr>
       <StyledSection>
-        <Typography variant="h3" mb={5} color="#214af1">
-          Категории:
+        <Typography variant="h3" mb={5} color="#373f61">
+          Категории
         </Typography>
         <TabsUi
           tabs={secondTab}
@@ -198,7 +218,7 @@ export default SalesPage;
 const StyledWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  padding: 60px 40px 0 40px;
+  padding: 0px 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -222,3 +242,9 @@ const StyledSection = styled.section`
   align-items: center;
   text-align: center;
 `;
+const StyledTitleAndBr = muiStyled("div")(() => ({
+  width: "100%",
+  display: "flex",
+  justifyContent: "start",
+  borderBottom: "2px solid #cdcdcd",
+}));

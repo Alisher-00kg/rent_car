@@ -125,3 +125,14 @@ export const deleteUserData = createAsyncThunk(
     }
   }
 );
+export const getSingleUserFeedback = createAsyncThunk(
+  "user/getSingleUserFeedback",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.get("/feedbacks");
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.message);
+    }
+  }
+);

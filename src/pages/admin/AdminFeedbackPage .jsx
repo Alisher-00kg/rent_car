@@ -39,7 +39,15 @@ const AdminFeedbackPage = () => {
   }, [dispatch]);
 
   const handleSendReply = (id) => {
-    dispatch(sendFeedbackReply({ id, response: replyText }));
+    dispatch(
+      sendFeedbackReply({
+        id,
+        response: {
+          text: replyText,
+          status: "unread",
+        },
+      })
+    );
     closeModal();
   };
 
@@ -48,8 +56,8 @@ const AdminFeedbackPage = () => {
       Header: "ID",
       accessor: "id",
     },
-    { Header: "Имя", accessor: "fullName" },
-    { Header: "Телефон", accessor: "phoneNumber" },
+    { Header: "Имя", accessor: "name" },
+    { Header: "Фамилия", accessor: "surname" },
     { Header: "Электронная почта", accessor: "email" },
     { Header: "Сообщение", accessor: "message" },
     {
@@ -57,8 +65,8 @@ const AdminFeedbackPage = () => {
       accessor: "response",
       Cell: ({ value, row }) => (
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          {value ? (
-            <span>{value}</span>
+          {value && value.text ? (
+            <span>{value.text}</span>
           ) : (
             <Button
               onClick={(e) => {

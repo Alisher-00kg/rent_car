@@ -20,6 +20,7 @@ const Header = () => {
   const { role } = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [notiCount, setNotiCount] = useState(0);
   const navigate = useNavigate();
   const { counter } = useContext(FavoriteContext);
   const [isOpenNotification, setIsOpenNotification] = useState(false);
@@ -89,20 +90,33 @@ const Header = () => {
         </StyledIconButton>
         <div>
           <IconButton onClick={handleClickNotification}>
-            <IoIosNotificationsOutline
-              style={{
-                color: "white",
-                width: "25",
-                height: "25",
-                cursor: "pointer",
+            <Badge
+              badgeContent={notiCount}
+              sx={{
+                "& .MuiBadge-badge": {
+                  backgroundColor: "rgb(250, 223, 70)",
+                  color: "#03045e",
+                },
               }}
-            />
+              s
+            >
+              <IoIosNotificationsOutline
+                style={{
+                  color: "white",
+                  width: "25",
+                  height: "25",
+                  cursor: "pointer",
+                }}
+              />
+            </Badge>
           </IconButton>
           <Notification
             open={isOpenNotification}
             onClose={() => setIsOpenNotification(false)}
             anchorEl={anchorElNotification}
+            onShow={(count) => setNotiCount(count)}
           />
+
           <IconButton onClick={() => navigate(PATHS.USER.FAVORITE)}>
             <Badge
               badgeContent={counter}

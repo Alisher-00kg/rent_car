@@ -13,3 +13,4 @@ export const serializeToQueryParams = (obj) => {
 
   return params.length ? `?${params.join("&")}` : "";
 };
+

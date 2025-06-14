@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import Menu from "@mui/material/Menu";
 import { List, MenuList, styled } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { axiosInstance } from "../../../api/axiosInstance";
+import { getSingleUserFeedback } from "../../../store/thunks/usersThunk";
 
 export const Notification = ({
   open = false,
@@ -9,27 +12,96 @@ export const Notification = ({
   anchorEl,
 }) => {
   const [notifications, setNotifications] = useState([]);
+  const { feedbacks } = useSelector((state) => state.allUsers);
+  const { user } = useSelector((state) => state.allUsers);
+  const dispatch = useDispatch();
+  const filteredFeedBacks = feedbacks?.filter((item) =>
+    item.email?.toLowerCase().includes(user.email)
+  );
+  console.log(filteredFeedBacks, "feed");
+
   useEffect(() => {
-    const unreadCount = notifications.filter((notify) => !notify.read);
-    // onShow(unreadCount);
+    if (feedbacks?.length && user?.email) {
+      const filteredFeedBacks = feedbacks.filter((item) =>
+        item.email?.toLowerCase().includes(user.email)
+      );
+
+      const mapped = filteredFeedBacks.map((item) => ({
+        id: item.id,
+        message: item.message,
+        status: item.response?.status,
+        read: item.response?.status === "read",
+        text: item.response?.text,
+      }));
+
+      setNotifications(mapped);
+    }
+  }, [feedbacks, user.email]);
+
+  useEffect(() => {
+    if (typeof onShow === "function") {
+      const unreadWithTextCount = notifications.filter(
+        (notify) => !notify.read && notify.text?.trim()
+      ).length;
+      onShow(unreadWithTextCount);
+    }
   }, [notifications, onShow]);
 
-  const markAsRead = (id) => {
-    setNotifications((prevNotifications) =>
-      prevNotifications.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
+  const markAsRead = async (id) => {
+    try {
+      const current = notifications.find((item) => item.id === id);
+
+      await axiosInstance.patch(`/feedbacks/${id}`, {
+        response: { status: "read", text: current.text || "" },
+      });
+
+      setNotifications((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, read: true, status: "read" } : item
+        )
+      );
+    } catch (error) {
+      console.error("Ошибка при отметке как прочитано:", error);
+    }
   };
 
-  const markAllAsRead = () => {
-    setNotifications((prevNotifications) =>
-      prevNotifications.map((notification) => ({
-        ...notification,
-        read: true,
-      }))
-    );
+  const deleteNotification = async (id) => {
+    try {
+      await axiosInstance.delete(`/feedbacks/${id}`);
+      setNotifications((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Ошибка при удалении уведомления:", error);
+    }
   };
+
+  useEffect(() => {
+    dispatch(getSingleUserFeedback());
+  }, []);
+
+  const markAllAsRead = async () => {
+    try {
+      const updateRequests = notifications
+        .filter((n) => !n.read)
+        .map((n) =>
+          axiosInstance.patch(`/feedbacks/${n.id}`, {
+            response: { status: "read", text: n.text || "" },
+          })
+        );
+
+      await Promise.all(updateRequests);
+
+      setNotifications((prev) =>
+        prev.map((item) => ({
+          ...item,
+          read: true,
+          status: "read",
+        }))
+      );
+    } catch (error) {
+      console.error("Ошибка при отметке всех как прочитанных:", error);
+    }
+  };
+
   return (
     <StyledMenu
       open={open}
@@ -59,13 +131,57 @@ export const Notification = ({
           <MarkReadText onClick={markAllAsRead}>Прочитано все</MarkReadText>
         </div>
       </StyledHeaderMenuItem>
-      <StyledUlList>Пока пусто</StyledUlList>
+      <StyledUlList>
+        {notifications.length === 0 ? (
+          <p>Нет уведомлений</p>
+        ) : (
+          notifications.map((notification) => (
+            <StyledMenuList key={notification.id}>
+              <Dot read={notification.read} />
+              <InnerBlock
+                onClick={() => markAsRead(notification.id)}
+                style={{
+                  opacity: notification.read ? 0.6 : 1,
+                }}
+              >
+                <StyledAboutUser>
+                  <strong>Сообщение:</strong>
+                </StyledAboutUser>
+
+                <DescriptionParentBox>
+                  <CommentAndSvgBox>
+                    <span className="comment">{notification.message}</span>
+
+                    <span
+                      style={{
+                        marginLeft: "10px",
+                        cursor: "pointer",
+                        color: "red",
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteNotification(notification.id);
+                      }}
+                    >
+                      ✖
+                    </span>
+                  </CommentAndSvgBox>
+
+                  <StyledMoreDescription>
+                    <span className="time">Менеджер:{notification.text}</span>
+                  </StyledMoreDescription>
+                </DescriptionParentBox>
+              </InnerBlock>
+            </StyledMenuList>
+          ))
+        )}
+      </StyledUlList>
     </StyledMenu>
   );
 };
 const StyledMenu = styled(Menu)({
   "& .MuiPaper-root": {
-    width: "300px",
+    width: "400px",
     minHeight: "15vh",
     borderRadius: "10px",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
@@ -98,12 +214,14 @@ const StyledUlList = styled(List)(() => ({
   color: "#6e6c6c",
 }));
 const StyledMenuList = styled(MenuList)(() => ({
-  width: "fit-content",
+  width: "100%",
   display: "flex",
   alignItems: "start",
+  flexDirection: "row",
   gap: "10px",
   borderBottom: "1px solid #E3E3E3",
-  overflowY: "auto",
+  cursor: "pointer",
+  paddingBottom: "10px",
 }));
 
 const MarkReadText = styled("span")(() => ({
@@ -140,12 +258,13 @@ const Container = styled("div")(({ background }) => ({
   },
 }));
 const InnerBlock = styled("div")(() => ({
-  width: "304px",
+  width: "100%",
   display: "flex",
   flexDirection: "column",
   gap: "8px",
   alignItems: "start",
 }));
+
 const StyledAboutUser = styled("div")(() => ({
   display: "flex",
   alignItems: "center",
@@ -158,19 +277,29 @@ const DescriptionParentBox = styled("div")(() => ({
   alignItems: "start",
 }));
 const CommentAndSvgBox = styled("div")(() => ({
-  width: "fit-content",
+  width: "100%",
   display: "flex",
-  alignItems: "center",
+  flexDirection: "row",
+  alignItems: "flex-start",
   justifyContent: "space-between",
+  gap: "8px",
   "& .comment": {
-    width: "282px",
-    height: "fit-content",
+    flex: 1,
     fontWeight: "500",
+    wordBreak: "break-word",
+    whiteSpace: "pre-wrap",
   },
 }));
+
 const StyledMoreDescription = styled("div")(() => ({
+  maxWidth: "100%",
+  wordBreak: "break-word",
+  whiteSpace: "pre-wrap",
+  marginTop: "10px",
   "& .time": {
-    color: "#919191",
+    color: "#0d67dd",
     fontSize: "14px",
+    lineHeight: "1.4",
+    fontWeight: "600",
   },
 }));

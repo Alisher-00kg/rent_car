@@ -45,7 +45,7 @@ const ScrollableTabList = styled(TabList)(({ theme }) => ({
     alignItems: "center",
     height: "70px",
     gap: "20px",
-    background: "#214af1",
+    background: "#111831",
     borderRadius: "8px",
   },
 

@@ -62,7 +62,6 @@ export const AdminOrders = () => {
     },
   ];
   const handleDelete = (id) => {
-    console.log("Удалить:", id);
     dispatch(deleteBookingFromAdmin(id));
   };
   const columns = [

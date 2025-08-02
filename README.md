@@ -1,8 +1,25 @@
-# React + Vite
+ # Веб-приложение по аренде автомобилей в России
+Это веб-приложение предназначено для аренды автомобилей по всей территории России. В системе реализованы три роли пользователей с разными правами доступа:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Гость (Guest)
+Может просматривать список автомобилей.
 
-Currently, two official plugins are available:
+# Пользователь (User)
+Бронирование автомобилей.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Добавление автомобилей в избранное.
+
+Просмотр истории заказов.
+
+Просмотр ответов на свои обращения в службу поддержки.
+
+# Администратор (Admin)
+Создание и редактирование карточек автомобилей.
+
+Добавление и удаление скидок.
+
+Обработка заказов клиентов (изменение статусов).
+
+Ответы на обращения пользователей.
+
+Просмотр полного списка зарегистрированных пользователей.
